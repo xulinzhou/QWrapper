@@ -209,7 +209,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
         		Date dateArriDetailDate = null;
 				try {
 					dateDeptDetailDate = format1.parse(arg1.getDepDate());
-					dateArriDetailDate = format1.parse(arg1.getDepDate());
+					dateArriDetailDate = format1.parse(arg1.getRetDate());
 				} catch (ParseException e1) {
 					e1.printStackTrace();
 				}
