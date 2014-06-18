@@ -42,7 +42,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
         public static void main(String[] args) {
 
                 FlightSearchParam searchParam = new FlightSearchParam();
-                searchParam.setDep("CDG");
+                searchParam.setDep("SDG");
                 searchParam.setArr("SJJ");
                 searchParam.setDepDate("2014-08-23");
                 //searchParam.setRetDate("2014-08-29");
@@ -235,6 +235,11 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                 	String jsonStr = org.apache.commons.lang.StringUtils.substringBetween(arg0, "var generatedJSon = new String('", "');");		
             		JSONObject ajson = JSON.parseObject(jsonStr);
             		String list = ajson.getString("listRecos");
+            		if(StringUtils.isEmpty(list)){
+            			result.setRet(false);
+                        result.setStatus(Constants.NO_RESULT);
+                        return result;    
+            		}
             		String recosIDs = ajson.getString("recosIDs");
             		JSONObject data = JSON.parseObject(list);
             	    Map<String,Double> priceMap = new HashMap<String,Double>();
@@ -427,7 +432,13 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                     int familyCount =  StringUtils.countMatches(htmlCompress,"name=\"FamilyButton\"");
                     String jsonStr = org.apache.commons.lang.StringUtils.substringBetween(arg0, "var generatedJSon = new String('", "');");		
             		JSONObject ajson = JSON.parseObject(jsonStr);
+            		
             		String list = ajson.getString("listRecos");
+            		if(StringUtils.isEmpty(list)){
+            			result.setRet(false);
+                        result.setStatus(Constants.NO_RESULT);
+                        return result;    
+            		}
             		JSONObject data = JSON.parseObject(list);
             	    Map<String,Double> priceMap = new HashMap<String,Double>();
             		for(int i=0;i<familyCount;i++){
