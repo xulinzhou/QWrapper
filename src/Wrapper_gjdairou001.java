@@ -92,7 +92,41 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
         }
         
         public BookingResult getBookingInfo(FlightSearchParam arg0) {
-                return null;
+        	String bookingUrlPre = "http://booking.croatiaairlines.com/plnext/FPCcroatiaairlines/Override.action";
+    		BookingResult bookingResult = new BookingResult();
+    		
+    		BookingInfo bookingInfo = new BookingInfo();
+    		bookingInfo.setAction(bookingUrlPre);
+    		bookingInfo.setMethod("get");
+    		Map<String, String> map = new LinkedHashMap<String, String>();
+    		map.put("EMBEDDED_TRANSACTION", "FlexPricerAvailability");
+    		map.put("TRIPFLOW", "YES");
+    		map.put("DIRECT_LOGIN", "NO");
+    		map.put("SITE", "BAXGBAXG");
+    		map.put("PRICING_TYPE", "I");
+    		
+    		map.put("DATE_RANGE_QUALIFIER_1", "C");
+    		map.put("DATE_RANGE_QUALIFIER_2", "C");
+    		map.put("SO_SITE_SEND_CMD_EMAIL", "OSI");
+    		map.put("LANGUAGE", "GB");
+    		map.put("B_DATE_1", "201406180000");
+    		
+    		map.put("TRIP_TYPE", "O");
+    		map.put("DATE_RANGE_VALUE_1", "0");
+    		map.put("DATE_RANGE_VALUE_2", "0");
+    		map.put("SO_SITE_ALLOW_PROMO", "True");
+    		map.put("DISPLAY_TYPE", "1");
+    		
+    		 
+    		map.put("COMMERCIAL_FARE_FAMILY_1", "EUEU");
+    		map.put("B_LOCATION_1", "CDG");
+    		map.put("E_LOCATION_1", "SJJ");
+    		map.put("TRAVELLER_TYPE_1", "ADT");
+    		
+    		bookingInfo.setInputs(map);		
+    		bookingResult.setData(bookingInfo);
+    		bookingResult.setRet(true);
+    		return bookingResult;
         }
 
         public String getHtml(FlightSearchParam arg0) {
@@ -186,7 +220,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                 }
                 
                 
-                if(arg1.getRetDate()!=null){
+                if(StringUtils.isNotEmpty(arg1.getRetDate())){
                 	String jsonStr = org.apache.commons.lang.StringUtils.substringBetween(arg0, "var generatedJSon = new String('", "');");		
             		JSONObject ajson = JSON.parseObject(jsonStr);
             		String list = ajson.getString("listRecos");
@@ -338,6 +372,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
             	    result.setRet(true);
                     result.setStatus(Constants.SUCCESS);
                     result.setData(flightList);
+                    System.out.println(result.toString());
             	    return result;
                 }else{
                 	int flightCount = StringUtils.countMatches(htmlCompress,"value=\"radOut\"");
