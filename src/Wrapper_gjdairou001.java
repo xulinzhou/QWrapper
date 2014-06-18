@@ -295,15 +295,18 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                              String dateDept = StringUtils.substringBetween(html2NotCompress, "<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "</td>");
                              String depTime = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Departure:</span></td><tdclass=\"nowrap\">", "</td>");
                              String arrTime = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "</td>");
-                             String depairport = StringUtils.substringBetween(html2, "</td><tdwidth=\"90%\">", "</td>");
-                             String arrairport = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "</td></tr></table></td></tr><tr>");
+
+                             String depairport = StringUtils.substringBetween(html2, "id=\"departureCode_0_"+t+"\"value=\"", "\"");
+                             String arrairport = StringUtils.substringBetween(html2, "id=\"arrivalCode_0_"+t+"\"value=\"", "\"");
+
                              String planerno =  StringUtils.substringBetween(html2, "<tdid=\"segAirline_0_"+t+"\"width=\"35%\">", "<spanclass=\"legendText\">e</span>"); 
-                             arrairport = arrairport.substring(arrairport.indexOf("<td>")+4);
                              html2 = html2.replaceFirst("<td width=\"83%\"class=\"textBold\"colspan=\"2\">", "");
                              html2 = html2.replaceFirst("<spanclass=\"nowrap\">Departure:</span></td><tdclass=\"nowrap\">", "");
                              html2 = html2.replaceFirst("<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "");
                              html2 = html2.replaceFirst("</td><tdwidth=\"90%\">", "");
                              html2 = html2.replaceFirst("segAirline_0_", "");
+                             html2 = html2.replaceFirst("id=\"departureCode_0_"+t+"\"value=\"", "");
+                             html2 = html2.replaceFirst("id=\"arrivalCode_0_"+t+"\"value=\"", "");
                              html2NotCompress = html2NotCompress.replaceFirst("<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "");
                              String plannerno = planerno.substring(planerno.indexOf("&nbsp")+6);
                              /*System.out.println("depTime==="+depTime);
@@ -321,8 +324,8 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                              flightNoList.add(plannerno);
                              seg.setFlightno(plannerno);
                              seg.setDepDate(dateStr);
-                             seg.setDepairport(depairport.substring(0, depairport.indexOf(",")));
-                             seg.setArrairport(arrairport.substring(0, arrairport.indexOf(",")));
+                             seg.setDepairport(depairport);
+                             seg.setArrairport(arrairport);
                              seg.setDeptime(depTime);
                              seg.setArrtime(arrTime);
                              seg.setArrDate(dateStr);
@@ -345,8 +348,10 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                              String date = StringUtils.substringBetween(html3NotCompress, "<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "</td>");
                               String depTime = StringUtils.substringBetween(html3, "<spanclass=\"nowrap\">Departure:</span></td><tdclass=\"nowrap\">", "</td>");
                               String arrTime = StringUtils.substringBetween(html3, "<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "</td>");
-                              String depairport = StringUtils.substringBetween(html3, "</td><tdwidth=\"90%\">", "</td>");
-                              String arrairport = StringUtils.substringBetween(html3, "<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "</td></tr></table></td></tr><tr>");
+                               
+                              String depairport = StringUtils.substringBetween(html3, "id=\"departureCode_0_"+t+"\"value=\"", "\"");
+                              String arrairport = StringUtils.substringBetween(html3, "id=\"arrivalCode_0_"+t+"\"value=\"", "\"");
+                              
                               String planerno =  StringUtils.substringBetween(html3, "<tdid=\"segAirline_0_"+t+"\"width=\"35%\">", "<spanclass=\"legendText\">e</span>"); 
                               arrairport = arrairport.substring(arrairport.indexOf("<td>")+4);
                               html3 = html3.replaceFirst("<td width=\"83%\"class=\"textBold\"colspan=\"2\">", "");
@@ -354,6 +359,11 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                               html3 = html3.replaceFirst("<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "");
                               html3 = html3.replaceFirst("</td><tdwidth=\"90%\">", "");
                               html3 = html3.replaceFirst("segAirline_0_", "");
+                              
+                              html3 = html3.replaceFirst("id=\"departureCode_0_"+t+"\"value=\"", "");
+                              html3 = html3.replaceFirst("id=\"arrivalCode_0_"+t+"\"value=\"", "");
+                              
+                              
                               html3NotCompress = html3NotCompress.replaceFirst("<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "");
                               String plannerno = planerno.substring(planerno.indexOf("&nbsp")+6);
                               /*System.out.println("depTime==="+depTime);
@@ -369,8 +379,8 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                               retflightno.add(plannerno);
                               seg.setFlightno(plannerno);
                               seg.setDepDate(dateStr);
-                              seg.setDepairport(depairport.substring(0, depairport.indexOf(",")));
-                              seg.setArrairport(arrairport.substring(0, arrairport.indexOf(",")));
+                              seg.setDepairport(depairport);
+                              seg.setArrairport(arrairport);
                               seg.setDeptime(depTime);
                               seg.setArrtime(arrTime);
                               seg.setArrDate(dateStr);
@@ -380,7 +390,6 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
             	    	 roundTripFlightInfo.setRetflightno(retflightno);
             	    	 roundTripFlightInfo.setOutboundPrice(0);
             	    	 roundTripFlightInfo.setRetdepdate(dateArriDetailDate);
-            	    	 roundTripFlightInfo.setRetdepdate(dateDeptDetailDate);
             	    	 roundTripFlightInfo.setReturnedPrice(0);
             	    	 flightList.add(roundTripFlightInfo);
             	    }
@@ -476,6 +485,8 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                                     html2 = html2.replaceFirst("<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "");
                                     html2 = html2.replaceFirst("</td><tdwidth=\"90%\">", "");
                                     html2 = html2.replaceFirst("segAirline_0_", "");
+                                    html2 = html2.replaceFirst("id=\"departureCode_0_"+t+"\"value=\"", "");
+                                    html2 = html2.replaceFirst("id=\"arrivalCode_0_"+t+"\"value=\"", "");
                                     html3 = html3.replaceFirst("<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "");
                                     String plannerno = planerno.substring(planerno.indexOf("&nbsp")+6);
                                     System.out.println("depTime==="+depTime);
