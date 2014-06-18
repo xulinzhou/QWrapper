@@ -39,27 +39,6 @@ import com.travelco.rdf.infocenter.InfoCenter;
 
 public class Wrapper_gjdairou001 implements QunarCrawler{
 
-        private static final NameValuePair WDS_CORPORATE_SALES = new NameValuePair("EMBEDDED_TRANSACTION","FlexPricerAvailability");
-        private static final NameValuePair SO_SITE_ISSUE_TKT_PER_PAX = new NameValuePair("TRIPFLOW","YES");
-        private static final NameValuePair FORCE_OVERRIDE = new NameValuePair("DIRECT_LOGIN","NO");
-        private static final NameValuePair WDS_DOMAIN_NAME = new NameValuePair("SITE","BAXGBAXG");
-        private static final NameValuePair WDS_MARKET = new NameValuePair("PRICING_TYPE","I");
-        private static final NameValuePair WDS_DISABLE_ATC_CHANGE_ITIN = new NameValuePair("DATE_RANGE_QUALIFIER_1","C");
-        private static final NameValuePair WDS_DISABLE_DEVICE_FINGERPRINT_MERCHANT_ID_PER_OID = new NameValuePair("DATE_RANGE_QUALIFIER_2","C");
-        private static final NameValuePair WDS_ONLINE_OPINION_EXIT_PERCENT = new NameValuePair("SO_SITE_SEND_CMD_EMAIL","OSI");
-        private static final NameValuePair WDS_ACI_ENABLED_MARKETS = new NameValuePair("B_DATE_1","201406100008");
-        private static final NameValuePair WDS_MARKET_WITH_INSURANCE = new NameValuePair("TRIP_TYPE","O");
-        private static final NameValuePair WDS_DISABLE_ATC_REFUND = new NameValuePair("DATE_RANGE_VALUE_1","0");
-        private static final NameValuePair SITE = new NameValuePair("DATE_RANGE_VALUE_2","0");
-        private static final NameValuePair LANGUAGE = new NameValuePair("SO_SITE_ALLOW_PROMO","True");
-        private static final NameValuePair FROM_PAGE = new NameValuePair("FROM_PAGE","HOMESEARCH");
-        private static final NameValuePair TRIP_TYPE = new NameValuePair("DISPLAY_TYPE","1");
-        private static final NameValuePair ADULTS = new NameValuePair("COMMERCIAL_FARE_FAMILY_1","EUEU");
-        private static final NameValuePair CHILDREN = new NameValuePair("B_LOCATION_1","CDG");
-        private static final NameValuePair INFANTS = new NameValuePair("E_LOCATION_1","SJJ");
-        private static final NameValuePair CORPORATE_CODE_INPUT = new NameValuePair("TRAVELLER_TYPE_1","ADT");
-        private static final NameValuePair SEARCH_COOKIE = new NameValuePair("SO_GL","<so_gl><global_list><name>site_list_external_remark</name><list_element><code>tr_code:</code><list_value>ctn00001</list_value></list_element><list_element><code>fol_lang:</code><list_value>en</list_value></list_element><list_element><code>fol_type:</code><list_value>flex_pricer</list_value></list_element><list_element><code>fol_ip:</code><list_value>111.194.211.185</list_value></list_element></global_list><global_list><name>site_included_airline</name><list_element><code>ou</code></list_element></global_list></so_gl>");     
-        
         public static void main(String[] args) {
 
                 FlightSearchParam searchParam = new FlightSearchParam();
@@ -98,6 +77,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
     		BookingInfo bookingInfo = new BookingInfo();
     		bookingInfo.setAction(bookingUrlPre);
     		bookingInfo.setMethod("get");
+    		String depDate=arg0.getDepDate().replaceAll("-","")+"0000";
     		Map<String, String> map = new LinkedHashMap<String, String>();
     		map.put("EMBEDDED_TRANSACTION", "FlexPricerAvailability");
     		map.put("TRIPFLOW", "YES");
@@ -109,7 +89,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
     		map.put("DATE_RANGE_QUALIFIER_2", "C");
     		map.put("SO_SITE_SEND_CMD_EMAIL", "OSI");
     		map.put("LANGUAGE", "GB");
-    		map.put("B_DATE_1", "201406180000");
+    		map.put("B_DATE_1", depDate);
     		
     		map.put("TRIP_TYPE", "O");
     		map.put("DATE_RANGE_VALUE_1", "0");
@@ -119,10 +99,13 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
     		
     		 
     		map.put("COMMERCIAL_FARE_FAMILY_1", "EUEU");
-    		map.put("B_LOCATION_1", "CDG");
-    		map.put("E_LOCATION_1", "SJJ");
+    		map.put("B_LOCATION_1", arg0.getDepDate());
+    		map.put("E_LOCATION_1", arg0.getDepDate());
     		map.put("TRAVELLER_TYPE_1", "ADT");
-    		
+    		if(StringUtils.isNotEmpty(arg0.getRetDate())){
+    			String retDate=arg0.getRetDate().replaceAll("-","")+"0000";
+    			map.put("B_DATE_2",retDate);
+    		}
     		bookingInfo.setInputs(map);		
     		bookingResult.setData(bookingInfo);
     		bookingResult.setRet(true);
@@ -131,10 +114,15 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
 
         public String getHtml(FlightSearchParam arg0) {
         	
-    		String getUrl = String.format("https://booking.croatiaairlines.com/plnext/fpccroatiaairlines/override.action?embedded_transaction=flexpriceravailability&tripflow=yes&direct_login=no&site=baxgbaxg&pricing_type=i&date_range_qualifier_1=c&date_range_qualifier_2=c&so_site_send_cmd_email=osi&language=gb&b_date_1=%s&trip_type=o&date_range_value_1=0&date_range_value_2=0&so_site_allow_promo=true&display_type=1&commercial_fare_family_1=eueu&b_location_1=%s&e_location_1=%s&traveller_type_1=adt","201406150000" ,"cdg","sjj");
-    		//System.out.println("getUrl=="+getUrl);
-    		                 getUrl = "http://booking.croatiaairlines.com/plnext/FPCcroatiaairlines/Override.action?EMBEDDED_TRANSACTION=FlexPricerAvailability&TRIPFLOW=YES&DIRECT_LOGIN=NO&SITE=BAXGBAXG&PRICING_TYPE=I&DATE_RANGE_QUALIFIER_1=C&DATE_RANGE_QUALIFIER_2=C&SO_SITE_SEND_CMD_EMAIL=OSI&LANGUAGE=GB&B_DATE_1=201406180000&TRIP_TYPE=O&DATE_RANGE_VALUE_1=0&DATE_RANGE_VALUE_2=0&SO_SITE_ALLOW_PROMO=True&DISPLAY_TYPE=1&COMMERCIAL_FARE_FAMILY_1=EUEU&B_LOCATION_1=CDG&E_LOCATION_1=SJJ&TRAVELLER_TYPE_1=ADT";
-    		//getUrl = "https://booking.croatiaairlines.com/plnext/FPCcroatiaairlines/Override.action?EMBEDDED_TRANSACTION=FlexPricerAvailability&TRIPFLOW=YES&DIRECT_LOGIN=NO&SITE=BAXGBAXG&PRICING_TYPE=I&DATE_RANGE_QUALIFIER_1=C&DATE_RANGE_QUALIFIER_2=C&SO_SITE_SEND_CMD_EMAIL=OSI&LANGUAGE=GB&B_DATE_1=201406171330&TRIP_TYPE=R&DATE_RANGE_VALUE_1=0&DATE_RANGE_VALUE_2=0&SO_SITE_ALLOW_PROMO=True&DISPLAY_TYPE=1&COMMERCIAL_FARE_FAMILY_1=EUEU&B_LOCATION_1=CDG&E_LOCATION_1=ZAD&B_DATE_2=201406200000&TRAVELLER_TYPE_1=ADT";
+        	String depDate=arg0.getDepDate().replaceAll("-","")+"0000";
+    		
+    		String getUrl = "";
+    		if(StringUtils.isEmpty(arg0.getRetDate())){
+       		   getUrl = String.format("http://booking.croatiaairlines.com/plnext/FPCcroatiaairlines/Override.action?EMBEDDED_TRANSACTION=FlexPricerAvailability&TRIPFLOW=YES&DIRECT_LOGIN=NO&SITE=BAXGBAXG&PRICING_TYPE=I&DATE_RANGE_QUALIFIER_1=C&DATE_RANGE_QUALIFIER_2=C&SO_SITE_SEND_CMD_EMAIL=OSI&LANGUAGE=GB&B_DATE_1=%s&TRIP_TYPE=O&DATE_RANGE_VALUE_1=0&DATE_RANGE_VALUE_2=0&SO_SITE_ALLOW_PROMO=True&DISPLAY_TYPE=1&COMMERCIAL_FARE_FAMILY_1=EUEU&B_LOCATION_1=CDG&E_LOCATION_1=SJJ&TRAVELLER_TYPE_1=ADT",depDate ,arg0.getDep(),arg0.getArr());
+    		}else{
+    			String retDate=arg0.getRetDate().replaceAll("-","")+"0000";
+        		getUrl = String.format("https://booking.croatiaairlines.com/plnext/FPCcroatiaairlines/Override.action?EMBEDDED_TRANSACTION=FlexPricerAvailability&TRIPFLOW=YES&DIRECT_LOGIN=NO&SITE=BAXGBAXG&PRICING_TYPE=I&DATE_RANGE_QUALIFIER_1=C&DATE_RANGE_QUALIFIER_2=C&SO_SITE_SEND_CMD_EMAIL=OSI&LANGUAGE=GB&B_DATE_1=%s&TRIP_TYPE=R&DATE_RANGE_VALUE_1=0&DATE_RANGE_VALUE_2=0&SO_SITE_ALLOW_PROMO=True&DISPLAY_TYPE=1&COMMERCIAL_FARE_FAMILY_1=EUEU&B_LOCATION_1=%s&E_LOCATION_1=%s&B_DATE_2=%s&TRAVELLER_TYPE_1=ADT",depDate ,retDate,arg0.getDep(),arg0.getArr());
+    		}
             System.out.println("getUrl"+getUrl);;
                 QFGetMethod get = null;
                 try
@@ -227,10 +215,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
             		String recosIDs = ajson.getString("recosIDs");
             		JSONObject data = JSON.parseObject(list);
             	    Map<String,Double> priceMap = new HashMap<String,Double>();
-            	    System.out.println("list"+list);
-            	    System.out.println(""+recosIDs);
             	    String[] fightArray = recosIDs.split("\\|");
-            	    
             	    for(int i=0;i<fightArray.length;i++){
             	    	String json = data.getString(""+i);
             	    	json = "["+json+"]";
@@ -272,15 +257,19 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                     RoundTripFlightInfo roundTripFlightInfo = null;
                     List<FlightSegement> segs =  null;
         	    	List<FlightSegement> segsRet = null;
+        	    	 try {           
+        	    	 
             	    while (iter.hasNext()) {
             	    	
             	    	roundTripFlightInfo = new RoundTripFlightInfo();
             	    	String key  = iter.next();
             	    	String[] id = key.split("\\|");
             	    	String html2 = getHtml2(arg1,""+id[0],sessionId);
+            	    	String html2NotCompress = html2;
                         html2 = html2.replaceAll("\\s+", "");
                         html2 = html2.replaceAll("\\s+", "");
                         String html3 = getHtml3(arg1,""+id[1],sessionId);
+                        String html3NotCompress = html3;
                         html3 = html3.replaceAll("\\s+", "");
                         html3 = html3.replaceAll("\\s+", "");
             	    	int leftCount = StringUtils.countMatches(html2, "<tdclass=\"textBoldflight\">Flight");
@@ -295,6 +284,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
             	    	 for (int t = 0; t < leftCount; t++){
             	    		 seg = new FlightSegement();
                          	//System.out.println("html2"+html2);
+                             String date = StringUtils.substringBetween(html2NotCompress, "<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "</td>");
                              String depTime = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Departure:</span></td><tdclass=\"nowrap\">", "</td>");
                              String arrTime = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "</td>");
                              String depairport = StringUtils.substringBetween(html2, "</td><tdwidth=\"90%\">", "</td>");
@@ -306,7 +296,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                              html2 = html2.replaceFirst("<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "");
                              html2 = html2.replaceFirst("</td><tdwidth=\"90%\">", "");
                              html2 = html2.replaceFirst("segAirline_0_", "");
-                             
+                             html2NotCompress = html2NotCompress.replaceFirst("<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "");
                              String plannerno = planerno.substring(planerno.indexOf("&nbsp")+6);
                              /*System.out.println("depTime==="+depTime);
                              System.out.println("arrTime==="+arrTime);
@@ -314,9 +304,15 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                              System.out.println("arrairport==="+arrairport.substring(0, arrairport.indexOf(",")));
                              System.out.println("planerno====="+plannerno);*/
                              
+                             String dateStr = "";
+                             DateFormat df3 = DateFormat.getDateInstance(DateFormat.FULL, Locale.ENGLISH);
+                             DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                             Date date1 = df3.parse(StringUtils.trimToNull(date));  
+                             dateStr = format.format(date1);
+                                 
                              flightNoList.add(plannerno);
                              seg.setFlightno(plannerno);
-                             seg.setDepDate("");
+                             seg.setDepDate(dateStr);
                              seg.setDepairport(depairport.substring(0, depairport.indexOf(",")));
                              seg.setArrairport(arrairport.substring(0, arrairport.indexOf(",")));
                              seg.setDeptime(depTime);
@@ -336,6 +332,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
             	    	 for (int t = 0; t < rightCount; t++){
             	    		 seg = new FlightSegement();
                           	//System.out.println("html2"+html2);
+                             String date = StringUtils.substringBetween(html3NotCompress, "<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "</td>");
                               String depTime = StringUtils.substringBetween(html3, "<spanclass=\"nowrap\">Departure:</span></td><tdclass=\"nowrap\">", "</td>");
                               String arrTime = StringUtils.substringBetween(html3, "<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "</td>");
                               String depairport = StringUtils.substringBetween(html3, "</td><tdwidth=\"90%\">", "</td>");
@@ -347,17 +344,21 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                               html3 = html3.replaceFirst("<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "");
                               html3 = html3.replaceFirst("</td><tdwidth=\"90%\">", "");
                               html3 = html3.replaceFirst("segAirline_0_", "");
-                              
+                              html3NotCompress = html3NotCompress.replaceFirst("<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "");
                               String plannerno = planerno.substring(planerno.indexOf("&nbsp")+6);
                               /*System.out.println("depTime==="+depTime);
                               System.out.println("arrTime==="+arrTime);
                               System.out.println("depairport==="+depairport.substring(0, depairport.indexOf(",")));
                               System.out.println("arrairport==="+arrairport.substring(0, arrairport.indexOf(",")));
                               System.out.println("planerno====="+plannerno);*/
-                              
+                              String dateStr = "";
+                              DateFormat df3 = DateFormat.getDateInstance(DateFormat.FULL, Locale.ENGLISH);
+                              DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                              Date date1 = df3.parse(StringUtils.trimToNull(date));  
+                              dateStr = format.format(date1);
                               retflightno.add(plannerno);
                               seg.setFlightno(plannerno);
-                              seg.setDepDate("");
+                              seg.setDepDate(dateStr);
                               seg.setDepairport(depairport.substring(0, depairport.indexOf(",")));
                               seg.setArrairport(arrairport.substring(0, arrairport.indexOf(",")));
                               seg.setDeptime(depTime);
@@ -374,6 +375,12 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                     result.setData(flightList);
                     System.out.println(result.toString());
             	    return result;
+        	       }catch(Exception e){
+                          e.printStackTrace();
+                          result.setRet(false);
+                          result.setStatus(Constants.PARSING_FAIL);
+                          return result;
+                   }
                 }else{
                 	int flightCount = StringUtils.countMatches(htmlCompress,"value=\"radOut\"");
                     String sessionId=   StringUtils.substringBetween(arg0, ";jsessionid=", "\"");		
@@ -407,15 +414,6 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
             			}
             		}
                     
-                    htmlCompress  = htmlCompress.replaceAll("\\s+", "");
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            		Date date = null;
-    				try {
-    					date = format.parse(arg1.getDepDate());
-    				} catch (ParseException e1) {
-    					e1.printStackTrace();
-    				}
-                    
     		        try {                   
                             List<OneWayFlightInfo> flightList = new ArrayList<OneWayFlightInfo>();
             		        OneWayFlightInfo baseFlight = null;
@@ -441,10 +439,13 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                                 htmlCompress = htmlCompress.replaceFirst("<liclass=\"line\">&nbsp;</li><li>", "");
                                 htmlCompress = htmlCompress.replaceFirst("<liclass=\"line\">&nbsp;</li><li>", "");
                                 String html2 = getHtml2(arg1,""+i,sessionId);
+                                String html3 = html2;
                                 html2 = html2.replaceAll("\\s+", "");
                                 int countFlight = StringUtils.countMatches(html2, "<tdclass=\"textBoldflight\">Flight");
                                 for (int t = 0; t < countFlight; t++){
                                 	seg = new FlightSegement();
+                                	System.out.println("html2"+html2);
+                                    String datedept = StringUtils.substringBetween(html3, "<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "</td>");
                                     String depTime = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Departure:</span></td><tdclass=\"nowrap\">", "</td>");
                                     String arrTime = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "</td>");
                                     String depairport = StringUtils.substringBetween(html2, "</td><tdwidth=\"90%\">", "</td>");
@@ -456,7 +457,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                                     html2 = html2.replaceFirst("<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "");
                                     html2 = html2.replaceFirst("</td><tdwidth=\"90%\">", "");
                                     html2 = html2.replaceFirst("segAirline_0_", "");
-                                    
+                                    html3 = html3.replaceFirst("<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "");
                                     String plannerno = planerno.substring(planerno.indexOf("&nbsp")+6);
                                     System.out.println("depTime==="+depTime);
                                     System.out.println("arrTime==="+arrTime);
@@ -464,8 +465,14 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                                     System.out.println("arrairport==="+arrairport.substring(0, arrairport.indexOf(",")));
                                     System.out.println("planerno====="+plannerno);
                                     
+                                    String dateStr = "";
+                                    DateFormat df3 = DateFormat.getDateInstance(DateFormat.FULL, Locale.ENGLISH);
+                                    DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                                    Date date1 = df3.parse(StringUtils.trimToNull(datedept));  
+                                    dateStr = format.format(date1);
+                                    System.out.println("dateStr====="+dateStr);
                                     seg.setFlightno(plannerno);
-                                    seg.setDepDate("");
+                                    seg.setDepDate(dateStr);
                                     seg.setDepairport(depairport);
                                     seg.setArrairport(arrairport);
                                     seg.setDeptime(depTime);
