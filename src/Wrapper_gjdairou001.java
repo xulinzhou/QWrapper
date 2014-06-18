@@ -206,13 +206,14 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                         result.setStatus(Constants.INVALID_DATE);
                         return result;                  
                 }
-                /*if (htmlCompress.contains("The following error(s) occured")) {
-                    result.setRet(false);
-                    result.setStatus(Constants.NO_RESULT);
-                    return result;                  
-                }*/
-                
-                
+                SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        		Date dateDeptDetailDate = null;
+				try {
+					dateDeptDetailDate = format1.parse(arg1.getDepDate());
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+                System.out.println("dateDeptDetailDate"+dateDeptDetailDate);
                 if(StringUtils.isNotEmpty(arg1.getRetDate())){
                 	System.out.println(arg0);
                 	String jsonStr = org.apache.commons.lang.StringUtils.substringBetween(arg0, "var generatedJSon = new String('", "');");		
@@ -332,6 +333,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                          flightDetail.setDepcity(arg1.getDep());
                          flightDetail.setArrcity(arg1.getArr());
                          flightDetail.setWrapperid(arg1.getWrapperid());
+                         flightDetail.setDepdate(dateDeptDetailDate);
                          roundTripFlightInfo.setDetail(flightDetail);
                          roundTripFlightInfo.setInfo(segs);
 
@@ -379,7 +381,8 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
             	    result.setRet(true);
                     result.setStatus(Constants.SUCCESS);
                     result.setData(flightList);
-                    System.out.println(result.toString());
+                    System.out.println(com.alibaba.fastjson.JSON.toJSONString(result));
+                    
             	    return result;
         	       }catch(Exception e){
                           e.printStackTrace();
@@ -492,6 +495,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                                 flightDetail.setDepcity(arg1.getDep());
                                 flightDetail.setArrcity(arg1.getArr());
                                 flightDetail.setWrapperid(arg1.getWrapperid());
+                                flightDetail.setDepdate(dateDeptDetailDate);
                                 baseFlight.setDetail(flightDetail);
                                 baseFlight.setInfo(segs);
                                 flightList.add(baseFlight);
