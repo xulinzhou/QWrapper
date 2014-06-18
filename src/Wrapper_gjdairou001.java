@@ -99,8 +99,8 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
     		
     		 
     		map.put("COMMERCIAL_FARE_FAMILY_1", "EUEU");
-    		map.put("B_LOCATION_1", arg0.getDepDate());
-    		map.put("E_LOCATION_1", arg0.getDepDate());
+    		map.put("B_LOCATION_1", arg0.getDep());
+    		map.put("E_LOCATION_1", arg0.getArr());
     		map.put("TRAVELLER_TYPE_1", "ADT");
     		if(StringUtils.isNotEmpty(arg0.getRetDate())){
     			String retDate=arg0.getRetDate().replaceAll("-","")+"0000";
@@ -131,8 +131,6 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
 
                 get = new QFGetMethod(getUrl);
                 int status = httpClient.executeMethod(get);
-                
-                System.out.println("status============"+status);
                 return get.getResponseBodyAsString();
                 } catch (Exception e) {
                         e.printStackTrace();
@@ -201,15 +199,17 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                         return result;                  
                 }
                 //需要有明显的提示语句，才能判断是否INVALID_DATE|INVALID_AIRLINE|NO_RESULT
-                if (htmlCompress.contains("select your dates")) {
+                if (htmlCompress.contains("We are unable to find recommendations for the date(s) / time(s) specified.")) {
                         result.setRet(false);
                         result.setStatus(Constants.INVALID_DATE);
                         return result;                  
                 }
                 SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
         		Date dateDeptDetailDate = null;
+        		Date dateArriDetailDate = null;
 				try {
 					dateDeptDetailDate = format1.parse(arg1.getDepDate());
+					dateArriDetailDate = format1.parse(arg1.getDepDate());
 				} catch (ParseException e1) {
 					e1.printStackTrace();
 				}
@@ -292,6 +292,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
             	    		 seg = new FlightSegement();
                          	//System.out.println("html2"+html2);
                              String date = StringUtils.substringBetween(html2NotCompress, "<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "</td>");
+                             String dateDept = StringUtils.substringBetween(html2NotCompress, "<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "</td>");
                              String depTime = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Departure:</span></td><tdclass=\"nowrap\">", "</td>");
                              String arrTime = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "</td>");
                              String depairport = StringUtils.substringBetween(html2, "</td><tdwidth=\"90%\">", "</td>");
@@ -324,6 +325,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                              seg.setArrairport(arrairport.substring(0, arrairport.indexOf(",")));
                              seg.setDeptime(depTime);
                              seg.setArrtime(arrTime);
+                             seg.setArrDate(dateStr);
                              segs.add(seg);
                          }
             	    	 
@@ -371,11 +373,15 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                               seg.setArrairport(arrairport.substring(0, arrairport.indexOf(",")));
                               seg.setDeptime(depTime);
                               seg.setArrtime(arrTime);
+                              seg.setArrDate(dateStr);
                               segsRet.add(seg);
                           }
             	    	 roundTripFlightInfo.setRetinfo(segsRet);
-                         roundTripFlightInfo.setRetflightno(retflightno);
-                         
+            	    	 roundTripFlightInfo.setRetflightno(retflightno);
+            	    	 roundTripFlightInfo.setOutboundPrice(0);
+            	    	 roundTripFlightInfo.setRetdepdate(dateArriDetailDate);
+            	    	 roundTripFlightInfo.setRetdepdate(dateDeptDetailDate);
+            	    	 roundTripFlightInfo.setReturnedPrice(0);
             	    	 flightList.add(roundTripFlightInfo);
             	    }
             	    result.setRet(true);
@@ -486,6 +492,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                                     seg.setArrairport(arrairport);
                                     seg.setDeptime(depTime);
                                     seg.setArrtime(arrTime);
+                                    seg.setArrDate(dateStr);
                                     flightNoList.add(plannerno);
                                     segs.add(seg);
                                 }
