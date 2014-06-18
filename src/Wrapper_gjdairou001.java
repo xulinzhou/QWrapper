@@ -45,7 +45,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                 searchParam.setDep("CDG");
                 searchParam.setArr("SJJ");
                 searchParam.setDepDate("2014-07-01");
-                searchParam.setRetDate("2014-08-01");
+                //searchParam.setRetDate("2014-08-01");
                 searchParam.setTimeOut("60000");
                 searchParam.setToken("");
                 
@@ -463,10 +463,14 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                                     String datedept = StringUtils.substringBetween(html3, "<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "</td>");
                                     String depTime = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Departure:</span></td><tdclass=\"nowrap\">", "</td>");
                                     String arrTime = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "</td>");
-                                    String depairport = StringUtils.substringBetween(html2, "</td><tdwidth=\"90%\">", "</td>");
-                                    String arrairport = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "</td></tr></table></td></tr><tr>");
+                                    
+                                    String depairport = StringUtils.substringBetween(html2, "id=\"departureCode_0_"+t+"\"value=\"", "\"");
+                                    String arrairport = StringUtils.substringBetween(html2, "id=\"arrivalCode_0_"+t+"\"value=\"", "\"");
+                                    
+                                    //String depairport = StringUtils.substringBetween(html2, "</td><tdwidth=\"90%\">", "</td>");
+                                    //tring arrairport = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "</td></tr></table></td></tr><tr>");
                                     String planerno =  StringUtils.substringBetween(html2, "<tdid=\"segAirline_0_"+t+"\"width=\"35%\">", "<spanclass=\"legendText\">e</span>"); 
-                                    arrairport = arrairport.substring(arrairport.indexOf("<td>")+4);
+                                    //arrairport = arrairport.substring(arrairport.indexOf("<td>")+4);
                                     html2 = html2.replaceFirst("<td width=\"83%\"class=\"textBold\"colspan=\"2\">", "");
                                     html2 = html2.replaceFirst("<spanclass=\"nowrap\">Departure:</span></td><tdclass=\"nowrap\">", "");
                                     html2 = html2.replaceFirst("<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "");
@@ -476,8 +480,8 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                                     String plannerno = planerno.substring(planerno.indexOf("&nbsp")+6);
                                     System.out.println("depTime==="+depTime);
                                     System.out.println("arrTime==="+arrTime);
-                                    System.out.println("depairport==="+depairport.substring(0, depairport.indexOf(",")));
-                                    System.out.println("arrairport==="+arrairport.substring(0, arrairport.indexOf(",")));
+                                    System.out.println("depairport==="+depairport);
+                                    System.out.println("arrairport==="+arrairport);
                                     System.out.println("planerno====="+plannerno);
                                     
                                     String dateStr = "";
@@ -489,7 +493,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                                     seg.setFlightno(plannerno);
                                     seg.setDepDate(dateStr);
                                     seg.setDepairport(depairport);
-                                    seg.setArrairport(arrairport);
+                                    seg.setArrairport(depairport);
                                     seg.setDeptime(depTime);
                                     seg.setArrtime(arrTime);
                                     seg.setArrDate(dateStr);
