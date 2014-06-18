@@ -234,6 +234,13 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                 	System.out.println(arg0);
                 	String jsonStr = org.apache.commons.lang.StringUtils.substringBetween(arg0, "var generatedJSon = new String('", "');");		
             		JSONObject ajson = JSON.parseObject(jsonStr);
+            		
+            		if(ajson == null){
+            			result.setRet(false);
+                        result.setStatus(Constants.NO_RESULT);
+                        return result;  
+            		}
+            		
             		String list = ajson.getString("listRecos");
             		if(StringUtils.isEmpty(list)){
             			result.setRet(false);
@@ -432,8 +439,18 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                     int familyCount =  StringUtils.countMatches(htmlCompress,"name=\"FamilyButton\"");
                     String jsonStr = org.apache.commons.lang.StringUtils.substringBetween(arg0, "var generatedJSon = new String('", "');");		
             		JSONObject ajson = JSON.parseObject(jsonStr);
+            		if(ajson == null){
+            			result.setRet(false);
+                        result.setStatus(Constants.NO_RESULT);
+                        return result;  
+            		}
             		
             		String list = ajson.getString("listRecos");
+            		if(StringUtils.isEmpty(list)){
+            			result.setRet(false);
+                        result.setStatus(Constants.NO_RESULT);
+                        return result;    
+            		}
             		if(StringUtils.isEmpty(list)){
             			result.setRet(false);
                         result.setStatus(Constants.NO_RESULT);
