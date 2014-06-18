@@ -45,7 +45,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                 searchParam.setDep("CDG");
                 searchParam.setArr("SJJ");
                 searchParam.setDepDate("2014-08-15");
-                //searchParam.setRetDate("2014-08-19");
+                searchParam.setRetDate("2014-08-19");
                 searchParam.setTimeOut("60000");
                 searchParam.setToken("");
                 
@@ -121,7 +121,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
        		   getUrl = String.format("http://booking.croatiaairlines.com/plnext/FPCcroatiaairlines/Override.action?EMBEDDED_TRANSACTION=FlexPricerAvailability&TRIPFLOW=YES&DIRECT_LOGIN=NO&SITE=BAXGBAXG&PRICING_TYPE=I&DATE_RANGE_QUALIFIER_1=C&DATE_RANGE_QUALIFIER_2=C&SO_SITE_SEND_CMD_EMAIL=OSI&LANGUAGE=GB&B_DATE_1=%s&TRIP_TYPE=O&DATE_RANGE_VALUE_1=0&DATE_RANGE_VALUE_2=0&SO_SITE_ALLOW_PROMO=True&DISPLAY_TYPE=1&COMMERCIAL_FARE_FAMILY_1=EUEU&B_LOCATION_1=CDG&E_LOCATION_1=SJJ&TRAVELLER_TYPE_1=ADT",depDate ,arg0.getDep(),arg0.getArr());
     		}else{
     			String retDate=arg0.getRetDate().replaceAll("-","")+"0000";
-        		getUrl = String.format("https://booking.croatiaairlines.com/plnext/FPCcroatiaairlines/Override.action?EMBEDDED_TRANSACTION=FlexPricerAvailability&TRIPFLOW=YES&DIRECT_LOGIN=NO&SITE=BAXGBAXG&PRICING_TYPE=I&DATE_RANGE_QUALIFIER_1=C&DATE_RANGE_QUALIFIER_2=C&SO_SITE_SEND_CMD_EMAIL=OSI&LANGUAGE=GB&B_DATE_1=%s&TRIP_TYPE=R&DATE_RANGE_VALUE_1=0&DATE_RANGE_VALUE_2=0&SO_SITE_ALLOW_PROMO=True&DISPLAY_TYPE=1&COMMERCIAL_FARE_FAMILY_1=EUEU&B_LOCATION_1=%s&E_LOCATION_1=%s&B_DATE_2=%s&TRAVELLER_TYPE_1=ADT",depDate ,retDate,arg0.getDep(),arg0.getArr());
+        		getUrl = String.format("https://booking.croatiaairlines.com/plnext/FPCcroatiaairlines/Override.action?EMBEDDED_TRANSACTION=FlexPricerAvailability&TRIPFLOW=YES&DIRECT_LOGIN=NO&SITE=BAXGBAXG&PRICING_TYPE=I&DATE_RANGE_QUALIFIER_1=C&DATE_RANGE_QUALIFIER_2=C&SO_SITE_SEND_CMD_EMAIL=OSI&LANGUAGE=GB&B_DATE_1=%s&TRIP_TYPE=R&DATE_RANGE_VALUE_1=0&DATE_RANGE_VALUE_2=0&SO_SITE_ALLOW_PROMO=True&DISPLAY_TYPE=1&COMMERCIAL_FARE_FAMILY_1=EUEU&B_LOCATION_1=%s&E_LOCATION_1=%s&B_DATE_2=%s&TRAVELLER_TYPE_1=ADT",depDate ,arg0.getDep(),arg0.getArr(),retDate);
     		}
             System.out.println("getUrl"+getUrl);;
                 QFGetMethod get = null;
@@ -206,9 +206,15 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                         result.setStatus(Constants.INVALID_DATE);
                         return result;                  
                 }
+                if (htmlCompress.contains("The following error(s) occured")) {
+                    result.setRet(false);
+                    result.setStatus(Constants.NO_RESULT);
+                    return result;                  
+                }
                 
                 
                 if(StringUtils.isNotEmpty(arg1.getRetDate())){
+                	System.out.println(arg0);
                 	String jsonStr = org.apache.commons.lang.StringUtils.substringBetween(arg0, "var generatedJSon = new String('", "');");		
             		JSONObject ajson = JSON.parseObject(jsonStr);
             		String list = ajson.getString("listRecos");
