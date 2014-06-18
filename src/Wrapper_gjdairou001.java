@@ -42,10 +42,10 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
         public static void main(String[] args) {
 
                 FlightSearchParam searchParam = new FlightSearchParam();
-                searchParam.setDep("SDG");
-                searchParam.setArr("SPU");
+                searchParam.setDep("CDG");
+                searchParam.setArr("SJJ");
                 searchParam.setDepDate("2014-08-23");
-                searchParam.setRetDate("2014-08-29");
+                //searchParam.setRetDate("2014-08-29");
                 searchParam.setTimeOut("60000");
                 searchParam.setToken("");
                 
@@ -131,6 +131,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
 
                 get = new QFGetMethod(getUrl);
                 int status = httpClient.executeMethod(get);
+                System.out.println(status);
                 return get.getResponseBodyAsString();
                 } catch (Exception e) {
                         e.printStackTrace();
@@ -210,7 +211,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                     return result;                  
                 }
                 if (htmlCompress.contains("We are unable to find recommendations for your search")
-                		|| htmlCompress.contains("not in service on the dates you selected")) {
+                		|| htmlCompress.contains("WDSErrorE")) {
                     result.setRet(false);
                     result.setStatus(Constants.NO_RESULT);
                     return result;                  
