@@ -44,8 +44,8 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                 FlightSearchParam searchParam = new FlightSearchParam();
                 searchParam.setDep("CDG");
                 searchParam.setArr("SJJ");
-                searchParam.setDepDate("2014-08-15");
-                searchParam.setRetDate("2014-08-19");
+                searchParam.setDepDate("2014-07-01");
+                searchParam.setRetDate("2014-08-01");
                 searchParam.setTimeOut("60000");
                 searchParam.setToken("");
                 
@@ -206,11 +206,11 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                         result.setStatus(Constants.INVALID_DATE);
                         return result;                  
                 }
-                if (htmlCompress.contains("The following error(s) occured")) {
+                /*if (htmlCompress.contains("The following error(s) occured")) {
                     result.setRet(false);
                     result.setStatus(Constants.NO_RESULT);
                     return result;                  
-                }
+                }*/
                 
                 
                 if(StringUtils.isNotEmpty(arg1.getRetDate())){
