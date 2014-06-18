@@ -43,7 +43,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
 
                 FlightSearchParam searchParam = new FlightSearchParam();
                 searchParam.setDep("CDG");
-                searchParam.setArr("SJJ");
+                searchParam.setArr("ddd");
                 searchParam.setDepDate("2014-07-01");
                 //searchParam.setRetDate("2014-08-01");
                 searchParam.setTimeOut("60000");
@@ -204,12 +204,19 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                         result.setStatus(Constants.INVALID_DATE);
                         return result;                  
                 }
+                if (htmlCompress.contains("We cannot find an arrival city as submitted")) {
+                    result.setRet(false);
+                    result.setStatus(Constants.NO_RESULT);
+                    return result;                  
+                }
                 SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
         		Date dateDeptDetailDate = null;
         		Date dateArriDetailDate = null;
 				try {
 					dateDeptDetailDate = format1.parse(arg1.getDepDate());
-					dateArriDetailDate = format1.parse(arg1.getRetDate());
+					if(StringUtils.isNotEmpty(arg1.getRetDate())){
+						dateArriDetailDate = format1.parse(arg1.getRetDate());
+					}
 				} catch (ParseException e1) {
 					e1.printStackTrace();
 				}
@@ -521,12 +528,8 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                                 baseFlight.setDetail(flightDetail);
                                 baseFlight.setInfo(segs);
                                 flightList.add(baseFlight);
-                                //htmlCompress = htmlCompress.replaceFirst("<tdclass=\"textBold\"width=\"20%\">", "");
-                              //  htmlCompress = htmlCompress.replaceFirst("<tdclass=\"textBold\"width=\"20%\">", "");
-                               // htmlCompress = htmlCompress.replaceFirst("<tdclass=\"textBold\"width=\"20%\">", "");
-                                
                             }
-                             System.out.println(flightList.toString());
+                            System.out.println(flightList.toString());
                             result.setRet(true);
                             result.setStatus(Constants.SUCCESS);
                             result.setData(flightList);
