@@ -42,9 +42,9 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
         public static void main(String[] args) {
 
                 FlightSearchParam searchParam = new FlightSearchParam();
-                searchParam.setDep("CDG");
-                searchParam.setArr("ddd");
-                searchParam.setDepDate("2014-07-01");
+                searchParam.setDep("DME");
+                searchParam.setArr("SKP");
+                searchParam.setDepDate("2014-08-08");
                 //searchParam.setRetDate("2014-08-01");
                 searchParam.setTimeOut("60000");
                 searchParam.setToken("");
@@ -209,6 +209,13 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                     result.setStatus(Constants.NO_RESULT);
                     return result;                  
                 }
+                if (htmlCompress.contains("We are unable to find recommendations for your search")) {
+                    result.setRet(false);
+                    result.setStatus(Constants.NO_RESULT);
+                    return result;                  
+                }
+                
+                
                 SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
         		Date dateDeptDetailDate = null;
         		Date dateArriDetailDate = null;
