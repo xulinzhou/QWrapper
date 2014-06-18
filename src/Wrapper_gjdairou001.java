@@ -336,7 +336,6 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
             	    	 flightList.add(roundTripFlightInfo);
             	    }
             	    System.out.println(flightList.toString());
-                	return null;
                 }else{
                 	int flightCount = StringUtils.countMatches(htmlCompress,"value=\"radOut\"");
                     String sessionId=   StringUtils.substringBetween(arg0, ";jsessionid=", "\"");		
