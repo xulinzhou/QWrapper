@@ -42,10 +42,11 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
         public static void main(String[] args) {
 
                 FlightSearchParam searchParam = new FlightSearchParam();
-                searchParam.setDep("SDG");
+                searchParam.setDep("CDG");
                 searchParam.setArr("SJJ");
                 searchParam.setDepDate("2014-08-23");
-                //searchParam.setRetDate("2014-08-29");
+                searchParam.setRetDate("2014-08-29");
+                searchParam.setIsFastTrack(true);
                 searchParam.setTimeOut("60000");
                 searchParam.setToken("");
                 
@@ -91,7 +92,6 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
     		map.put("LANGUAGE", "GB");
     		map.put("B_DATE_1", depDate);
     		
-    		map.put("TRIP_TYPE", "O");
     		map.put("DATE_RANGE_VALUE_1", "0");
     		map.put("DATE_RANGE_VALUE_2", "0");
     		map.put("SO_SITE_ALLOW_PROMO", "True");
@@ -105,6 +105,9 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
     		if(StringUtils.isNotEmpty(arg0.getRetDate())){
     			String retDate=arg0.getRetDate().replaceAll("-","")+"0000";
     			map.put("B_DATE_2",retDate);
+    			map.put("TRIP_TYPE", "R");
+    		}else{
+        		map.put("TRIP_TYPE", "O");
     		}
     		bookingInfo.setInputs(map);		
     		bookingResult.setData(bookingInfo);
@@ -184,7 +187,6 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                         }
                 }
                 return "Exception";
-        
         }
             
 
@@ -229,9 +231,9 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
 				} catch (ParseException e1) {
 					e1.printStackTrace();
 				}
-                System.out.println("dateDeptDetailDate"+dateDeptDetailDate);
+                //System.out.println("dateDeptDetailDate"+dateDeptDetailDate);
                 if(StringUtils.isNotEmpty(arg1.getRetDate())){
-                	System.out.println(arg0);
+                	//System.out.println(arg0);
                 	String jsonStr = org.apache.commons.lang.StringUtils.substringBetween(arg0, "var generatedJSon = new String('", "');");		
             		JSONObject ajson = JSON.parseObject(jsonStr);
             		
@@ -282,9 +284,8 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
             	    }
             	    
             	    htmlCompress  = htmlCompress.replaceAll("\\s+", "");
-            	    System.out.println("htmlCompress"+htmlCompress);
-            	    String count = StringUtils.substringBetween(htmlCompress, "<liclass=\"line\">&nbsp;</li><li>", "<spanclass=\"nowrap\">stop(s)");
-            	    //System.out.println("count"+count);
+            	    //System.out.println("htmlCompress"+htmlCompress);
+            	    
             	    String sessionId=   StringUtils.substringBetween(arg0, ";jsessionid=", "\"");
             	    Iterator<String> iter = priceMap.keySet().iterator();
             	    
@@ -292,134 +293,197 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                     RoundTripFlightInfo roundTripFlightInfo = null;
                     List<FlightSegement> segs =  null;
         	    	List<FlightSegement> segsRet = null;
-        	    	 try {           
-        	    	 
+        	    	
+        	    try {           
             	    while (iter.hasNext()) {
-            	    	
+            	    	//System.out.println(htmlCompress);
+                	    List<String> flightNoList = new ArrayList<String>();
+                	    
+            	    	/*String flightInfo = StringUtils.substringBetween(htmlCompress, "<tdwidth=\"90%\">", "</td>");
+                    	int countFlightInfo = StringUtils.countMatches(flightInfo, "<spanclass=\"nameHighlight\">");
+                    	
+                    	for(int s=0;s<countFlightInfo;s++){
+                    		String org = StringUtils.substringBetween(flightInfo, "<spanclass=\"nameHighlight\">CroatiaAirlines", "</span>");
+                    		flightNoList.add(org.substring(1, org.length()-1));
+                    		flightInfo = flightInfo.replaceFirst("<spanclass=\"nameHighlight\">CroatiaAirlines\\(", "\\)");
+                    	}
+                    	htmlCompress = htmlCompress.replaceFirst("<tdwidth=\"90%\">", "</td>");*/
+                    	
             	    	roundTripFlightInfo = new RoundTripFlightInfo();
-            	    	String key  = iter.next();
-            	    	String[] id = key.split("\\|");
-            	    	String html2 = getHtml2(arg1,""+id[0],sessionId);
-            	    	String html2NotCompress = html2;
-                        html2 = html2.replaceAll("\\s+", "");
-                        html2 = html2.replaceAll("\\s+", "");
-                        String html3 = getHtml3(arg1,""+id[1],sessionId);
-                        String html3NotCompress = html3;
-                        html3 = html3.replaceAll("\\s+", "");
-                        html3 = html3.replaceAll("\\s+", "");
-            	    	int leftCount = StringUtils.countMatches(html2, "<tdclass=\"textBoldflight\">Flight");
-            	    	int rightCount = StringUtils.countMatches(html3, "<tdclass=\"textBoldflight\">Flight");
-            	    	segs = new ArrayList<FlightSegement>();
-            	    	segsRet = new ArrayList<FlightSegement>();
-                        FlightDetail flightDetail = new FlightDetail();
-                        FlightSegement seg = null;
-                        List<String> flightNoList = new ArrayList<String>();
                         List<String> retflightno = new ArrayList<String>();
-                        Double priceInfo = priceMap.get(key);
-            	    	 for (int t = 0; t < leftCount; t++){
-            	    		 seg = new FlightSegement();
-                         	//System.out.println("html2"+html2);
-                             String date = StringUtils.substringBetween(html2NotCompress, "<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "</td>");
-                             String dateDept = StringUtils.substringBetween(html2NotCompress, "<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "</td>");
-                             String depTime = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Departure:</span></td><tdclass=\"nowrap\">", "</td>");
-                             String arrTime = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "</td>");
-
-                             String depairport = StringUtils.substringBetween(html2, "id=\"departureCode_0_"+t+"\"value=\"", "\"");
-                             String arrairport = StringUtils.substringBetween(html2, "id=\"arrivalCode_0_"+t+"\"value=\"", "\"");
-
-                             String planerno =  StringUtils.substringBetween(html2, "<tdid=\"segAirline_0_"+t+"\"width=\"35%\">", "<spanclass=\"legendText\">e</span>"); 
-                             html2 = html2.replaceFirst("<td width=\"83%\"class=\"textBold\"colspan=\"2\">", "");
-                             html2 = html2.replaceFirst("<spanclass=\"nowrap\">Departure:</span></td><tdclass=\"nowrap\">", "");
-                             html2 = html2.replaceFirst("<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "");
-                             html2 = html2.replaceFirst("</td><tdwidth=\"90%\">", "");
-                             html2 = html2.replaceFirst("segAirline_0_", "");
-                             html2 = html2.replaceFirst("id=\"departureCode_0_"+t+"\"value=\"", "");
-                             html2 = html2.replaceFirst("id=\"arrivalCode_0_"+t+"\"value=\"", "");
-                             html2NotCompress = html2NotCompress.replaceFirst("<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "");
-                             String plannerno = planerno.substring(planerno.indexOf("&nbsp")+6);
-                             /*System.out.println("depTime==="+depTime);
-                             System.out.println("arrTime==="+arrTime);
-                             System.out.println("depairport==="+depairport.substring(0, depairport.indexOf(",")));
-                             System.out.println("arrairport==="+arrairport.substring(0, arrairport.indexOf(",")));
-                             System.out.println("planerno====="+plannerno);*/
+                        
+                        String key  = iter.next();
+            	    	String[] id = key.split("\\|");
+            	    	Double priceInfo = priceMap.get(key);
+            	    	
+            	    	if(arg1.getIsFastTrack() == true){
+            	    		flightNoList.clear();
+            	    		retflightno.clear();
+            	    		 segs = new ArrayList<FlightSegement>();
+                	    	 segsRet = new ArrayList<FlightSegement>();
+                            
+                             //System.out.println(htmlCompress);
+                             String htmlInfo = StringUtils.substringBetween(htmlCompress, "FT_0_"+id[0], "</tbody></table><table");
+                             String htmlInfoRet = StringUtils.substringBetween(htmlCompress, "FT_1_"+id[0], "</tbody></table><table");
                              
-                             String dateStr = "";
-                             DateFormat df3 = DateFormat.getDateInstance(DateFormat.FULL, Locale.ENGLISH);
-                             DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                             Date date1 = df3.parse(StringUtils.trimToNull(date));  
-                             dateStr = format.format(date1);
-                                 
-                             flightNoList.add(plannerno);
-                             seg.setFlightno(plannerno);
-                             seg.setDepDate(dateStr);
-                             seg.setDepairport(depairport);
-                             seg.setArrairport(arrairport);
-                             seg.setDeptime(depTime);
-                             seg.setArrtime(arrTime);
-                             seg.setArrDate(dateStr);
+                            int countFlightInfo = StringUtils.countMatches(htmlInfo, "<spanclass=\"nameHighlight\">");
+                         	for(int s=0;s<countFlightInfo;s++){
+                         		String org = StringUtils.substringBetween(htmlInfo, "<spanclass=\"nameHighlight\">CroatiaAirlines", "</span>");
+                         		flightNoList.add(org.substring(1, org.length()-1));
+                         		htmlInfo = htmlInfo.replaceFirst("<spanclass=\"nameHighlight\">CroatiaAirlines\\(", "\\)");
+                         	 }
+                         	
+                         	int countFlightRetInfo = StringUtils.countMatches(htmlInfoRet, "<spanclass=\"nameHighlight\">");
+                         	for(int s=0;s<countFlightRetInfo;s++){
+                         		String org = StringUtils.substringBetween(htmlInfoRet, "<spanclass=\"nameHighlight\">CroatiaAirlines", "</span>");
+                         		retflightno.add(org.substring(1, org.length()-1));
+                         		htmlInfoRet = htmlInfoRet.replaceFirst("<spanclass=\"nameHighlight\">CroatiaAirlines\\(", "\\)");
+                         	 }
+                         	
+                         	
+                             //System.out.println(htmlInfo);
+                             //System.out.println(htmlInfoRet);
+                             
+                             FlightDetail flightDetail = new FlightDetail();
+                              
+                             FlightSegement seg = new  FlightSegement("CDG","SPU", "OU475", "11:35", "13:40", "2014-08-23", "2014-08-23", "OU");
+                             
+                             FlightSegement retSeg = new FlightSegement("CDG","SPU", "OU475", "11:35", "13:40", "2014-08-23", "2014-08-23", "OU");;
+                             
+            	    		 flightDetail.setFlightno(flightNoList);
+                             flightDetail.setMonetaryunit(monetaryunit);
+                             flightDetail.setPrice(priceInfo);
+                             flightDetail.setDepcity(arg1.getDep());
+                             flightDetail.setArrcity(arg1.getArr());
+                             flightDetail.setWrapperid(arg1.getWrapperid());
+                             flightDetail.setDepdate(dateDeptDetailDate);
+                             
+                             roundTripFlightInfo.setDetail(flightDetail);
                              segs.add(seg);
-                         }
-            	    	 
-            	    	 flightDetail.setFlightno(flightNoList);
-                         flightDetail.setMonetaryunit(monetaryunit);
-                         flightDetail.setPrice(priceInfo);
-                         flightDetail.setDepcity(arg1.getDep());
-                         flightDetail.setArrcity(arg1.getArr());
-                         flightDetail.setWrapperid(arg1.getWrapperid());
-                         flightDetail.setDepdate(dateDeptDetailDate);
-                         roundTripFlightInfo.setDetail(flightDetail);
-                         roundTripFlightInfo.setInfo(segs);
+                             segsRet.add(retSeg);
+                             roundTripFlightInfo.setInfo(segs);
+                             roundTripFlightInfo.setRetinfo(segsRet);
+                	    	 roundTripFlightInfo.setRetflightno(retflightno);
+                	    	 roundTripFlightInfo.setOutboundPrice(0);
+                	    	 roundTripFlightInfo.setRetdepdate(dateArriDetailDate);
+                	    	 roundTripFlightInfo.setReturnedPrice(0);
+                	    	 
+                	    	 flightList.add(roundTripFlightInfo);
+                	    	 
+            	    	}else{
+            	    		
+                	    	String html2 = getHtml2(arg1,""+id[0],sessionId);
+                	    	String html2NotCompress = html2;
+                            html2 = html2.replaceAll("\\s+", "");
+                            html2 = html2.replaceAll("\\s+", "");
+                            String html3 = getHtml3(arg1,""+id[1],sessionId);
+                            String html3NotCompress = html3;
+                            html3 = html3.replaceAll("\\s+", "");
+                            html3 = html3.replaceAll("\\s+", "");
+                	    	int leftCount = StringUtils.countMatches(html2, "<tdclass=\"textBoldflight\">Flight");
+                	    	int rightCount = StringUtils.countMatches(html3, "<tdclass=\"textBoldflight\">Flight");
+                	    	segs = new ArrayList<FlightSegement>();
+                	    	segsRet = new ArrayList<FlightSegement>();
+                            FlightDetail flightDetail = new FlightDetail();
+                            FlightSegement seg = null;
+                            
+                	    	 for (int t = 0; t < leftCount; t++){
+                	    		 seg = new FlightSegement();
+                	    		 
+                                 String date = StringUtils.substringBetween(html2NotCompress, "<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "</td>");
+                                 String dateDept = StringUtils.substringBetween(html2NotCompress, "<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "</td>");
+                                 String depTime = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Departure:</span></td><tdclass=\"nowrap\">", "</td>");
+                                 String arrTime = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "</td>");
 
-            	    	 for (int t = 0; t < rightCount; t++){
-            	    		 seg = new FlightSegement();
-                          	//System.out.println("html2"+html2);
-                             String date = StringUtils.substringBetween(html3NotCompress, "<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "</td>");
-                              String depTime = StringUtils.substringBetween(html3, "<spanclass=\"nowrap\">Departure:</span></td><tdclass=\"nowrap\">", "</td>");
-                              String arrTime = StringUtils.substringBetween(html3, "<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "</td>");
-                               
-                              String depairport = StringUtils.substringBetween(html3, "id=\"departureCode_0_"+t+"\"value=\"", "\"");
-                              String arrairport = StringUtils.substringBetween(html3, "id=\"arrivalCode_0_"+t+"\"value=\"", "\"");
-                              
-                              String planerno =  StringUtils.substringBetween(html3, "<tdid=\"segAirline_0_"+t+"\"width=\"35%\">", "<spanclass=\"legendText\">e</span>"); 
-                              arrairport = arrairport.substring(arrairport.indexOf("<td>")+4);
-                              html3 = html3.replaceFirst("<td width=\"83%\"class=\"textBold\"colspan=\"2\">", "");
-                              html3 = html3.replaceFirst("<spanclass=\"nowrap\">Departure:</span></td><tdclass=\"nowrap\">", "");
-                              html3 = html3.replaceFirst("<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "");
-                              html3 = html3.replaceFirst("</td><tdwidth=\"90%\">", "");
-                              html3 = html3.replaceFirst("segAirline_0_", "");
-                              
-                              html3 = html3.replaceFirst("id=\"departureCode_0_"+t+"\"value=\"", "");
-                              html3 = html3.replaceFirst("id=\"arrivalCode_0_"+t+"\"value=\"", "");
-                              
-                              
-                              html3NotCompress = html3NotCompress.replaceFirst("<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "");
-                              String plannerno = planerno.substring(planerno.indexOf("&nbsp")+6);
-                              /*System.out.println("depTime==="+depTime);
-                              System.out.println("arrTime==="+arrTime);
-                              System.out.println("depairport==="+depairport.substring(0, depairport.indexOf(",")));
-                              System.out.println("arrairport==="+arrairport.substring(0, arrairport.indexOf(",")));
-                              System.out.println("planerno====="+plannerno);*/
-                              String dateStr = "";
-                              DateFormat df3 = DateFormat.getDateInstance(DateFormat.FULL, Locale.ENGLISH);
-                              DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                              Date date1 = df3.parse(StringUtils.trimToNull(date));  
-                              dateStr = format.format(date1);
-                              retflightno.add(plannerno);
-                              seg.setFlightno(plannerno);
-                              seg.setDepDate(dateStr);
-                              seg.setDepairport(depairport);
-                              seg.setArrairport(arrairport);
-                              seg.setDeptime(depTime);
-                              seg.setArrtime(arrTime);
-                              seg.setArrDate(dateStr);
-                              segsRet.add(seg);
-                          }
-            	    	 roundTripFlightInfo.setRetinfo(segsRet);
-            	    	 roundTripFlightInfo.setRetflightno(retflightno);
-            	    	 roundTripFlightInfo.setOutboundPrice(0);
-            	    	 roundTripFlightInfo.setRetdepdate(dateArriDetailDate);
-            	    	 roundTripFlightInfo.setReturnedPrice(0);
-            	    	 flightList.add(roundTripFlightInfo);
+                                 String depairport = StringUtils.substringBetween(html2, "id=\"departureCode_0_"+t+"\"value=\"", "\"");
+                                 String arrairport = StringUtils.substringBetween(html2, "id=\"arrivalCode_0_"+t+"\"value=\"", "\"");
+
+                                 String planerno =  StringUtils.substringBetween(html2, "<tdid=\"segAirline_0_"+t+"\"width=\"35%\">", "<spanclass=\"legendText\">e</span>"); 
+                                 html2 = html2.replaceFirst("<td width=\"83%\"class=\"textBold\"colspan=\"2\">", "");
+                                 html2 = html2.replaceFirst("<spanclass=\"nowrap\">Departure:</span></td><tdclass=\"nowrap\">", "");
+                                 html2 = html2.replaceFirst("<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "");
+                                 html2 = html2.replaceFirst("</td><tdwidth=\"90%\">", "");
+                                 html2 = html2.replaceFirst("segAirline_0_", "");
+                                 html2 = html2.replaceFirst("id=\"departureCode_0_"+t+"\"value=\"", "");
+                                 html2 = html2.replaceFirst("id=\"arrivalCode_0_"+t+"\"value=\"", "");
+                                 html2NotCompress = html2NotCompress.replaceFirst("<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "");
+                                 String plannerno = planerno.substring(planerno.indexOf("&nbsp")+6);
+                                 
+                                 String dateStr = "";
+                                 DateFormat df3 = DateFormat.getDateInstance(DateFormat.FULL, Locale.ENGLISH);
+                                 DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                                 Date date1 = df3.parse(StringUtils.trimToNull(date));  
+                                 dateStr = format.format(date1);
+                                     
+                                 flightNoList.add(plannerno);
+                                 
+                                 seg.setFlightno(plannerno);
+                                 seg.setDepDate(dateStr);
+                                 seg.setDepairport(depairport);
+                                 seg.setArrairport(arrairport);
+                                 seg.setDeptime(depTime);
+                                 seg.setArrtime(arrTime);
+                                 seg.setArrDate(dateStr);
+                                 segs.add(seg);
+                             }
+                	    	 
+                	    	 flightDetail.setFlightno(flightNoList);
+                             flightDetail.setMonetaryunit(monetaryunit);
+                             flightDetail.setPrice(priceInfo);
+                             flightDetail.setDepcity(arg1.getDep());
+                             flightDetail.setArrcity(arg1.getArr());
+                             flightDetail.setWrapperid(arg1.getWrapperid());
+                             flightDetail.setDepdate(dateDeptDetailDate);
+                             roundTripFlightInfo.setDetail(flightDetail);
+                             roundTripFlightInfo.setInfo(segs);
+
+                	    	 for (int t = 0; t < rightCount; t++){
+                	    		 seg = new FlightSegement();
+                              	//System.out.println("html2"+html2);
+                                 String date = StringUtils.substringBetween(html3NotCompress, "<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "</td>");
+                                  String depTime = StringUtils.substringBetween(html3, "<spanclass=\"nowrap\">Departure:</span></td><tdclass=\"nowrap\">", "</td>");
+                                  String arrTime = StringUtils.substringBetween(html3, "<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "</td>");
+                                   
+                                  String depairport = StringUtils.substringBetween(html3, "id=\"departureCode_0_"+t+"\"value=\"", "\"");
+                                  String arrairport = StringUtils.substringBetween(html3, "id=\"arrivalCode_0_"+t+"\"value=\"", "\"");
+                                  
+                                  String planerno =  StringUtils.substringBetween(html3, "<tdid=\"segAirline_0_"+t+"\"width=\"35%\">", "<spanclass=\"legendText\">e</span>"); 
+                                  arrairport = arrairport.substring(arrairport.indexOf("<td>")+4);
+                                  html3 = html3.replaceFirst("<td width=\"83%\"class=\"textBold\"colspan=\"2\">", "");
+                                  html3 = html3.replaceFirst("<spanclass=\"nowrap\">Departure:</span></td><tdclass=\"nowrap\">", "");
+                                  html3 = html3.replaceFirst("<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "");
+                                  html3 = html3.replaceFirst("</td><tdwidth=\"90%\">", "");
+                                  html3 = html3.replaceFirst("segAirline_0_", "");
+                                  
+                                  html3 = html3.replaceFirst("id=\"departureCode_0_"+t+"\"value=\"", "");
+                                  html3 = html3.replaceFirst("id=\"arrivalCode_0_"+t+"\"value=\"", "");
+                                  
+                                  
+                                  html3NotCompress = html3NotCompress.replaceFirst("<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "");
+                                  String plannerno = planerno.substring(planerno.indexOf("&nbsp")+6);
+                                  
+                                  String dateStr = "";
+                                  DateFormat df3 = DateFormat.getDateInstance(DateFormat.FULL, Locale.ENGLISH);
+                                  DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                                  Date date1 = df3.parse(StringUtils.trimToNull(date));  
+                                  dateStr = format.format(date1);
+                                  retflightno.add(plannerno);
+                                  seg.setFlightno(plannerno);
+                                  seg.setDepDate(dateStr);
+                                  seg.setDepairport(depairport);
+                                  seg.setArrairport(arrairport);
+                                  seg.setDeptime(depTime);
+                                  seg.setArrtime(arrTime);
+                                  seg.setArrDate(dateStr);
+                                  segsRet.add(seg);
+                              }
+                	    	 roundTripFlightInfo.setRetinfo(segsRet);
+                	    	 roundTripFlightInfo.setRetflightno(retflightno);
+                	    	 roundTripFlightInfo.setOutboundPrice(0);
+                	    	 roundTripFlightInfo.setRetdepdate(dateArriDetailDate);
+                	    	 roundTripFlightInfo.setReturnedPrice(0);
+                	    	 flightList.add(roundTripFlightInfo);
+            	    	  }
             	    }
             	    result.setRet(true);
                     result.setStatus(Constants.SUCCESS);
@@ -487,17 +551,23 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
             		        OneWayFlightInfo baseFlight = null;
 
                             for(int i=0;i<flightCount;i++){
-                            	//System.out.println(htmlCompress);
-                            	String startTime = StringUtils.substringBetween(htmlCompress, "<tdclass=\"textBold\"width=\"20%\">", "</td>");
-                                String endTime = StringUtils.substringBetween(htmlCompress, "<tdclass=\"textBold\">", "</td>");
-                		        //String org = StringUtils.substringBetween(htmlCompress, "<spanclass=\"nameHighlight\">", "</span>");;
-                		        //String dst = StringUtils.substringBetween(htmlCompress, "<br/><spanclass=\"nameHighlight\">", "</span>");
-                		        String time = StringUtils.substringBetween(htmlCompress, "<tdclass=\"textBold\">", "</td>");
-                		        String count = StringUtils.substringBetween(htmlCompress, "<liclass=\"line\">&nbsp;</li><li>", "<spanclass=\"nowrap\">stop(s)");
+                            	htmlCompress =  htmlCompress.replaceAll("\\s+", "");
+                            	System.out.println(htmlCompress);
+                            	
+                		        List<String> flightNoList = new ArrayList<String>();
 
+                            	String flightInfo = StringUtils.substringBetween(htmlCompress, "<tdwidth=\"90%\">", "</td>");
+                            	int countFlightInfo = StringUtils.countMatches(flightInfo, "<spanclass=\"nameHighlight\">");
+                            	for(int s=0;s<countFlightInfo;s++){
+                            		String org = StringUtils.substringBetween(flightInfo, "<spanclass=\"nameHighlight\">CroatiaAirlines", "</span>");
+                            		flightNoList.add(org.substring(1, org.length()-1));
+                            		flightInfo = flightInfo.replaceFirst("<spanclass=\"nameHighlight\">CroatiaAirlines\\(", "\\)");
+                            	}
+                            	htmlCompress = htmlCompress.replaceFirst("<tdwidth=\"90%\">", "</td>");
+                		        
+                		        
                 		        baseFlight = new OneWayFlightInfo();
                 		        FlightDetail flightDetail = new FlightDetail();
-                		        List<String> flightNoList = new ArrayList<String>();
                 		        List<FlightSegement> segs = new ArrayList<FlightSegement>();
                 		        FlightSegement seg = null;
                 		        
@@ -506,55 +576,63 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                                 htmlCompress = htmlCompress.replaceFirst("<tdclass=\"textBold\">", "");
                                 htmlCompress = htmlCompress.replaceFirst("<liclass=\"line\">&nbsp;</li><li>", "");
                                 htmlCompress = htmlCompress.replaceFirst("<liclass=\"line\">&nbsp;</li><li>", "");
-                                String html2 = getHtml2(arg1,""+i,sessionId);
-                                String html3 = html2;
-                                html2 = html2.replaceAll("\\s+", "");
-                                int countFlight = StringUtils.countMatches(html2, "<tdclass=\"textBoldflight\">Flight");
-                                for (int t = 0; t < countFlight; t++){
-                                	seg = new FlightSegement();
-                                	System.out.println("html2"+html2);
-                                    String datedept = StringUtils.substringBetween(html3, "<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "</td>");
-                                    String depTime = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Departure:</span></td><tdclass=\"nowrap\">", "</td>");
-                                    String arrTime = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "</td>");
-                                    
-                                    String depairport = StringUtils.substringBetween(html2, "id=\"departureCode_0_"+t+"\"value=\"", "\"");
-                                    String arrairport = StringUtils.substringBetween(html2, "id=\"arrivalCode_0_"+t+"\"value=\"", "\"");
-                                    
-                                    //String depairport = StringUtils.substringBetween(html2, "</td><tdwidth=\"90%\">", "</td>");
-                                    //tring arrairport = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "</td></tr></table></td></tr><tr>");
-                                    String planerno =  StringUtils.substringBetween(html2, "<tdid=\"segAirline_0_"+t+"\"width=\"35%\">", "<spanclass=\"legendText\">e</span>"); 
-                                    //arrairport = arrairport.substring(arrairport.indexOf("<td>")+4);
-                                    html2 = html2.replaceFirst("<td width=\"83%\"class=\"textBold\"colspan=\"2\">", "");
-                                    html2 = html2.replaceFirst("<spanclass=\"nowrap\">Departure:</span></td><tdclass=\"nowrap\">", "");
-                                    html2 = html2.replaceFirst("<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "");
-                                    html2 = html2.replaceFirst("</td><tdwidth=\"90%\">", "");
-                                    html2 = html2.replaceFirst("segAirline_0_", "");
-                                    html2 = html2.replaceFirst("id=\"departureCode_0_"+t+"\"value=\"", "");
-                                    html2 = html2.replaceFirst("id=\"arrivalCode_0_"+t+"\"value=\"", "");
-                                    html3 = html3.replaceFirst("<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "");
-                                    String plannerno = planerno.substring(planerno.indexOf("&nbsp")+6);
-                                    System.out.println("depTime==="+depTime);
-                                    System.out.println("arrTime==="+arrTime);
-                                    System.out.println("depairport==="+depairport);
-                                    System.out.println("arrairport==="+arrairport);
-                                    System.out.println("planerno====="+plannerno);
-                                    
-                                    String dateStr = "";
-                                    DateFormat df3 = DateFormat.getDateInstance(DateFormat.FULL, Locale.ENGLISH);
-                                    DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                                    Date date1 = df3.parse(StringUtils.trimToNull(datedept));  
-                                    dateStr = format.format(date1);
-                                    System.out.println("dateStr====="+dateStr);
-                                    seg.setFlightno(plannerno);
-                                    seg.setDepDate(dateStr);
-                                    seg.setDepairport(depairport);
-                                    seg.setArrairport(depairport);
-                                    seg.setDeptime(depTime);
-                                    seg.setArrtime(arrTime);
-                                    seg.setArrDate(dateStr);
-                                    flightNoList.add(plannerno);
-                                    segs.add(seg);
+                                htmlCompress = htmlCompress.replaceFirst("<spanclass=\"nameHighlight\">", "");
+                                htmlCompress = htmlCompress.replaceFirst("<br/><spanclass=\"nameHighlight\">", "");
+                                
+                                if(arg1.getIsFastTrack() == false){
+                                	 String html2 = getHtml2(arg1,""+i,sessionId);
+                                     String html3 = html2;
+                                     html2 = html2.replaceAll("\\s+", "");
+                                     int countFlight = StringUtils.countMatches(html2, "<tdclass=\"textBoldflight\">Flight");
+                                     for (int t = 0; t < countFlight; t++){
+                                     	seg = new FlightSegement();
+                                     	System.out.println("html2"+html2);
+                                         String datedept = StringUtils.substringBetween(html3, "<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "</td>");
+                                         String depTime = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Departure:</span></td><tdclass=\"nowrap\">", "</td>");
+                                         String arrTime = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "</td>");
+                                         
+                                         String depairport = StringUtils.substringBetween(html2, "id=\"departureCode_0_"+t+"\"value=\"", "\"");
+                                         String arrairport = StringUtils.substringBetween(html2, "id=\"arrivalCode_0_"+t+"\"value=\"", "\"");
+                                         
+                                         //String depairport = StringUtils.substringBetween(html2, "</td><tdwidth=\"90%\">", "</td>");
+                                         //tring arrairport = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "</td></tr></table></td></tr><tr>");
+                                         String planerno =  StringUtils.substringBetween(html2, "<tdid=\"segAirline_0_"+t+"\"width=\"35%\">", "<spanclass=\"legendText\">e</span>"); 
+                                         //arrairport = arrairport.substring(arrairport.indexOf("<td>")+4);
+                                         html2 = html2.replaceFirst("<td width=\"83%\"class=\"textBold\"colspan=\"2\">", "");
+                                         html2 = html2.replaceFirst("<spanclass=\"nowrap\">Departure:</span></td><tdclass=\"nowrap\">", "");
+                                         html2 = html2.replaceFirst("<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "");
+                                         html2 = html2.replaceFirst("</td><tdwidth=\"90%\">", "");
+                                         html2 = html2.replaceFirst("segAirline_0_", "");
+                                         html2 = html2.replaceFirst("id=\"departureCode_0_"+t+"\"value=\"", "");
+                                         html2 = html2.replaceFirst("id=\"arrivalCode_0_"+t+"\"value=\"", "");
+                                         html3 = html3.replaceFirst("<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "");
+                                         String plannerno = planerno.substring(planerno.indexOf("&nbsp")+6);
+                                         System.out.println("depTime==="+depTime);
+                                         System.out.println("arrTime==="+arrTime);
+                                         System.out.println("depairport==="+depairport);
+                                         System.out.println("arrairport==="+arrairport);
+                                         System.out.println("planerno====="+plannerno);
+                                         
+                                         String dateStr = "";
+                                         DateFormat df3 = DateFormat.getDateInstance(DateFormat.FULL, Locale.ENGLISH);
+                                         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                                         Date date1 = df3.parse(StringUtils.trimToNull(datedept));  
+                                         dateStr = format.format(date1);
+                                         System.out.println("dateStr====="+dateStr);
+                                         seg.setFlightno(plannerno);
+                                         seg.setDepDate(dateStr);
+                                         seg.setDepairport(depairport);
+                                         seg.setArrairport(depairport);
+                                         seg.setDeptime(depTime);
+                                         seg.setArrtime(arrTime);
+                                         seg.setArrDate(dateStr);
+                                         flightNoList.add(plannerno);
+                                         segs.add(seg);
+                                     }
+                                }else{
+                                	segs.add(new FlightSegement(""));
                                 }
+                               
                                 flightDetail.setFlightno(flightNoList);
                                 flightDetail.setMonetaryunit(monetaryunit);
                                 flightDetail.setPrice(Math.round(priceMap.get(String.valueOf(i))));
