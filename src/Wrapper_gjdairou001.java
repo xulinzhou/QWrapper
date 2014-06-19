@@ -46,7 +46,6 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                 searchParam.setArr("SJJ");
                 searchParam.setDepDate("2014-08-23");
                 searchParam.setRetDate("2014-08-29");
-                searchParam.setIsFastTrack(true);
                 searchParam.setTimeOut("60000");
                 searchParam.setToken("");
                 
@@ -316,7 +315,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
             	    	String[] id = key.split("\\|");
             	    	Double priceInfo = priceMap.get(key);
             	    	
-            	    	if(arg1.getIsFastTrack() == true){
+            	    	/*if(arg1.getIsFastTrack() == true){
             	    		flightNoList.clear();
             	    		retflightno.clear();
             	    		 segs = new ArrayList<FlightSegement>();
@@ -370,7 +369,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                 	    	 
                 	    	 flightList.add(roundTripFlightInfo);
                 	    	 
-            	    	}else{
+            	    	}else{*/
             	    		
                 	    	String html2 = getHtml2(arg1,""+id[0],sessionId);
                 	    	String html2NotCompress = html2;
@@ -484,7 +483,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                 	    	 roundTripFlightInfo.setReturnedPrice(0);
                 	    	 flightList.add(roundTripFlightInfo);
             	    	  }
-            	    }
+            	   // }
             	    result.setRet(true);
                     result.setStatus(Constants.SUCCESS);
                     result.setData(flightList);
@@ -579,7 +578,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                                 htmlCompress = htmlCompress.replaceFirst("<spanclass=\"nameHighlight\">", "");
                                 htmlCompress = htmlCompress.replaceFirst("<br/><spanclass=\"nameHighlight\">", "");
                                 
-                                if(arg1.getIsFastTrack() == false){
+                                //if(arg1.getIsFastTrack() == false){
                                 	 String html2 = getHtml2(arg1,""+i,sessionId);
                                      String html3 = html2;
                                      html2 = html2.replaceAll("\\s+", "");
@@ -629,9 +628,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                                          flightNoList.add(plannerno);
                                          segs.add(seg);
                                      }
-                                }else{
-                                	segs.add(new FlightSegement(""));
-                                }
+                               // }
                                
                                 flightDetail.setFlightno(flightNoList);
                                 flightDetail.setMonetaryunit(monetaryunit);
