@@ -345,9 +345,26 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                              
                              FlightDetail flightDetail = new FlightDetail();
                               
-                             FlightSegement seg = new  FlightSegement("CDG","SPU", "OU475", "11:35", "13:40", "2014-08-23", "2014-08-23", "OU");
+                             FlightSegement seg = new  FlightSegement();
+                             seg.setArrairport("SPU");
+                             seg.setArrDate("2014-08-23");
+                             seg.setArrtime("13:40");
+                             seg.setDepairport("CDG");
+                             seg.setDepDate("2014-08-29");
+                             seg.setDeptime("11:35");
+                             seg.setFlightno("OU475");
+                             seg.setCompany("OU");
+                             FlightSegement retSeg = new FlightSegement();;
                              
-                             FlightSegement retSeg = new FlightSegement("CDG","SPU", "OU475", "11:35", "13:40", "2014-08-23", "2014-08-23", "OU");;
+                             
+                             retSeg.setArrairport("SPU");
+                             retSeg.setArrDate("2014-08-23");
+                             retSeg.setArrtime("13:40");
+                             retSeg.setDepairport("CDG");
+                             retSeg.setDepDate("2014-08-29");
+                             retSeg.setDeptime("11:35");
+                             retSeg.setFlightno("OU475");
+                             retSeg.setCompany("OU");
                              
             	    		 flightDetail.setFlightno(flightNoList);
                              flightDetail.setMonetaryunit(monetaryunit);
@@ -629,7 +646,15 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                                          segs.add(seg);
                                      }
                                }else{
-                            	   seg = new FlightSegement("CDG","SPU", "OU475", "11:35", "13:40", "2014-08-23", "2014-08-23", "OU");;
+                            	   seg = new  FlightSegement();
+                                   seg.setArrairport("SPU");
+                                   seg.setArrDate("2014-08-23");
+                                   seg.setArrtime("13:40");
+                                   seg.setDepairport("CDG");
+                                   seg.setDepDate("2014-08-29");
+                                   seg.setDeptime("11:35");
+                                   seg.setFlightno("OU475");
+                                   seg.setCompany("OU");
                                    segs.add(seg);
                                }
                                
