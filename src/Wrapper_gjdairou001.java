@@ -42,12 +42,12 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
         public static void main(String[] args) {
 
                 FlightSearchParam searchParam = new FlightSearchParam();
-                searchParam.setDep("CDG");
-                searchParam.setArr("SJJ");
+                searchParam.setDep("PRG");
+                searchParam.setArr("SPU");
                 searchParam.setDepDate("2014-08-23");
                 searchParam.setRetDate("2014-08-29");
                 searchParam.setTimeOut("60000");
-                searchParam.setToken("");
+               // searchParam.setToken("");
                 searchParam.setFastTrack(false);
                 String html = new  Wrapper_gjdairou001().getHtml(searchParam);
         //String detail = new  Wrapper_gjdairou001().getHtml2(searchParam);
@@ -574,20 +574,26 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
 
                             	String flightInfo = StringUtils.substringBetween(htmlCompress, "<tdwidth=\"90%\">", "</td>");
                             	int countFlightInfo = StringUtils.countMatches(flightInfo, "<spanclass=\"nameHighlight\">");
+                            	System.out.println(countFlightInfo);
                             	for(int s=0;s<countFlightInfo;s++){
-                            		String org = StringUtils.substringBetween(flightInfo, "<spanclass=\"nameHighlight\">CroatiaAirlines", "</span>");
-                            		flightNoList.add(org.substring(1, org.length()-1));
+                            		String org = StringUtils.substringBetween(flightInfo, "<spanclass=\"nameHighlight\">CroatiaAirlines", ")");
+                            		flightNoList.add(org.substring(1, org.length()));
                             		flightInfo = flightInfo.replaceFirst("<spanclass=\"nameHighlight\">CroatiaAirlines\\(", "\\)");
                             	}
                             	htmlCompress = htmlCompress.replaceFirst("<tdwidth=\"90%\">", "</td>");
-                		        
+                		        //System.out.println(flightNoList.toString());
                 		        
                 		        baseFlight = new OneWayFlightInfo();
                 		        FlightDetail flightDetail = new FlightDetail();
                 		        List<FlightSegement> segs = new ArrayList<FlightSegement>();
                 		        FlightSegement seg = null;
                 		        
-                                
+                		        String flightNo = StringUtils.substringBetween(htmlCompress, "<ahref=\"javascript:FlightDetailsPopUp.flexPricerCheck('", "'");
+                		        
+                		        //System.out.println("==============="+flightNo);
+                		        
+                		        htmlCompress = htmlCompress.replaceFirst("<ahref=\"javascript:FlightDetailsPopUp.flexPricerCheck\\('", "");
+                		        
                                 htmlCompress = htmlCompress.replaceFirst("<tdclass=\"textBold\"width=\"20%\">", "");
                                 htmlCompress = htmlCompress.replaceFirst("<tdclass=\"textBold\">", "");
                                 htmlCompress = htmlCompress.replaceFirst("<liclass=\"line\">&nbsp;</li><li>", "");
@@ -596,13 +602,13 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                                 htmlCompress = htmlCompress.replaceFirst("<br/><spanclass=\"nameHighlight\">", "");
                                 
                                 if(arg1.isFastTrack() == false){
-                                	 String html2 = getHtml2(arg1,""+i,sessionId);
+                                	 String html2 = getHtml2(arg1,""+flightNo,sessionId);
                                      String html3 = html2;
                                      html2 = html2.replaceAll("\\s+", "");
                                      int countFlight = StringUtils.countMatches(html2, "<tdclass=\"textBoldflight\">Flight");
                                      for (int t = 0; t < countFlight; t++){
                                      	seg = new FlightSegement();
-                                     	System.out.println("html2"+html2);
+                                     	//System.out.println("html2"+html2);
                                          String datedept = StringUtils.substringBetween(html3, "<td width=\"83%\" class=\"textBold\" colspan=\"2\">", "</td>");
                                          String depTime = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Departure:</span></td><tdclass=\"nowrap\">", "</td>");
                                          String arrTime = StringUtils.substringBetween(html2, "<spanclass=\"nowrap\">Arrival:</span></td><tdclass=\"nowrap\">", "</td>");
@@ -642,7 +648,7 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                                          seg.setDeptime(depTime);
                                          seg.setArrtime(arrTime);
                                          seg.setArrDate(dateStr);
-                                         flightNoList.add(plannerno);
+                                         //flightNoList.add(plannerno);
                                          segs.add(seg);
                                      }
                                }else{
@@ -669,10 +675,11 @@ public class Wrapper_gjdairou001 implements QunarCrawler{
                                 baseFlight.setInfo(segs);
                                 flightList.add(baseFlight);
                             }
-                            System.out.println(flightList.toString());
+                            //System.out.println(flightList.toString());
                             result.setRet(true);
                             result.setStatus(Constants.SUCCESS);
                             result.setData(flightList);
+                            System.out.println(com.alibaba.fastjson.JSON.toJSONString(result));
                             return result;
     		        } catch(Exception e){
                     	e.printStackTrace();
