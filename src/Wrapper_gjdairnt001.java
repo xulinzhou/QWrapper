@@ -1,28 +1,17 @@
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.SimpleTimeZone;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.lang.StringUtils;
-
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Lists;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.qunar.qfwrapper.bean.booking.BookingInfo;
 import com.qunar.qfwrapper.bean.booking.BookingResult;
 import com.qunar.qfwrapper.bean.search.FlightDetail;
@@ -36,7 +25,6 @@ import com.qunar.qfwrapper.interfaces.QunarCrawler;
 import com.qunar.qfwrapper.util.QFGetMethod;
 import com.qunar.qfwrapper.util.QFHttpClient;
 import com.qunar.qfwrapper.util.QFPostMethod;
-import com.travelco.rdf.infocenter.InfoCenter;
 
 
 public class Wrapper_gjdairnt001 implements QunarCrawler{
@@ -46,8 +34,8 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
                 FlightSearchParam searchParam = new FlightSearchParam();
                 searchParam.setDep("VDE");
                 searchParam.setArr("LPA");
-                searchParam.setDepDate("2014-07-01");
-                searchParam.setRetDate("2014-07-12");
+                searchParam.setDepDate("2014-07-02");
+                //searchParam.setRetDate("2014-07-12");
                 //searchParam.setTimeOut("60000");
                 searchParam.setToken("");
                 //searchParam.setFastTrack(false);
@@ -74,47 +62,69 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
         }
         
         public BookingResult getBookingInfo(FlightSearchParam arg0) {
-        	String bookingUrlPre = "http://booking.croatiaairlines.com/plnext/FPCcroatiaairlines/Override.action";
+        	String bookingUrlPre = "https://www.bintercanarias.com/booking/searchDo";
     		BookingResult bookingResult = new BookingResult();
     		
     		BookingInfo bookingInfo = new BookingInfo();
     		bookingInfo.setAction(bookingUrlPre);
-    		bookingInfo.setMethod("get");
-    		String depDate=arg0.getDepDate().replaceAll("-","")+"0000";
+    		bookingInfo.setMethod("post");
     		Map<String, String> map = new LinkedHashMap<String, String>();
-    		map.put("EMBEDDED_TRANSACTION", "FlexPricerAvailability");
-    		map.put("TRIPFLOW", "YES");
-    		map.put("DIRECT_LOGIN", "NO");
-    		map.put("SITE", "BAXGBAXG");
-    		map.put("PRICING_TYPE", "I");
     		
-    		map.put("DATE_RANGE_QUALIFIER_1", "C");
-    		map.put("DATE_RANGE_QUALIFIER_2", "C");
-    		map.put("SO_SITE_SEND_CMD_EMAIL", "OSI");
-    		map.put("LANGUAGE", "GB");
-    		map.put("B_DATE_1", depDate);
-    		
-    		map.put("DATE_RANGE_VALUE_1", "0");
-    		map.put("DATE_RANGE_VALUE_2", "0");
-    		map.put("SO_SITE_ALLOW_PROMO", "True");
-    		map.put("DISPLAY_TYPE", "1");
-    		
-    		 
-    		map.put("COMMERCIAL_FARE_FAMILY_1", "EUEU");
-    		map.put("B_LOCATION_1", arg0.getDep());
-    		map.put("E_LOCATION_1", arg0.getArr());
-    		map.put("TRAVELLER_TYPE_1", "ADT");
-    		if(StringUtils.isNotEmpty(arg0.getRetDate())){
-    			String retDate=arg0.getRetDate().replaceAll("-","")+"0000";
-    			map.put("B_DATE_2",retDate);
-    			map.put("TRIP_TYPE", "R");
-    		}else{
-        		map.put("TRIP_TYPE", "O");
-    		}
-    		bookingInfo.setInputs(map);		
-    		bookingResult.setData(bookingInfo);
-    		bookingResult.setRet(true);
-    		return bookingResult;
+    		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+    	 	SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+    	 	try {
+				String depdate = format.format(format1.parse(arg0.getDepDate()));
+				String arrdate = "";
+	    	 	if(StringUtils.isNotBlank(arg0.getRetDate())){
+	    	 		arrdate =format.format(format1.parse(arg0.getRetDate()));
+	    	 	}
+	    	 	map.put("data[search][departureDate]", depdate);
+	    	 	map.put("data[search][returnDate]", arrdate);
+	    	 	map.put("data[search][dateAdvance]", "2");
+	    	 	map.put("data[search][departureDate]", "depdate");
+	    	 	map.put("data[search][departureDate]", "depdate");
+	    	 	 
+	 			//map.put(("search[initDates][0][month]","07"),
+	 			//map.put(("search[initDates][0][year]","2014"),
+	 			
+	 			//map.put(("search[initDates][1][month]","07"),
+	 			//map.put(("search[initDates][1][year]","2014"),
+	 			
+	    	 	map.put("data[search][tipoBusqueda]","normal");
+	    	 	map.put("data[search][from]",arg0.getDep());
+	 			//map.put("data[search][from_text]","El Hierro");
+	 			map.put("data[search][to]",arg0.getArr());
+	 			//map.put("data[search][to_text]","Gran Canaria");
+	 			map.put("data[search][oneWay]","0");
+	 			map.put("data[search][oneWay]","1");
+	 			map.put("data[search][onlyPoints]","0");
+	 			map.put("data[search][onlyDirectFlights]","0");
+	 			//map.put("data[search][departureDateVisual]","1 Jul 2014");
+	 			
+	 			//map.put("data[search][returnDateVisual]","12 Jul 2014");
+	 			map.put("data[search][calendar]","0");
+	 			map.put("data[search][passengers][ADTDC]","0");
+	 			map.put("data[search][passengers][ADT]","1");
+	 			map.put("data[search][passengers][CHDDC]","0");
+	 			map.put("data[search][passengers][CHD]","0");
+	 			map.put("data[search][passengers][INFDC]","0");
+	 			map.put("data[search][passengers][INF]","0");
+	 			map.put("data[search][conditions]","0");
+	 			map.put("data[search][flagLess29Fare]","0");
+	 			map.put("data[search][flagHigher60Fare]","0");
+	 			map.put("data[search][flagLargeFamily]","0");
+	 			map.put("data[search][flagUniversityFare]","0");
+	    		
+	    		bookingInfo.setInputs(map);		
+	    		bookingResult.setData(bookingInfo);
+	    		bookingResult.setRet(true);
+	    		return bookingResult;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+    	 	return null;
+    	 	
+
         }
 
         public String getHtml(FlightSearchParam arg0) {QFPostMethod post = null;
@@ -126,32 +136,37 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 				CookiePolicy.BROWSER_COMPATIBILITY);
 
 		post = new QFPostMethod("https://www.bintercanarias.com/booking/searchDo");
-	 	String data=arg0.getDepDate().replaceAll("-","")+"0000";
-	 	
+ 	 	SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+	 	SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+	 	String depdate = format.format(format1.parse(arg0.getDepDate()));
+	 	String arrdate = "";
+	 	if(StringUtils.isNotBlank(arg0.getRetDate())){
+	 		arrdate =format.format(format1.parse(arg0.getRetDate()));
+	 	}
+	 	 
 	 	NameValuePair[] names = {
 	 			new NameValuePair("_method","POST"),
-	 			new NameValuePair("data[search][departureDate]","2014/07/2"), 
-	 			
-	 			new NameValuePair("data[search][returnDate]","2014/07/12"),
+	 			new NameValuePair("data[search][departureDate]",depdate),
+	 			new NameValuePair("data[search][returnDate]",arrdate),
 	 			new NameValuePair("data[search][dateAdvance]","2"),
-	 			new NameValuePair("search[initDates][0][month]","07"),
-	 			new NameValuePair("search[initDates][0][year]","2014"),
+	 			//new NameValuePair("search[initDates][0][month]","07"),
+	 			//new NameValuePair("search[initDates][0][year]","2014"),
 	 			
-	 			new NameValuePair("search[initDates][1][month]","07"),
-	 			new NameValuePair("search[initDates][1][year]","2014"),
+	 			//new NameValuePair("search[initDates][1][month]","07"),
+	 			//new NameValuePair("search[initDates][1][year]","2014"),
 	 			
 	 			new NameValuePair("data[search][tipoBusqueda]","normal"),
-	 			new NameValuePair("data[search][from]","VDE"),
-	 			new NameValuePair("data[search][from_text]","El Hierro"),
-	 			new NameValuePair("data[search][to]","LPA"),
-	 			new NameValuePair("data[search][to_text]","Gran Canaria"),
+	 			new NameValuePair("data[search][from]",arg0.getDep()),
+	 			//new NameValuePair("data[search][from_text]","El Hierro"),
+	 			new NameValuePair("data[search][to]",arg0.getArr()),
+	 			//new NameValuePair("data[search][to_text]","Gran Canaria"),
 	 			new NameValuePair("data[search][oneWay]","0"),
 	 			new NameValuePair("data[search][oneWay]","1"),
 	 			new NameValuePair("data[search][onlyPoints]","0"),
 	 			new NameValuePair("data[search][onlyDirectFlights]","0"),
-	 			new NameValuePair("data[search][departureDateVisual]","1 Jul 2014"),
+	 			//new NameValuePair("data[search][departureDateVisual]","1 Jul 2014"),
 	 			
-	 			new NameValuePair("data[search][returnDateVisual]","12 Jul 2014"),
+	 			//new NameValuePair("data[search][returnDateVisual]","12 Jul 2014"),
 	 			new NameValuePair("data[search][calendar]","0"),
 	 			new NameValuePair("data[search][passengers][ADTDC]","0"),
 	 			new NameValuePair("data[search][passengers][ADT]","1"),
@@ -176,8 +191,8 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 		if(post.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || post.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 			Header location = post.getResponseHeader("Location");
 			System.out.println(location.getValue());
-			String url = "";
-			url = "https://www.bintercanarias.com/eng/book/select-a-flight/VDE-LPA";
+			String urlDetail = arg0.getDep()+"-"+arg0.getArr();
+			String url = "https://www.bintercanarias.com/eng/book/select-a-flight/"+urlDetail;
 			String cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
 		    get = new QFGetMethod(url);
 			httpClient.getState().clearCookies();
@@ -480,7 +495,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 					    result.setRet(true);
 	                    result.setStatus(Constants.SUCCESS);
 	                    result.setData(flightRoundList);
-	                    System.out.println(JSON.toJSONString(result));
+	                    System.out.println(JSON.toJSONString(result,SerializerFeature.DisableCircularReferenceDetect));
 	                    
 	            	    return result;
 	                    
@@ -577,7 +592,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
                 result.setRet(true);
                 result.setStatus(Constants.SUCCESS);
                 result.setData(flightList);
-                System.out.println(com.alibaba.fastjson.JSON.toJSONString(result));
+                System.out.println(JSON.toJSONString(result,SerializerFeature.DisableCircularReferenceDetect));
                 return result;
         }
 }
