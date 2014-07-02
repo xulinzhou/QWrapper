@@ -32,20 +32,21 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
         public static void main(String[] args) {
 
                 FlightSearchParam searchParam = new FlightSearchParam();
-                searchParam.setDep("VDE");
+                searchParam.setDep("DKR");
                 searchParam.setArr("LPA");
-                searchParam.setDepDate("2014-07-02");
-                //searchParam.setRetDate("2014-07-12");
+                searchParam.setDepDate("2014-07-22");
+                searchParam.setRetDate("2014-07-28");
                 //searchParam.setTimeOut("60000");
                 searchParam.setToken("");
                 //searchParam.setFastTrack(false);
                 String html = new  Wrapper_gjdairnt001().getHtml(searchParam);
-                //System.out.println(html);
+                System.out.println(html);
         //String detail = new  Wrapper_gjdairou001().getHtml2(searchParam);
         //System.out.println(detail);
                 //ProcessResultInfo result = new ProcessResultInfo();
         ProcessResultInfo   result = new  Wrapper_gjdairnt001().process(html,searchParam);
-                
+        System.out.println(JSON.toJSONString(result,SerializerFeature.DisableCircularReferenceDetect));
+
                // result = new  Wrapper_gjdairou001().process1(html,detail,searchParam);
                 /*if(result.isRet() && result.getStatus().equals(Constants.SUCCESS))
                 {
@@ -213,50 +214,104 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 	}
 
         
-            public String getHtml2(FlightSearchParam arg0,String num,String sessionId) {
-                QFGetMethod get = null;
-                try
-                {
-                QFHttpClient httpClient = new QFHttpClient(arg0, false);
-        		String getUrl = String.format("http://booking.croatiaairlines.com/plnext/FPCcroatiaairlines/FlexPricerFlightDetailsPopUp.action;jsessionid=%s?SITE=BAXGBAXG&LANGUAGE=GB&PAGE_TICKET=0&TRIP_TYPE=O&PRICING_TYPE=I&DISPLAY_TYPE=1&ARRANGE_BY=D&FLIGHT_ID_1=%s&FLIGHT_ID_2=",sessionId,num);
-                 System.out.println("getUrl"+getUrl);;
-                get = new QFGetMethod(getUrl);
-                 int status = httpClient.executeMethod(get);
-                return get.getResponseBodyAsString();
-                } catch (Exception e) {
-                        e.printStackTrace();
-                } finally {                     
-                        if (get != null) {
-                        	get.releaseConnection();
-                        }
-                }
-                return "Exception";
-        
-        }
+        public String getHtml2(FlightSearchParam arg0,String name,String value,String name2,String value2) {
+        	QFPostMethod post = null;
+            try
+            {
+            	// get all query parameters from the url set by wrapperSearchInterface
+        		QFHttpClient httpClient = new QFHttpClient(arg0, false);
+        		httpClient.getParams().setCookiePolicy(
+        				CookiePolicy.BROWSER_COMPATIBILITY);
 
-            public String getHtml3(FlightSearchParam arg0,String num,String sessionId) {
-                QFGetMethod get = null;
-                try
-                {
-                QFHttpClient httpClient = new QFHttpClient(arg0, false);
-        		String getUrl = String.format("http://booking.croatiaairlines.com/plnext/FPCcroatiaairlines/FlexPricerFlightDetailsPopUp.action;jsessionid=%s?SITE=BAXGBAXG&LANGUAGE=GB&PAGE_TICKET=0&TRIP_TYPE=O&PRICING_TYPE=I&DISPLAY_TYPE=1&ARRANGE_BY=D&FLIGHT_ID_1=&FLIGHT_ID_2=%s",sessionId,num);
-                 System.out.println("getUrl"+getUrl);;
-                get = new QFGetMethod(getUrl);
-                 int status = httpClient.executeMethod(get);
-                return get.getResponseBodyAsString();
-                } catch (Exception e) {
-                        e.printStackTrace();
-                } finally {                     
-                        if (get != null) {
-                        	get.releaseConnection();
-                        }
-                }
-                return "Exception";
-        }
-            
-
+        		post = new QFPostMethod("https://www.bintercanarias.com/booking/searchDo");
+         	 	SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        	 	SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        	 	String depdate = format.format(format1.parse(arg0.getDepDate()));
+        	 	String arrdate = "";
+        	 	if(StringUtils.isNotBlank(arg0.getRetDate())){
+        	 		arrdate =format.format(format1.parse(arg0.getRetDate()));
+        	 	}
+        	 	 
+        	 	NameValuePair[] names = {
+        	 			new NameValuePair("_method","POST"),
+        	 			new NameValuePair("data[search][departureDate]",depdate),
+        	 			new NameValuePair("data[search][returnDate]",arrdate),
+        	 			new NameValuePair("data[search][dateAdvance]","2"),
+        	 			//new NameValuePair("search[initDates][0][month]","07"),
+        	 			//new NameValuePair("search[initDates][0][year]","2014"),
+        	 			
+        	 			//new NameValuePair("search[initDates][1][month]","07"),
+        	 			//new NameValuePair("search[initDates][1][year]","2014"),
+        	 			
+        	 			new NameValuePair("data[search][tipoBusqueda]","normal"),
+        	 			new NameValuePair("data[search][from]",arg0.getDep()),
+        	 			//new NameValuePair("data[search][from_text]","El Hierro"),
+        	 			new NameValuePair("data[search][to]",arg0.getArr()),
+        	 			//new NameValuePair("data[search][to_text]","Gran Canaria"),
+        	 			new NameValuePair("data[search][oneWay]","0"),
+        	 			new NameValuePair("data[search][oneWay]","1"),
+        	 			new NameValuePair("data[search][onlyPoints]","0"),
+        	 			new NameValuePair("data[search][onlyDirectFlights]","0"),
+        	 			//new NameValuePair("data[search][departureDateVisual]","1 Jul 2014"),
+        	 			
+        	 			//new NameValuePair("data[search][returnDateVisual]","12 Jul 2014"),
+        	 			new NameValuePair("data[search][calendar]","0"),
+        	 			new NameValuePair("data[search][passengers][ADTDC]","0"),
+        	 			new NameValuePair("data[search][passengers][ADT]","1"),
+        	 			new NameValuePair("data[search][passengers][CHDDC]","0"),
+        	 			new NameValuePair("data[search][passengers][CHD]","0"),
+        	 			new NameValuePair("data[search][passengers][INFDC]","0"),
+        	 			new NameValuePair("data[search][passengers][INF]","0"),
+        	 			new NameValuePair("data[search][conditions]","0"),
+        	 			new NameValuePair("data[search][flagLess29Fare]","0"),
+        	 			new NameValuePair("data[search][flagHigher60Fare]","0"),
+        	 			new NameValuePair("data[search][flagLargeFamily]","0"),
+        	 			new NameValuePair("data[search][flagUniversityFare]","0"),
+        	 			
+        	    };
+        	    post.setRequestBody(names);
+        		post.getParams().setContentCharset("UTF-8");
+        		httpClient.executeMethod(post);	
+             
+    		String getUrl = String.format("https://www.bintercanarias.com/booking/infoServiceFee/lang:eng");
+            System.out.println("getUrl"+getUrl);;
+            post = new QFPostMethod(getUrl);
+            if(StringUtils.isBlank(name2)){
+            	NameValuePair[] names1 = {
+         	 			new NameValuePair("HD",""),
+         	 			new NameValuePair(name,value),
+         	 			new NameValuePair("csrf","ND"),
+                 };
+            	post.setRequestBody(names1);
+            }else{
+            	NameValuePair[] namesNew = {
+         	 			new NameValuePair("HD",""),
+         	 			new NameValuePair(name,value),
+         	 			new NameValuePair(name2,value2),
+         	 			new NameValuePair("csrf","HD|ND"),
+                 };
+            	post.setRequestBody(namesNew);
+            }
+             
+     		post.getParams().setContentCharset("UTF-8");
+     		post.setRequestHeader("X_REQUESTED_WITH", "XMLHttpRequest");
+     		post.setRequestHeader("Referer", "https://www.bintercanarias.com/eng/book/select-a-flight/DKR-LPA");
+     		String cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
+			post.addRequestHeader("Cookie",cookie);
+     		httpClient.executeMethod(post);	
+     		return post.getResponseBodyAsString();
+            } catch (Exception e) {
+                    e.printStackTrace();
+            } finally {                     
+                    if (post != null) {
+                    	post.releaseConnection();
+                    }
+            }
+            return "Exception";
+    
+    }
         public ProcessResultInfo process(String arg0, FlightSearchParam arg1) {
-        	String monetaryunit = "HRK";
+        	String monetaryunit = "EUR";
         	
                 String htmlCompress = arg0;
                 
@@ -267,7 +322,8 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
                         return result;                  
                 }
                 //需要有明显的提示语句，才能判断是否INVALID_DATE|INVALID_AIRLINE|NO_RESULT
-                if (htmlCompress.contains("We are unable to find recommendations for the date(s) / time(s) specified.")) {
+                if (htmlCompress.contains("We are unable to find recommendations for the date(s) / time(s) specified.")
+                		|| htmlCompress.contains("There are no places available on this date")) {
                         result.setRet(false);
                         result.setStatus(Constants.INVALID_DATE);
                         return result;                  
@@ -278,7 +334,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
                     return result;                  
                 }
                 if (htmlCompress.contains("We are unable to find recommendations for your search")
-                		|| htmlCompress.contains("WDSErrorE")) {
+                		|| htmlCompress.contains("Search for flights")) {
                     result.setRet(false);
                     result.setStatus(Constants.NO_RESULT);
                     return result;                  
@@ -328,7 +384,18 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 						    List<String> retflightno = new ArrayList<String>();
 						    List<String> flightNoList = new ArrayList<String>();
 						    String info=   StringUtils.substringBetween(start, "availability-cell-leftlastcolor-999\"><", "</div>");
-		                    String price = StringUtils.substringBetween(start, "data-group=\"jsGroup-generic\"", "</div>");
+		                     
+						    int masFareint = StringUtils.lastIndexOf(htmlCompress, "data-group=\"jsGroup-masFare\"");
+		                    int binterMasPointsint = StringUtils.lastIndexOf(htmlCompress, "data-group=\"jsGroup-binterMasPoints\"");
+		                    String price = "";
+		                    if(masFareint!=-1){
+		                    	price = StringUtils.substringBetween(htmlCompress, "data-group=\"jsGroup-generic\"", "jsGroup-masFare");
+		                    }
+		                    else if(binterMasPointsint!=-1){
+		                    	price = StringUtils.substringBetween(htmlCompress, "data-group=\"jsGroup-generic\"", "jsGroup-binterMasPoints");
+		                    }else{
+		                    	price = StringUtils.substringBetween(htmlCompress, "data-group=\"jsGroup-generic\"");
+		                    }
 		                    
 		                    System.out.println("info===="+info);
 		                    System.out.println("price===="+price);
@@ -383,20 +450,18 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 		                    String taxes = StringUtils.substringBetween(price, "data-taxes=\"", "\"");
 		                    String fare = StringUtils.substringBetween(price, "data-fareimport=\"", "\"");
 		                    
+		                    String name = StringUtils.substringBetween(price, "name=\"", "\"");
+		                    String value = StringUtils.substringBetween(price, "value=\"", "\"");
+		                    
+		                    
 		                    flightDetail.setFlightno(flightNoList);
                             flightDetail.setMonetaryunit(monetaryunit);
-                            flightDetail.setPrice(Double.parseDouble(fare));
+                            
                             flightDetail.setDepcity(arg1.getDep());
                             flightDetail.setArrcity(arg1.getArr());
                             flightDetail.setWrapperid(arg1.getWrapperid());
                             flightDetail.setDepdate(dateDeptDetailDate);
                             
-                            
-		                    
-		                    
-		                    System.out.println("fare========="+fare);
-		                    System.out.println("taxes========"+taxes);
-		                    
 		                    System.out.println("==============================================================================");
 		                    
 		                    String end = StringUtils.substringBetween(htmlCompress, "id=\"segment_1\"", "foot-raterounded-corners-bottom-8");
@@ -407,13 +472,23 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 		                    for(int k=0;k<countEndFlightInfo;k++){
 		                    	
 		                    	roundTripFlightInfo = new RoundTripFlightInfo();
-		                    	roundTripFlightInfo.setDetail(flightDetail);
-	                            roundTripFlightInfo.setInfo(segs);
+		                    	
+	                            
 	                            
 		                    	retsegs = new ArrayList<FlightSegement>();
 		                    	System.out.println("======================================start");
 		                    	String infoRet=   StringUtils.substringBetween(end, "availability-cell-leftlastcolor-999\"><", "</div>");
-			                    String priceRet = StringUtils.substringBetween(end, "data-group=\"jsGroup-generic\"", "</div>");
+		                    	int masFareintRet = StringUtils.lastIndexOf(end, "data-group=\"jsGroup-masFare\"");
+			                    int binterMasPointsintRet = StringUtils.lastIndexOf(end, "data-group=\"jsGroup-binterMasPoints\"");
+			                    String priceRet = "";
+			                    if(masFareintRet!=-1){
+			                    	priceRet = StringUtils.substringBetween(end, "data-group=\"jsGroup-generic\"", "jsGroup-masFare");
+			                    }
+			                    else if(binterMasPointsintRet!=-1){
+			                    	priceRet = StringUtils.substringBetween(end, "data-group=\"jsGroup-generic\"", "jsGroup-binterMasPoints");
+			                    }else{
+			                    	priceRet = StringUtils.substringBetween(end, "data-group=\"jsGroup-generic\"");
+			                    }
 			                    
 			                    System.out.println("info===="+infoRet);
 			                    System.out.println("price===="+priceRet);
@@ -433,13 +508,31 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 			                    	}
 			                    }
 			                    
+			                    
+	                            
 			                    System.out.println("lastIndex===="+lastIndexRet);
-			                    price = price.substring(lastIndexRet);
+			                    priceRet = priceRet.substring(lastIndexRet);
 			                    String hourRet = StringUtils.substringBetween(priceRet, "data-hours=\"", "\"");
 			                    String hourArrayRet[] = hourRet.split("\\;");
 			                    System.out.println("hour"+hourRet);
 			                    retflightno = new ArrayList<String>();
 			                    
+			                    String taxeRet = StringUtils.substringBetween(priceRet, "data-taxes=\"", "\"");
+			                    String fareRet = StringUtils.substringBetween(priceRet, "data-fareimport=\"", "\"");
+			                    
+			                    String nameRet = StringUtils.substringBetween(priceRet, "name=\"", "\"");
+			                    String valueRet = StringUtils.substringBetween(priceRet, "value=\"", "\"");
+			                    String ret = getHtml2(arg1, name, value,nameRet,valueRet);
+			                    
+			                    String fee = "0";
+			                    if(StringUtils.isNotBlank(ret)){
+			                    	fee = ret.substring(0,ret.indexOf(";"));
+			                    }
+			                    
+			                    flightDetail.setPrice(Double.parseDouble(fare)+Double.parseDouble(fareRet)
+			                    		+Double.parseDouble(taxes)+Double.parseDouble(taxeRet)+Double.parseDouble(fee));
+	                            flightDetail.setTax(Double.parseDouble(fare));
+	                            
  			                    for(int j=0;j<countFlightRet;j++){
 			                    	seg = new FlightSegement();
 			                        String flightNo =   StringUtils.substringBetween(infoRet, "'>", "</span>");
@@ -465,6 +558,8 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 			                        infoRet = infoRet.replaceFirst("data-date='", "");
 		                	    	
 			                    }
+ 			                    roundTripFlightInfo.setInfo(segs);
+ 			                    roundTripFlightInfo.setDetail(flightDetail);
 			                    roundTripFlightInfo.setRetinfo(retsegs);
 	                	    	roundTripFlightInfo.setRetflightno(retflightno);
 	                	    	roundTripFlightInfo.setOutboundPrice(0);
@@ -495,7 +590,6 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 					    result.setRet(true);
 	                    result.setStatus(Constants.SUCCESS);
 	                    result.setData(flightRoundList);
-	                    System.out.println(JSON.toJSONString(result,SerializerFeature.DisableCircularReferenceDetect));
 	                    
 	            	    return result;
 	                    
@@ -509,7 +603,18 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 		                	 FlightSegement seg = null;
 		                	 List<String> flightNoList = null;
 		                    String info=   StringUtils.substringBetween(htmlCompress, "availability-cell-leftlastcolor-999\"><", "</div>");
-		                    String price = StringUtils.substringBetween(htmlCompress, "data-group=\"jsGroup-generic\"", "</div>");
+		                    
+		                    int masFareint = StringUtils.lastIndexOf(htmlCompress, "data-group=\"jsGroup-masFare\"");
+		                    int binterMasPointsint = StringUtils.lastIndexOf(htmlCompress, "data-group=\"jsGroup-binterMasPoints\"");
+		                    String price = "";
+		                    if(masFareint!=-1){
+		                    	price = StringUtils.substringBetween(htmlCompress, "data-group=\"jsGroup-generic\"", "jsGroup-masFare");
+		                    }
+		                    else if(binterMasPointsint!=-1){
+		                    	price = StringUtils.substringBetween(htmlCompress, "data-group=\"jsGroup-generic\"", "jsGroup-binterMasPoints");
+		                    }else{
+		                    	price = StringUtils.substringBetween(htmlCompress, "data-group=\"jsGroup-generic\"");
+		                    }
 		                    
 		                    System.out.println("info===="+info);
 		                    System.out.println("price===="+price);
@@ -565,13 +670,22 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 		                    
 		                    String taxes = StringUtils.substringBetween(price, "data-taxes=\"", "\"");
 		                    String fare = StringUtils.substringBetween(price, "data-fareimport=\"", "\"");
+		                    String name = StringUtils.substringBetween(price, "name=\"", "\"");
+		                    String value = StringUtils.substringBetween(price, "value=\"", "\"");
 		                    
+		                    //获取 fee
+		                    String ret = getHtml2(arg1, name, value,"","");
 		                    System.out.println("fare========="+fare);
 		                    System.out.println("taxes========"+taxes);
-		                    
+		                    System.out.println("ret========"+ret);
+		                    String fee = "0";
+		                    if(StringUtils.isNotBlank(ret)){
+		                    	fee = ret.substring(0,ret.indexOf(";"));
+		                    }
+		                     
 		                    flightDetail.setFlightno(flightNoList);
 		                    flightDetail.setMonetaryunit(monetaryunit);
-		                    flightDetail.setPrice(Double.parseDouble(fare));
+		                    flightDetail.setPrice(Double.parseDouble(fare)+Double.parseDouble(taxes)+Double.parseDouble(fee));
 		                    flightDetail.setTax(Double.parseDouble(taxes));
 		                    flightDetail.setDepcity(arg1.getDep());
 		                    flightDetail.setArrcity(arg1.getArr());
@@ -592,7 +706,6 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
                 result.setRet(true);
                 result.setStatus(Constants.SUCCESS);
                 result.setData(flightList);
-                System.out.println(JSON.toJSONString(result,SerializerFeature.DisableCircularReferenceDetect));
                 return result;
         }
 }
