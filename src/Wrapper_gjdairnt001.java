@@ -32,14 +32,14 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
         public static void main(String[] args) {
 
                 FlightSearchParam searchParam = new FlightSearchParam();
-                searchParam.setDep("LPA");
-                searchParam.setArr("SID");
-                searchParam.setDepDate("2014-07-15");
-                searchParam.setRetDate("2014-08-22");
+                searchParam.setDep("LIS");
+                searchParam.setArr("TFN");
+                searchParam.setDepDate("2014-07-17");
+                //searchParam.setRetDate("2014-08-22");
                 //searchParam.setRetDate("2014-07-28");
                 //searchParam.setTimeOut("60000");
                 searchParam.setToken("");
-                //searchParam.setFastTrack(false);
+                searchParam.setFastTrack(false);
                 String html = new  Wrapper_gjdairnt001().getHtml(searchParam);
                 System.out.println(html);
         //String detail = new  Wrapper_gjdairou001().getHtml2(searchParam);
@@ -524,12 +524,17 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 			                    
 			                    String nameRet = StringUtils.substringBetween(priceRet, "name=\"", "\"");
 			                    String valueRet = StringUtils.substringBetween(priceRet, "value=\"", "\"");
-			                    String ret = getHtml2(arg1, name, value,nameRet,valueRet);
 			                    
 			                    String fee = "0";
-			                    if(StringUtils.isNotBlank(ret)){
-			                    	fee = ret.substring(0,ret.indexOf(";"));
+			                    if(arg1.isFastTrack() == false){
+			                    	String ret = getHtml2(arg1, name, value,nameRet,valueRet);
+				                    if(StringUtils.isNotBlank(ret)){
+				                    	if(ret.indexOf(";")!=-1){
+					                    	fee = ret.substring(0,ret.indexOf(";"));
+				                    	}
+				                    }
 			                    }
+			                    
 			                    
 			                    flightDetail.setPrice(Double.parseDouble(fare)+Double.parseDouble(fareRet)
 			                    		+Double.parseDouble(taxes)+Double.parseDouble(taxeRet)+Double.parseDouble(fee));
@@ -676,14 +681,19 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 		                    String value = StringUtils.substringBetween(price, "value=\"", "\"");
 		                    
 		                    //获取 fee
-		                    String ret = getHtml2(arg1, name, value,"","");
+		                    
 		                    System.out.println("fare========="+fare);
 		                    System.out.println("taxes========"+taxes);
-		                    System.out.println("ret========"+ret);
 		                    String fee = "0";
-		                    if(StringUtils.isNotBlank(ret)){
-		                    	fee = ret.substring(0,ret.indexOf(";"));
+		                    if(arg1.isFastTrack() == false){
+		                    	String ret = getHtml2(arg1, name, value,"","");
+			                    if(StringUtils.isNotBlank(ret)){
+			                    	if(ret.indexOf(";")!=-1){
+				                    	fee = ret.substring(0,ret.indexOf(";"));
+			                    	}
+			                    }
 		                    }
+		                    
 		                     
 		                    flightDetail.setFlightno(flightNoList);
 		                    flightDetail.setMonetaryunit(monetaryunit);
