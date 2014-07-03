@@ -34,7 +34,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
                 FlightSearchParam searchParam = new FlightSearchParam();
                 searchParam.setDep("LIS");
                 searchParam.setArr("TFN");
-                searchParam.setDepDate("2014-07-17");
+                searchParam.setDepDate("2014-07-09");
                 //searchParam.setRetDate("2014-08-22");
                 //searchParam.setRetDate("2014-07-28");
                 //searchParam.setTimeOut("60000");
@@ -83,8 +83,8 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 	    	 	map.put("data[search][departureDate]", depdate);
 	    	 	map.put("data[search][returnDate]", arrdate);
 	    	 	map.put("data[search][dateAdvance]", "2");
-	    	 	map.put("data[search][departureDate]", "depdate");
-	    	 	map.put("data[search][departureDate]", "depdate");
+	    	 	//map.put("data[search][departureDate]", "depdate");
+	    	 	///map.put("data[search][departureDate]", "depdate");
 	    	 	 
 	 			//map.put(("search[initDates][0][month]","07"),
 	 			//map.put(("search[initDates][0][year]","2014"),
