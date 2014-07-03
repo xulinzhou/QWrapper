@@ -435,12 +435,12 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 		                        System.out.println("flightNo========"+flightNo);
 		                        seg.setFlightno(flightNo);
 		                        String detailHour = hourArray[j];
-		                        seg.setDepDate(date);
+		                        seg.setDepDate(arg1.getDepDate());
 		                        seg.setDepairport(orgin);
 		                        seg.setArrairport(des);
 		                        seg.setDeptime(detailHour.split("-")[0]);
 		                        seg.setArrtime(detailHour.split("-")[1]);
-		                        seg.setArrDate(date);
+		                        seg.setArrDate(arg1.getDepDate());
 		                        
 		                        segs.add(seg);
 		                        info = info.replaceFirst("'>", "");
@@ -551,12 +551,12 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 			                        System.out.println("flightNo============="+flightNo);
 			                        seg.setFlightno(flightNo);
 			                        String detailHour = hourArrayRet[j];
-			                        seg.setDepDate(date);
+			                        seg.setDepDate(arg1.getDepDate());
 			                        seg.setDepairport(orgin);
 			                        seg.setArrairport(des);
 			                        seg.setDeptime(detailHour.split("-")[0]);
 			                        seg.setArrtime(detailHour.split("-")[1]);
-			                        seg.setArrDate(date);
+			                        seg.setArrDate(arg1.getDepDate());
 			                        
 			                        retsegs.add(seg);
 			                        infoRet = infoRet.replaceFirst("'>", "");
@@ -660,12 +660,12 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 		                        System.out.println("flightNo"+flightNo);
 		                        seg.setFlightno(flightNo);
 		                        String detailHour = hourArray[j];
-		                        seg.setDepDate(date);
+		                        seg.setDepDate(arg1.getDepDate());
 		                        seg.setDepairport(orgin);
 		                        seg.setArrairport(des);
 		                        seg.setDeptime(detailHour.split("-")[0]);
 		                        seg.setArrtime(detailHour.split("-")[1]);
-		                        seg.setArrDate(date);
+		                        seg.setArrDate(arg1.getDepDate());
 		                        
 		                        segs.add(seg);
 		                        htmlCompress = htmlCompress.replaceFirst("'>", "");
