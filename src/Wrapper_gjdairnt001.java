@@ -32,10 +32,11 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
         public static void main(String[] args) {
 
                 FlightSearchParam searchParam = new FlightSearchParam();
-                searchParam.setDep("DKR");
-                searchParam.setArr("LPA");
-                searchParam.setDepDate("2014-07-22");
-                searchParam.setRetDate("2014-07-28");
+                searchParam.setDep("LPA");
+                searchParam.setArr("SID");
+                searchParam.setDepDate("2014-07-15");
+                searchParam.setRetDate("2014-08-22");
+                //searchParam.setRetDate("2014-07-28");
                 //searchParam.setTimeOut("60000");
                 searchParam.setToken("");
                 //searchParam.setFastTrack(false);
@@ -128,7 +129,8 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 
         }
 
-        public String getHtml(FlightSearchParam arg0) {QFPostMethod post = null;
+        public String getHtml(FlightSearchParam arg0) {
+        	QFPostMethod post = null;
 		try
 		{
 		// get all query parameters from the url set by wrapperSearchInterface
@@ -334,7 +336,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
                     return result;                  
                 }
                 if (htmlCompress.contains("We are unable to find recommendations for your search")
-                		|| htmlCompress.contains("Search for flights")) {
+                		) {
                     result.setRet(false);
                     result.setStatus(Constants.NO_RESULT);
                     return result;                  
