@@ -551,12 +551,12 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 			                        System.out.println("flightNo============="+flightNo);
 			                        seg.setFlightno(flightNo);
 			                        String detailHour = hourArrayRet[j];
-			                        seg.setDepDate(arg1.getDepDate());
+			                        seg.setDepDate(arg1.getRetDate());
 			                        seg.setDepairport(orgin);
 			                        seg.setArrairport(des);
 			                        seg.setDeptime(detailHour.split("-")[0]);
 			                        seg.setArrtime(detailHour.split("-")[1]);
-			                        seg.setArrDate(arg1.getDepDate());
+			                        seg.setArrDate(arg1.getRetDate());
 			                        
 			                        retsegs.add(seg);
 			                        infoRet = infoRet.replaceFirst("'>", "");
