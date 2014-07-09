@@ -307,17 +307,17 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
             httpClient.getParams().setParameter(HttpMethodParams.USER_AGENT, "Mozilla/5.0 (Windows NT 6.1; rv:8.0.1) Gecko/20100101 Firefox/8.0.1");
             
      		
-     		//post.addRequestHeader("Accept", "*/*");
-     		/*post.addRequestHeader("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
-     		post.addRequestHeader("Accept-Encoding", "gzip,deflate,sdch");
-     		post.addRequestHeader("Connection", "keep-alive");
-     		post.addRequestHeader("Content-Length", "17100");
-     		post.addRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-     		post.addRequestHeader("Host", "www.bintercanarias.com");
-     		post.addRequestHeader("Origin", "https://www.bintercanarias.com");
-     		post.addRequestHeader("RA-Sid", "D397EE33-20140623-111000-43e0d4-07451b");
-     		post.addRequestHeader("RA-Ver", "2.2.25");
-     		post.addRequestHeader("Referer", "https://www.bintercanarias.com");*/
+     		post.setRequestHeader("Accept", "*/*");
+     		post.setRequestHeader("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
+     		post.setRequestHeader("Accept-Encoding", "gzip,deflate,sdch");
+     		post.setRequestHeader("Connection", "keep-alive");
+     		post.setRequestHeader("Content-Length", "163");
+     		post.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+     		post.setRequestHeader("Host", "www.bintercanarias.com");
+     		post.setRequestHeader("Origin", "https://www.bintercanarias.com");
+     		post.setRequestHeader("RA-Sid", "D397EE33-20140623-111000-43e0d4-07451b");
+     		post.setRequestHeader("RA-Ver", "2.2.25");
+     		post.setRequestHeader("Referer", "https://www.bintercanarias.com");
      		//post.addRequestHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; nl; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13");
      		post.addRequestHeader("X_REQUESTED_WITH", "XMLHttpRequest");
      		
