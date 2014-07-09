@@ -599,21 +599,28 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
 			                        String des = StringUtils.substringBetween(infoRet, "data-destination='", "'");
 			                        String date = StringUtils.substringBetween(infoRet, "data-date='", "'");
 			                        
-			                        System.out.println("flightNo============="+flightNo);
-			                        seg.setFlightno(flightNo);
-			                        String detailHour = hourArrayRet[j];
 			                        
+			                        
+			                       /* SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+			                	 	SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+			                	 	String depdate = format.format(format1.parse(arg0.getDepDate()));
+			                	 	String arrdate = "";
+			                	 	if(StringUtils.isNotBlank(arg0.getRetDate())){
+			                	 		arrdate =format.format(format1.parse(arg0.getRetDate()));
+			                	 	}*/
+			                	 	
 			                        SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
 			                	 	SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-			                	 	
 			                	 	String arrdate = "";
  			                	 		try {
- 			                	 			String depdate = format.format(format1.parse(date));
-											arrdate =format2.format(format1.parse(depdate));
-										} catch (ParseException e) {
+ 			                	 			 arrdate = format2.format(format.parse(date));
+ 										} catch (ParseException e) {
 											e.printStackTrace();
 										}
 			                	 	
+			                        System.out.println("flightNo============="+flightNo);
+			                        seg.setFlightno(flightNo);
+			                        String detailHour = hourArrayRet[j];
 			                        seg.setDepDate(arrdate);
 			                        seg.setDepairport(orgin);
 			                        seg.setArrairport(des);
@@ -747,7 +754,7 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
 		                    
 		                    System.out.println("fare========="+fare);
 		                    System.out.println("taxes========"+taxes);
-		                    String fee = "12";
+		                    String fee = "0";
 		                    //if(arg1.isFastTrack() == false){
 		                    	String ret = getHtml2(arg1, name, value,"","");
 			                    if(StringUtils.isNotBlank(ret)){
