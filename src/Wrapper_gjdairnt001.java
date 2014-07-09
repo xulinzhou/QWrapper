@@ -34,7 +34,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
                 FlightSearchParam searchParam = new FlightSearchParam();
                 searchParam.setDep("MAD");
                 searchParam.setArr("EUN");
-                searchParam.setDepDate("2014-07-15");
+                searchParam.setDepDate("2014-07-20");
                 //searchParam.setRetDate("2014-08-15");
                 //searchParam.setRetDate("2014-07-28");
                 //searchParam.setTimeOut("60000");
@@ -280,9 +280,9 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
                     post = new QFPostMethod(getUrl);
                     if(StringUtils.isBlank(name2)){
                     	NameValuePair[] names1 = {
-                 	 			new NameValuePair("ZJDK",""),
+                 	 			//new NameValuePair("ZJDK",""),
                  	 			new NameValuePair(name,value),
-                 	 			new NameValuePair("csrf","ZJDK"),
+                 	 			//new NameValuePair("csrf","ZJDK"),
                          };
                     	post.setRequestBody(names1);
                     }else{
@@ -315,7 +315,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
              		String cookie = StringUtils.join(httpClient.getState().getCookies(),";");
              		
              		httpClient.getState().clearCookies();
-             		System.out.println(cookie);
+             		//System.out.println(cookie);
         			post.setRequestHeader("Cookie",cookie);
              		httpClient.executeMethod(post);
              		return cookie;
@@ -711,18 +711,18 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 		                    System.out.println("taxes========"+taxes);
 		                    String fee = "12";
 		                    //if(arg1.isFastTrack() == false){
-		                    	//String ret = getHtml2(arg1, name, value,"","");
-			                    /*if(StringUtils.isNotBlank(ret)){
+		                    	String ret = getHtml2(arg1, name, value,"","");
+			                    if(StringUtils.isNotBlank(ret)){
 			                    	if(ret.indexOf(";")!=-1){
 				                    	fee = ret.substring(0,ret.indexOf(";"));
 			                    	}
-			                    }*/
+			                    }
 		                    //}
 		                    
 		                     
 		                    flightDetail.setFlightno(flightNoList);
-		                    flightDetail.setMonetaryunit(monetaryunit);
-		                    flightDetail.setPrice(Double.parseDouble(fare)+Double.parseDouble(fee));
+		                    flightDetail.setMonetaryunit(fee);
+		                    //flightDetail.setPrice(Double.parseDouble(fare)+Double.parseDouble(fee));
 		                    flightDetail.setTax(Double.parseDouble(taxes));
 		                    flightDetail.setDepcity(arg1.getDep());
 		                    flightDetail.setArrcity(arg1.getArr());
