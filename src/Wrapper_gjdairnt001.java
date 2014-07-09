@@ -599,15 +599,26 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 			                        String des = StringUtils.substringBetween(infoRet, "data-destination='", "'");
 			                        String date = StringUtils.substringBetween(infoRet, "data-date='", "'");
 			                        
+			                        SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+			                	 	SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+			                	 	
+			                	 	String arrdate = "";
+ 			                	 		try {
+ 			                	 			String depdate = format.format(format1.parse(date));
+											arrdate =format2.format(format1.parse(depdate));
+										} catch (ParseException e) {
+											e.printStackTrace();
+										}
+			                	 	
 			                        System.out.println("flightNo============="+flightNo);
 			                        seg.setFlightno(flightNo);
 			                        String detailHour = hourArrayRet[j];
-			                        seg.setDepDate(date);
+			                        seg.setDepDate(arrdate);
 			                        seg.setDepairport(orgin);
 			                        seg.setArrairport(des);
 			                        seg.setDeptime(detailHour.split("-")[0]);
 			                        seg.setArrtime(detailHour.split("-")[1]);
-			                        seg.setArrDate(date);
+			                        seg.setArrDate(arrdate);
 			                        
 			                        retsegs.add(seg);
 			                        infoRet = infoRet.replaceFirst("'>", "");
