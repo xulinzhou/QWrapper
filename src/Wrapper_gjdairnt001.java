@@ -712,11 +712,11 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 		                    String fee = "12";
 		                    //if(arg1.isFastTrack() == false){
 		                    	String ret = getHtml2(arg1, name, value,"","");
-			                    if(StringUtils.isNotBlank(ret)){
+			                    /*if(StringUtils.isNotBlank(ret)){
 			                    	if(ret.indexOf(";")!=-1){
 				                    	fee = ret.substring(0,ret.indexOf(";"));
 			                    	}
-			                    }
+			                    }*/
 		                    //}
 		                    
 		                     
