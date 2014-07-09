@@ -27,7 +27,7 @@ import com.qunar.qfwrapper.util.QFHttpClient;
 import com.qunar.qfwrapper.util.QFPostMethod;
 
 
-public class Wrapper_gjdairnt001 implements QunarCrawler{
+public class Wrapper_gjsairnt001 implements QunarCrawler{
 
         public static void main(String[] args) {
 
@@ -40,12 +40,12 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
                 //searchParam.setTimeOut("60000");
                 searchParam.setToken("");
                 searchParam.setFastTrack(false);
-                String html = new  Wrapper_gjdairnt001().getHtml(searchParam);
+                String html = new  Wrapper_gjsairnt001().getHtml(searchParam);
                 System.out.println(html);
         //String detail = new  Wrapper_gjdairou001().getHtml2(searchParam);
         //System.out.println(detail);
                 //ProcessResultInfo result = new ProcessResultInfo();
-        ProcessResultInfo   result = new  Wrapper_gjdairnt001().process(html,searchParam);
+        ProcessResultInfo   result = new  Wrapper_gjsairnt001().process(html,searchParam);
         System.out.println(JSON.toJSONString(result,SerializerFeature.DisableCircularReferenceDetect));
 
                // result = new  Wrapper_gjdairou001().process1(html,detail,searchParam);
