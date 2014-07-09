@@ -309,7 +309,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
                     	post.releaseConnection();
                     }
             }
-            return "Exception";
+            return post.getStatusCode()+"";
     
     }
         public ProcessResultInfo process(String arg0, FlightSearchParam arg1) {
