@@ -296,9 +296,8 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
             }
              
      		post.getParams().setContentCharset("UTF-8");
-     		post.setRequestHeader("X_REQUESTED_WITH", "XMLHttpRequest");
      		
-     		/*post.setRequestHeader("Accept", "*//*");
+     		post.setRequestHeader("Accept", "");
      		post.setRequestHeader("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
      		post.setRequestHeader("Accept-Encoding", "gzip,deflate,sdch");
      		post.setRequestHeader("Connection", "keep-alive");
@@ -309,7 +308,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
      		post.setRequestHeader("RA-Sid", "D397EE33-20140623-111000-43e0d4-07451b");
      		post.setRequestHeader("RA-Ver", "2.2.25");
      		post.setRequestHeader("Referer", "https://www.bintercanarias.com");
-     		post.setRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36");*/
+     		post.setRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36");
      		post.setRequestHeader("X_REQUESTED_WITH", "XMLHttpRequest");
      		
      		
