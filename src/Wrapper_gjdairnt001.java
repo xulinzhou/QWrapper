@@ -298,10 +298,11 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
              
      		post.getParams().setContentCharset("UTF-8");
      		
-     		post.setRequestHeader("X_REQUESTED_WITH", "XMLHttpRequest");
+     		post.addRequestHeader("X_REQUESTED_WITH", "XMLHttpRequest");
      		
      		
-     	 cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
+     	    cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
+     	    System.out.println(cookie);
 			post.addRequestHeader("Cookie",cookie);
      		httpClient.executeMethod(post);	
      		return post.getResponseBodyAsString();
