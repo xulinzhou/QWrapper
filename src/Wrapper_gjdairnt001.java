@@ -35,7 +35,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
                 searchParam.setDep("MAD");
                 searchParam.setArr("EUN");
                 searchParam.setDepDate("2014-07-15");
-                searchParam.setRetDate("2014-08-15");
+                //searchParam.setRetDate("2014-08-15");
                 //searchParam.setRetDate("2014-07-28");
                 //searchParam.setTimeOut("60000");
                 searchParam.setToken("");
@@ -691,14 +691,14 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 		                    System.out.println("fare========="+fare);
 		                    System.out.println("taxes========"+taxes);
 		                    String fee = "0";
-		                    //if(arg1.isFastTrack() == false){
+		                    if(arg1.isFastTrack() == false){
 		                    	String ret = getHtml2(arg1, name, value,"","");
 			                    if(StringUtils.isNotBlank(ret)){
 			                    	if(ret.indexOf(";")!=-1){
 				                    	fee = ret.substring(0,ret.indexOf(";"));
 			                    	}
 			                    }
-		                    //}
+		                    }
 		                    
 		                     
 		                    flightDetail.setFlightno(flightNoList);
