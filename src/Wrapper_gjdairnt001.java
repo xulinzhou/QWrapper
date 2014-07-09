@@ -222,8 +222,8 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
             {
             	// get all query parameters from the url set by wrapperSearchInterface
         		QFHttpClient httpClient = new QFHttpClient(arg0, false);
-        		httpClient.getParams().setCookiePolicy(
-        				CookiePolicy.BROWSER_COMPATIBILITY);
+        		//httpClient.getParams().setCookiePolicy(
+        			//	CookiePolicy.BROWSER_COMPATIBILITY);
 
         		post = new QFPostMethod("https://www.bintercanarias.com/booking/searchDo");
          	 	SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -297,8 +297,8 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
              
      		post.getParams().setContentCharset("UTF-8");
      		post.setRequestHeader("X_REQUESTED_WITH", "XMLHttpRequest");
-     		post.setRequestHeader("Referer", "https://www.bintercanarias.com/eng/book/select-a-flight/DKR-LPA");
-     		String cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
+     		String cookie = StringUtils.join(httpClient.getState().getCookies(),";");
+     		httpClient.getState().clearCookies();
 			post.addRequestHeader("Cookie",cookie);
      		httpClient.executeMethod(post);
      		return post.getResponseBodyAsString();
