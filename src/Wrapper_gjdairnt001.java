@@ -9,6 +9,7 @@ import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.lang.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -223,8 +224,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
             {
             	// get all query parameters from the url set by wrapperSearchInterface
         		QFHttpClient httpClient = new QFHttpClient(arg0, false);
-        		httpClient.getParams().setCookiePolicy(
-        				CookiePolicy.BROWSER_COMPATIBILITY);
+        		
 
         		post = new QFPostMethod("https://www.bintercanarias.com/booking/searchDo");
          	 	SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -278,6 +278,8 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
         		
     		String getUrl = String.format("https://www.bintercanarias.com/booking/infoServiceFee/lang:eng");
             System.out.println("getUrl"+getUrl);;
+            
+
             post = new QFPostMethod(getUrl);
             if(StringUtils.isBlank(name2)){
             	NameValuePair[] names1 = {
@@ -298,7 +300,12 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
              
      		post.getParams().setContentCharset("UTF-8");
      		
-     		
+            httpClient.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET, "UTF8");
+            
+            httpClient.getParams().setCookiePolicy(
+    				CookiePolicy.BROWSER_COMPATIBILITY);
+            httpClient.getParams().setParameter(HttpMethodParams.USER_AGENT, "Mozilla/5.0 (Windows NT 6.1; rv:8.0.1) Gecko/20100101 Firefox/8.0.1");
+            
      		
      		//post.addRequestHeader("Accept", "*/*");
      		/*post.addRequestHeader("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
@@ -317,7 +324,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
      		
      	    cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
      	    System.out.println(cookie);
-			post.addRequestHeader("Cookie","PHPSESSID=rqdpi9bbcip7enlaa8ub0qub00; cookiesession1=UUA906H5YF1D0PED3RAAUSXECOJWZOFT; CakeCookie[BookingSearch]=Q2FrZQ%3D%3D.%2BFQuO0Q49Y4v2w5DY51F0xMYzcWn7oVDltgAikxvU8mjLy63JRCTsiJz6OejDv0OPzU5xet9Fgek4Bupo2u3H%2Fp9KUc2MUgqfyjRux9wL2K29Kv0ZSjpLxNoNUBbz8mBx5AmWQry01kkuzLT%2Fq%2FOkZm2EnFy0lix5prB5ypH%2Fqjh4lVjtR3Fe6KkP7%2BDcMO%2FSzmiqeN2sud68wyuxXG3On8zXyaxFvAbu5s9WqFVvg2F8smPnyUoL%2Bd5iwttvgTfOFfYrdUn0%2FTX0HICVvPZhvNb23Fj7qAvBH6JY0Gr6AA1Y0nTHdy3b8KFua9U7OGEsqW%2BMkdc6Se%2F2EGJl75huzfc2CeXxvwMZkiVMaI3sMYN7MpVQjp9q%2FbL6Cse0ktGG%2Flqrq%2Bi8n91lCK%2Fy%2BbcDCr0r062k%2FE4UORLDFV7jl%2FvBxt6sPyuBJXFa28DjptRcYDLzZm%2FwZ5bO%2BDDg%2B1QFNV2atg9JEYyYFDkKFg%2BGjnKmRrOH1D8CCRiaw%2BEMQkuebSlSiF4AXYLEhso%2F1vJ02KPjz7QlQijNZIyLMJd5rAa4i9DDioXesVcvo3qPeVeaxH2G65fTcTpjNdqo9Dcahv2ZeIX%2BrfZtVwW8jRgSQuWkSmDwYb%2BkpKwe5jelJA0t8NutbvLfBgrWYyOwuLQCYA7z2UjKKmD%2BBCl08iJfjRQR%2FIEtCdk7GU26WqNVcfhg%2BGzCuz21%2F2hh%2BozUaxm%2B0R%2FVS29Q2WrcnKXbEemrk7Mc2IgWMiKs1zrfYDYtQlSORZ5M%2F2CVGeWcRIwVH5uLEZnaLmED%2BQx9QchgEMt3Yk4kQpcD08u8Dz9mZil%2Fb%2FDVzbH1xt8ZVo1NvIRWffmCJ15Lp%2F8I1mVVT7ACtu2lUg1NoRGQenKABfjORf0eF3%2BUvN35iF%2F3azizEZOHirNWQKxDqnwWTZ0KCmbMOn5WiR317h4DgpJAtJqRwY%2FNtGJ4hU3mRddWCMdqDLd%2Bo%2FBDFqjTNjoeHa9Q2A%3D; __utma=27653039.443068471.1404180813.1404885715.1404890341.15; __utmb=27653039.6.9.1404890428625; __utmc=27653039; __utmz=27653039.1404364764.11.2.utmcsr=cbook.flight.qunar.com|utmccn=(referral)|utmcmd=referral|utmcct=/bookingtransform/bookingCheck");
+			post.addRequestHeader("Cookie",cookie);
      		httpClient.executeMethod(post);	
      		return post.getResponseBodyAsString();
             } catch (Exception e) {
