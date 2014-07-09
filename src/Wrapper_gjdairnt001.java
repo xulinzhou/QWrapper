@@ -304,9 +304,11 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
             
             httpClient.getParams().setCookiePolicy(
     				CookiePolicy.BROWSER_COMPATIBILITY);
-            httpClient.getParams().setParameter(HttpMethodParams.USER_AGENT, "Mozilla/5.0 (Windows NT 6.1; rv:8.0.1) Gecko/20100101 Firefox/8.0.1");
+            httpClient.getParams().setParameter(HttpMethodParams.USER_AGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; nl; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13");
             
      		
+          
+            
      		post.setRequestHeader("Accept", "*/*");
      		post.setRequestHeader("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
      		post.setRequestHeader("Accept-Encoding", "gzip,deflate,sdch");
@@ -318,14 +320,15 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
      		post.setRequestHeader("RA-Sid", "D397EE33-20140623-111000-43e0d4-07451b");
      		post.setRequestHeader("RA-Ver", "2.2.25");
      		post.setRequestHeader("Referer", "https://www.bintercanarias.com");
-     		//post.addRequestHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; nl; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13");
-     		post.addRequestHeader("X_REQUESTED_WITH", "XMLHttpRequest");
-     		
+     		//post.setRequestHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; nl; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13");
+     		post.setRequestHeader("X_REQUESTED_WITH", "XMLHttpRequest");
+     		 
      		
      	    cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
      	    System.out.println(cookie);
 			post.addRequestHeader("Cookie",cookie);
-     		httpClient.executeMethod(post);	
+ 
+            httpClient.executeMethod(post);	
      		return post.getResponseBodyAsString();
             } catch (Exception e) {
                     e.printStackTrace();
