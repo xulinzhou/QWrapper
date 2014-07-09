@@ -310,7 +310,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
      		post.setRequestHeader("Referer", "https://www.bintercanarias.com");
      		post.setRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36");
      		post.setRequestHeader("X_REQUESTED_WITH", "XMLHttpRequest");
-     		
+     		post.setRequestHeader("Cookie","");
      		String cookie = StringUtils.join(httpClient.getState().getCookies(),";");
      		
      		httpClient.getState().clearCookies();
