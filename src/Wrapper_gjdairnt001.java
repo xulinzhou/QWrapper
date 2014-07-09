@@ -41,7 +41,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
                 searchParam.setToken("");
                 searchParam.setFastTrack(false);
                 String html = new  Wrapper_gjdairnt001().getHtml(searchParam);
-                System.out.println(html);
+                //System.out.println(html);
         //String detail = new  Wrapper_gjdairou001().getHtml2(searchParam);
         //System.out.println(detail);
                 //ProcessResultInfo result = new ProcessResultInfo();
@@ -271,57 +271,52 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
         	 			new NameValuePair("data[search][flagUniversityFare]","0"),
         	 			
         	    };
-        	 	post.setRequestBody(names);
-        	    post.getParams().setContentCharset("UTF-8");
-        	    httpClient.executeMethod(post);				
-        	    if(post.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || post.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
-        	    	String getUrl = String.format("https://www.bintercanarias.com/booking/infoServiceFee/lang:eng");
-                    System.out.println("getUrl"+getUrl);
-                    post = new QFPostMethod(getUrl);
-                    if(StringUtils.isBlank(name2)){
-                    	NameValuePair[] names1 = {
-                 	 			//new NameValuePair("ZJDK",""),
-                 	 			new NameValuePair(name,value),
-                 	 			//new NameValuePair("csrf","ZJDK"),
-                         };
-                    	post.setRequestBody(names1);
-                    }else{
-                    	NameValuePair[] namesNew = {
-                 	 			new NameValuePair("HD",""),
-                 	 			new NameValuePair(name,value),
-                 	 			new NameValuePair(name2,value2),
-                 	 			new NameValuePair("csrf","HD|ND"),
-                         };
-                    	post.setRequestBody(namesNew);
-                    }
-                     
-             		post.getParams().setContentCharset("UTF-8");
-             		
-             		post.setRequestHeader("Accept", "*/*");
-             		post.setRequestHeader("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
-             		post.setRequestHeader("Accept-Encoding", "gzip,deflate,sdch");
-             		post.setRequestHeader("Connection", "keep-alive");
-             		post.setRequestHeader("Content-Length", "17100");
-             		post.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-             		post.setRequestHeader("Host", "www.bintercanarias.com");
-             		post.setRequestHeader("Origin", "https://www.bintercanarias.com");
-             		post.setRequestHeader("RA-Sid", "D397EE33-20140623-111000-43e0d4-07451b");
-             		post.setRequestHeader("RA-Ver", "2.2.25");
-             		post.setRequestHeader("Referer", "https://www.bintercanarias.com");
-             		post.setRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36");
-             		post.setRequestHeader("X_REQUESTED_WITH", "XMLHttpRequest");
-
-             		//post.setRequestHeader("Cookie","");
-             		String cookie = StringUtils.join(httpClient.getState().getCookies(),";");
-             		
-             		httpClient.getState().clearCookies();
-             		System.out.println(cookie);
-        			post.setRequestHeader("Cookie",cookie);
-             		httpClient.executeMethod(post);
-             		
-             		return post.getStatusCode()+"";
-        	    }
-    		
+        	    post.setRequestBody(names);
+        		post.getParams().setContentCharset("UTF-8");
+        		httpClient.executeMethod(post);	
+             
+    		String getUrl = String.format("https://www.bintercanarias.com/booking/infoServiceFee/lang:eng");
+            System.out.println("getUrl"+getUrl);;
+            post = new QFPostMethod(getUrl);
+            if(StringUtils.isBlank(name2)){
+            	NameValuePair[] names1 = {
+         	 			new NameValuePair("HD",""),
+         	 			new NameValuePair(name,value),
+         	 			new NameValuePair("csrf","ND"),
+                 };
+            	post.setRequestBody(names1);
+            }else{
+            	NameValuePair[] namesNew = {
+         	 			new NameValuePair("HD",""),
+         	 			new NameValuePair(name,value),
+         	 			new NameValuePair(name2,value2),
+         	 			new NameValuePair("csrf","HD|ND"),
+                 };
+            	post.setRequestBody(namesNew);
+            }
+             
+     		post.getParams().setContentCharset("UTF-8");
+     		post.setRequestHeader("X_REQUESTED_WITH", "XMLHttpRequest");
+     		
+     		/*post.setRequestHeader("Accept", "*//*");
+     		post.setRequestHeader("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
+     		post.setRequestHeader("Accept-Encoding", "gzip,deflate,sdch");
+     		post.setRequestHeader("Connection", "keep-alive");
+     		post.setRequestHeader("Content-Length", "17100");
+     		post.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+     		post.setRequestHeader("Host", "www.bintercanarias.com");
+     		post.setRequestHeader("Origin", "https://www.bintercanarias.com");
+     		post.setRequestHeader("RA-Sid", "D397EE33-20140623-111000-43e0d4-07451b");
+     		post.setRequestHeader("RA-Ver", "2.2.25");
+     		post.setRequestHeader("Referer", "https://www.bintercanarias.com");
+     		post.setRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36");*/
+     		post.setRequestHeader("X_REQUESTED_WITH", "XMLHttpRequest");
+     		
+     		
+     		String cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
+			post.addRequestHeader("Cookie",cookie);
+     		httpClient.executeMethod(post);	
+     		return post.getResponseBodyAsString();
             } catch (Exception e) {
                     e.printStackTrace();
             } finally {                     
@@ -329,7 +324,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
                     	post.releaseConnection();
                     }
             }
-            return post.getStatusCode()+"";
+            return "Exception";
     
     }
         public ProcessResultInfo process(String arg0, FlightSearchParam arg1) {
