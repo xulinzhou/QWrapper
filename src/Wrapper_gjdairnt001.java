@@ -315,9 +315,10 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
              		String cookie = StringUtils.join(httpClient.getState().getCookies(),";");
              		
              		httpClient.getState().clearCookies();
+             		System.out.println(cookie);
         			post.setRequestHeader("Cookie",cookie);
              		httpClient.executeMethod(post);
-             		return post.getStatusCode()+"";
+             		return cookie;
         	    }
     		
             } catch (Exception e) {
