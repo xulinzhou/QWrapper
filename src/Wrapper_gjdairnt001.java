@@ -218,6 +218,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
         
         public String getHtml2(FlightSearchParam arg0,String name,String value,String name2,String value2) {
         	QFPostMethod post = null;
+        	String cookie = "";
             try
             {
             	// get all query parameters from the url set by wrapperSearchInterface
@@ -274,7 +275,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
         	    post.setRequestBody(names);
         		post.getParams().setContentCharset("UTF-8");
         		httpClient.executeMethod(post);	
-             
+        		
     		String getUrl = String.format("https://www.bintercanarias.com/booking/infoServiceFee/lang:eng");
             System.out.println("getUrl"+getUrl);;
             post = new QFPostMethod(getUrl);
@@ -297,22 +298,10 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
              
      		post.getParams().setContentCharset("UTF-8");
      		
-     		post.setRequestHeader("Accept", "");
-     		post.setRequestHeader("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
-     		post.setRequestHeader("Accept-Encoding", "gzip,deflate,sdch");
-     		post.setRequestHeader("Connection", "keep-alive");
-     		post.setRequestHeader("Content-Length", "17100");
-     		post.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-     		post.setRequestHeader("Host", "www.bintercanarias.com");
-     		post.setRequestHeader("Origin", "https://www.bintercanarias.com");
-     		post.setRequestHeader("RA-Sid", "D397EE33-20140623-111000-43e0d4-07451b");
-     		post.setRequestHeader("RA-Ver", "2.2.25");
-     		post.setRequestHeader("Referer", "https://www.bintercanarias.com");
-     		post.setRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36");
      		post.setRequestHeader("X_REQUESTED_WITH", "XMLHttpRequest");
      		
      		
-     		String cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
+     	 cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
 			post.addRequestHeader("Cookie",cookie);
      		httpClient.executeMethod(post);	
      		return post.getResponseBodyAsString();
@@ -323,7 +312,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
                     	post.releaseConnection();
                     }
             }
-            return "Exception";
+            return "Exception"+cookie+post.getStatusCode();
     
     }
         public ProcessResultInfo process(String arg0, FlightSearchParam arg1) {
