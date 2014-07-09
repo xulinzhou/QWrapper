@@ -280,9 +280,9 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
             post = new QFPostMethod(getUrl);
             if(StringUtils.isBlank(name2)){
             	NameValuePair[] names1 = {
-         	 			new NameValuePair("HD",""),
+         	 			new NameValuePair("ZJDK",""),
          	 			new NameValuePair(name,value),
-         	 			new NameValuePair("csrf","ND"),
+         	 			new NameValuePair("csrf","ZJDK"),
                  };
             	post.setRequestBody(names1);
             }else{
@@ -300,7 +300,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
      		post.setRequestHeader("Referer", "https://www.bintercanarias.com/eng/book/select-a-flight/DKR-LPA");
      		String cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
 			post.addRequestHeader("Cookie",cookie);
-     		httpClient.executeMethod(post);	
+     		httpClient.executeMethod(post);
      		return post.getResponseBodyAsString();
             } catch (Exception e) {
                     e.printStackTrace();
@@ -693,16 +693,16 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 		                    String fee = "0";
 		                    //if(arg1.isFastTrack() == false){
 		                    	String ret = getHtml2(arg1, name, value,"","");
-			                    /*if(StringUtils.isNotBlank(ret)){
+			                    if(StringUtils.isNotBlank(ret)){
 			                    	if(ret.indexOf(";")!=-1){
 				                    	fee = ret.substring(0,ret.indexOf(";"));
 			                    	}
-			                    }*/
+			                    }
 		                    //}
 		                    
 		                     
 		                    flightDetail.setFlightno(flightNoList);
-		                    flightDetail.setMonetaryunit(ret);
+		                    flightDetail.setMonetaryunit(monetaryunit);
 		                    flightDetail.setPrice(Double.parseDouble(fare)+Double.parseDouble(fee));
 		                    flightDetail.setTax(Double.parseDouble(taxes));
 		                    flightDetail.setDepcity(arg1.getDep());
