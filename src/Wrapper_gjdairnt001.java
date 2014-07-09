@@ -278,25 +278,8 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
     		String getUrl = String.format("https://www.bintercanarias.com/booking/infoServiceFee/lang:eng");
             System.out.println("getUrl"+getUrl);;
             post = new QFPostMethod(getUrl);
-            return post.getStatusCode()+"";
-            /*if(StringUtils.isBlank(name2)){
-            	NameValuePair[] names1 = {
-         	 			new NameValuePair("ZJDK",""),
-         	 			new NameValuePair(name,value),
-         	 			new NameValuePair("csrf","ZJDK"),
-                 };
-            	post.setRequestBody(names1);
-            }else{
-            	NameValuePair[] namesNew = {
-         	 			new NameValuePair("HD",""),
-         	 			new NameValuePair(name,value),
-         	 			new NameValuePair(name2,value2),
-         	 			new NameValuePair("csrf","HD|ND"),
-                 };
-            	post.setRequestBody(namesNew);
-            }*/
-             
-     		 
+            return httpClient.executeMethod(post)+"";
+            
             } catch (Exception e) {
                     e.printStackTrace();
             } finally {                     
