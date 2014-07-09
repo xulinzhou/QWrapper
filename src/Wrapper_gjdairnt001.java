@@ -222,8 +222,8 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
             {
             	// get all query parameters from the url set by wrapperSearchInterface
         		QFHttpClient httpClient = new QFHttpClient(arg0, false);
-        		httpClient.getState().setCookiePolicy(CookiePolicy.COMPATIBILITY); 
-
+        		httpClient.getParams().setCookiePolicy(
+        				CookiePolicy.BROWSER_COMPATIBILITY);
 
         		post = new QFPostMethod("https://www.bintercanarias.com/booking/searchDo");
          	 	SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
