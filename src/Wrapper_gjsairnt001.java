@@ -5,10 +5,13 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.lang.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -34,14 +37,14 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
                 FlightSearchParam searchParam = new FlightSearchParam();
                 searchParam.setDep("MAD");
                 searchParam.setArr("EUN");
-                searchParam.setDepDate("2014-07-15");
+                searchParam.setDepDate("2014-07-20");
                 //searchParam.setRetDate("2014-08-15");
                 //searchParam.setRetDate("2014-07-28");
                 //searchParam.setTimeOut("60000");
                 searchParam.setToken("");
                 searchParam.setFastTrack(false);
                 String html = new  Wrapper_gjsairnt001().getHtml(searchParam);
-                System.out.println(html);
+                //System.out.println(html);
         //String detail = new  Wrapper_gjdairou001().getHtml2(searchParam);
         //System.out.println(detail);
                 //ProcessResultInfo result = new ProcessResultInfo();
@@ -218,12 +221,12 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
         
         public String getHtml2(FlightSearchParam arg0,String name,String value,String name2,String value2) {
         	QFPostMethod post = null;
+        	String cookie = "";
             try
             {
             	// get all query parameters from the url set by wrapperSearchInterface
         		QFHttpClient httpClient = new QFHttpClient(arg0, false);
-        		httpClient.getParams().setCookiePolicy(
-        				CookiePolicy.BROWSER_COMPATIBILITY);
+        		
 
         		post = new QFPostMethod("https://www.bintercanarias.com/booking/searchDo");
          	 	SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -274,9 +277,11 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
         	    post.setRequestBody(names);
         		post.getParams().setContentCharset("UTF-8");
         		httpClient.executeMethod(post);	
-             
+        		
     		String getUrl = String.format("https://www.bintercanarias.com/booking/infoServiceFee/lang:eng");
             System.out.println("getUrl"+getUrl);;
+            
+
             post = new QFPostMethod(getUrl);
             if(StringUtils.isBlank(name2)){
             	NameValuePair[] names1 = {
@@ -296,11 +301,51 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
             }
              
      		post.getParams().setContentCharset("UTF-8");
-     		post.setRequestHeader("X_REQUESTED_WITH", "XMLHttpRequest");
-     		post.setRequestHeader("Referer", "https://www.bintercanarias.com/eng/book/select-a-flight/DKR-LPA");
-     		String cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
+     		
+            httpClient.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET, "UTF8");
+            
+            httpClient.getParams().setCookiePolicy(
+    				CookiePolicy.BROWSER_COMPATIBILITY);
+            httpClient.getParams().setParameter(HttpMethodParams.USER_AGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; nl; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13");
+            
+     		
+          
+            
+     		post.addRequestHeader("Accept", "*/*");
+     		post.addRequestHeader("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
+     		post.addRequestHeader("Accept-Encoding", "gzip,deflate,sdch");
+     		post.addRequestHeader("Connection", "keep-alive");
+     		post.addRequestHeader("Content-Length", "163");
+     		post.addRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+     		post.addRequestHeader("Host", "www.bintercanarias.com");
+     		post.addRequestHeader("Origin", "https://www.bintercanarias.com");
+     		post.addRequestHeader("RA-Sid", "D397EE33-20140623-111000-43e0d4-07451b");
+     		post.addRequestHeader("RA-Ver", "2.2.25");
+     		post.addRequestHeader("Referer", "https://www.bintercanarias.com");
+     		//post.setRequestHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; nl; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13");
+     		post.addRequestHeader("X-Requested-With", "XMLHttpRequest");
+     		 
+     		
+     	    cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
+     	    System.out.println(cookie);
+     	    cookie += "__utmc:27653039"+"; ";
+     	    cookie += "__utma:27653039.443068471.1404180813.1404885715.1404890341.15"+"; ";
+     	    cookie += "__utmz:27653039.1404364764.11.2.utmcsr=cbook.flight.qunar.com|utmccn=(referral)|utmcmd=referral|utmcct=/bookingtransform/bookingCheck"+";";
+     	 
 			post.addRequestHeader("Cookie",cookie);
-     		httpClient.executeMethod(post);	
+ 
+			
+			Cookie[] cookies = httpClient.getState().getCookies();	
+			
+			for (int i = 0; i < cookies.length; i++) {
+			System.out.println("cookiename=="+cookies[i].getName());
+			System.out.println("cookieValue=="+cookies[i].getValue());
+			//System.out.println("Domain=="+cookies[i].getDomain());
+			//System.out.println("Path=="+cookies[i].getPath());
+			//System.out.println("Version=="+cookies[i].getVersion());
+			}
+			
+            httpClient.executeMethod(post);	
      		return post.getResponseBodyAsString();
             } catch (Exception e) {
                     e.printStackTrace();
@@ -309,7 +354,7 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
                     	post.releaseConnection();
                     }
             }
-            return "Exception";
+            return "Exception"+cookie+post.getStatusCode();
     
     }
         public ProcessResultInfo process(String arg0, FlightSearchParam arg1) {
@@ -531,14 +576,14 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
 			                    String nameRet = StringUtils.substringBetween(priceRet, "name=\"", "\"");
 			                    String valueRet = StringUtils.substringBetween(priceRet, "value=\"", "\"");
 			                    
-			                    String fee = "12";
+			                    String fee = "0";
 			                    //if(arg1.isFastTrack() == false){
-			                    	/*String ret = getHtml2(arg1, name, value,nameRet,valueRet);
+			                    	String ret = getHtml2(arg1, name, value,nameRet,valueRet);
 				                    if(StringUtils.isNotBlank(ret)){
 				                    	if(ret.indexOf(";")!=-1){
 					                    	fee = ret.substring(0,ret.indexOf(";"));
 				                    	}
-				                    }*/
+				                    }
 			                    //}
 			                    
 			                    
@@ -692,12 +737,12 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
 		                    System.out.println("taxes========"+taxes);
 		                    String fee = "12";
 		                    //if(arg1.isFastTrack() == false){
-		                    	/*String ret = getHtml2(arg1, name, value,"","");
+		                    	String ret = getHtml2(arg1, name, value,"","");
 			                    if(StringUtils.isNotBlank(ret)){
 			                    	if(ret.indexOf(";")!=-1){
 				                    	fee = ret.substring(0,ret.indexOf(";"));
 			                    	}
-			                    }*/
+			                    }
 		                    //}
 		                    
 		                     
