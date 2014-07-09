@@ -477,15 +477,26 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 		                        String des = StringUtils.substringBetween(info, "data-destination='", "'");
 		                        String date = StringUtils.substringBetween(info, "data-date='", "'");
 		                        
+		                        
+		                        SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+		                	 	SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+		                	 	String arrdate = "";
+			                	 		try {
+			                	 			 arrdate = format2.format(format.parse(date));
+										} catch (ParseException e) {
+										e.printStackTrace();
+									}
+										
+										
 		                        System.out.println("flightNo========"+flightNo);
 		                        seg.setFlightno(flightNo);
 		                        String detailHour = hourArray[j];
-		                        seg.setDepDate(arg1.getDepDate());
+		                        seg.setDepDate(arrdate);
 		                        seg.setDepairport(orgin);
 		                        seg.setArrairport(des);
 		                        seg.setDeptime(detailHour.split("-")[0]);
 		                        seg.setArrtime(detailHour.split("-")[1]);
-		                        seg.setArrDate(arg1.getDepDate());
+		                        seg.setArrDate(arrdate);
 		                        
 		                        segs.add(seg);
 		                        info = info.replaceFirst("'>", "");
@@ -727,15 +738,24 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 		                        String des = StringUtils.substringBetween(info, "data-destination='", "'");
 		                        String date = StringUtils.substringBetween(info, "data-date='", "'");
 		                        
+		                        SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+		                	 	SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+		                	 	String arrdate = "";
+			                	 		try {
+			                	 			 arrdate = format2.format(format.parse(date));
+										} catch (ParseException e) {
+										e.printStackTrace();
+									}
+										
 		                        System.out.println("flightNo"+flightNo);
 		                        seg.setFlightno(flightNo);
 		                        String detailHour = hourArray[j];
-		                        seg.setDepDate(arg1.getDepDate());
+		                        seg.setDepDate(arrdate);
 		                        seg.setDepairport(orgin);
 		                        seg.setArrairport(des);
 		                        seg.setDeptime(detailHour.split("-")[0]);
 		                        seg.setArrtime(detailHour.split("-")[1]);
-		                        seg.setArrDate(arg1.getDepDate());
+		                        seg.setArrDate(arrdate);
 		                        
 		                        segs.add(seg);
 		                        htmlCompress = htmlCompress.replaceFirst("'>", "");
