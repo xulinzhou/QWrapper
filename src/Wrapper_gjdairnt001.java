@@ -550,8 +550,8 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 			                    String nameRet = StringUtils.substringBetween(priceRet, "name=\"", "\"");
 			                    String valueRet = StringUtils.substringBetween(priceRet, "value=\"", "\"");
 			                    
-			                    String fee = "0";
-			                    //if(arg1.isFastTrack() == false){
+			                    String fee = "12";
+			                    /*//if(arg1.isFastTrack() == false){
 			                    	String ret = getHtml2(arg1, name, value,nameRet,valueRet);
 				                    if(StringUtils.isNotBlank(ret)){
 				                    	if(ret.indexOf(";")!=-1){
@@ -559,7 +559,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 				                    	}
 				                    }
 			                    //}
-			                    
+*/			                    
 			                    
 				                    flightDetail2.setPrice(Double.parseDouble(fare)+Double.parseDouble(fareRet)
 			                    		+Double.parseDouble(fee));
@@ -709,9 +709,9 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 		                    
 		                    System.out.println("fare========="+fare);
 		                    System.out.println("taxes========"+taxes);
-		                    String fee = "0";
+		                    String fee = "12";
 		                    //if(arg1.isFastTrack() == false){
-		                    	String ret = getHtml2(arg1, name, value,"","");
+		                    	//String ret = getHtml2(arg1, name, value,"","");
 			                    /*if(StringUtils.isNotBlank(ret)){
 			                    	if(ret.indexOf(";")!=-1){
 				                    	fee = ret.substring(0,ret.indexOf(";"));
@@ -721,7 +721,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 		                    
 		                     
 		                    flightDetail.setFlightno(flightNoList);
-		                    flightDetail.setMonetaryunit(ret);
+		                    flightDetail.setMonetaryunit(monetaryunit);
 		                    flightDetail.setPrice(Double.parseDouble(fare)+Double.parseDouble(fee));
 		                    flightDetail.setTax(Double.parseDouble(taxes));
 		                    flightDetail.setDepcity(arg1.getDep());
