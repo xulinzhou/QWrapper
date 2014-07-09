@@ -301,7 +301,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
              		post.setRequestHeader("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
              		post.setRequestHeader("Accept-Encoding", "gzip,deflate,sdch");
              		post.setRequestHeader("Connection", "keep-alive");
-             		post.setRequestHeader("Content-Length", "171");
+             		post.setRequestHeader("Content-Length", "17100");
              		post.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
              		post.setRequestHeader("Host", "www.bintercanarias.com");
              		post.setRequestHeader("Origin", "https://www.bintercanarias.com");
@@ -315,10 +315,11 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
              		String cookie = StringUtils.join(httpClient.getState().getCookies(),";");
              		
              		httpClient.getState().clearCookies();
-             		//System.out.println(cookie);
+             		System.out.println(cookie);
         			post.setRequestHeader("Cookie",cookie);
              		httpClient.executeMethod(post);
-             		return cookie;
+             		
+             		return post.getStatusCode()+"";
         	    }
     		
             } catch (Exception e) {
