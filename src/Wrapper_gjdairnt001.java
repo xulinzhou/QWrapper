@@ -300,18 +300,24 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
      		
      		
      		
-     		//post.addRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36");
-     		post.addRequestHeader("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
-     		
-     		post.addRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+     		//post.addRequestHeader("Accept", "*/*");
+     		/*post.addRequestHeader("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
      		post.addRequestHeader("Accept-Encoding", "gzip,deflate,sdch");
-     		
+     		post.addRequestHeader("Connection", "keep-alive");
+     		post.addRequestHeader("Content-Length", "17100");
+     		post.addRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+     		post.addRequestHeader("Host", "www.bintercanarias.com");
+     		post.addRequestHeader("Origin", "https://www.bintercanarias.com");
+     		post.addRequestHeader("RA-Sid", "D397EE33-20140623-111000-43e0d4-07451b");
+     		post.addRequestHeader("RA-Ver", "2.2.25");
+     		post.addRequestHeader("Referer", "https://www.bintercanarias.com");*/
+     		//post.addRequestHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; nl; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13");
      		post.addRequestHeader("X_REQUESTED_WITH", "XMLHttpRequest");
      		
      		
      	    cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
      	    System.out.println(cookie);
-			post.addRequestHeader("Cookie",cookie);
+			post.addRequestHeader("Cookie","PHPSESSID=rqdpi9bbcip7enlaa8ub0qub00; cookiesession1=UUA906H5YF1D0PED3RAAUSXECOJWZOFT; CakeCookie[BookingSearch]=Q2FrZQ%3D%3D.%2BFQuO0Q49Y4v2w5DY51F0xMYzcWn7oVDltgAikxvU8mjLy63JRCTsiJz6OejDv0OPzU5xet9Fgek4Bupo2u3H%2Fp9KUc2MUgqfyjRux9wL2K29Kv0ZSjpLxNoNUBbz8mBx5AmWQry01kkuzLT%2Fq%2FOkZm2EnFy0lix5prB5ypH%2Fqjh4lVjtR3Fe6KkP7%2BDcMO%2FSzmiqeN2sud68wyuxXG3On8zXyaxFvAbu5s9WqFVvg2F8smPnyUoL%2Bd5iwttvgTfOFfYrdUn0%2FTX0HICVvPZhvNb23Fj7qAvBH6JY0Gr6AA1Y0nTHdy3b8KFua9U7OGEsqW%2BMkdc6Se%2F2EGJl75huzfc2CeXxvwMZkiVMaI3sMYN7MpVQjp9q%2FbL6Cse0ktGG%2Flqrq%2Bi8n91lCK%2Fy%2BbcDCr0r062k%2FE4UORLDFV7jl%2FvBxt6sPyuBJXFa28DjptRcYDLzZm%2FwZ5bO%2BDDg%2B1QFNV2atg9JEYyYFDkKFg%2BGjnKmRrOH1D8CCRiaw%2BEMQkuebSlSiF4AXYLEhso%2F1vJ02KPjz7QlQijNZIyLMJd5rAa4i9DDioXesVcvo3qPeVeaxH2G65fTcTpjNdqo9Dcahv2ZeIX%2BrfZtVwW8jRgSQuWkSmDwYb%2BkpKwe5jelJA0t8NutbvLfBgrWYyOwuLQCYA7z2UjKKmD%2BBCl08iJfjRQR%2FIEtCdk7GU26WqNVcfhg%2BGzCuz21%2F2hh%2BozUaxm%2B0R%2FVS29Q2WrcnKXbEemrk7Mc2IgWMiKs1zrfYDYtQlSORZ5M%2F2CVGeWcRIwVH5uLEZnaLmED%2BQx9QchgEMt3Yk4kQpcD08u8Dz9mZil%2Fb%2FDVzbH1xt8ZVo1NvIRWffmCJ15Lp%2F8I1mVVT7ACtu2lUg1NoRGQenKABfjORf0eF3%2BUvN35iF%2F3azizEZOHirNWQKxDqnwWTZ0KCmbMOn5WiR317h4DgpJAtJqRwY%2FNtGJ4hU3mRddWCMdqDLd%2Bo%2FBDFqjTNjoeHa9Q2A%3D; __utma=27653039.443068471.1404180813.1404885715.1404890341.15; __utmb=27653039.6.9.1404890428625; __utmc=27653039; __utmz=27653039.1404364764.11.2.utmcsr=cbook.flight.qunar.com|utmccn=(referral)|utmcmd=referral|utmcct=/bookingtransform/bookingCheck");
      		httpClient.executeMethod(post);	
      		return post.getResponseBodyAsString();
             } catch (Exception e) {
