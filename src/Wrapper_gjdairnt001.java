@@ -331,7 +331,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
      	    cookie += "__utma=27653039.443068471.1404180813.1404973878.1404981673.19"+time+"; ";
      	    cookie += "__utmb=27653039.5.9.1404981704590"+time+"; ";
      	    cookie += "__utmc=27653039"+time+"; ";
-     	    cookie += "__utmz=27653039.1404364764.11.2.utmcsr=cbook.flight.qunar.com|utmccn=(referral)|utmcmd=referral|utmcct=/bookingtransform/bookingCheck";
+     	    cookie += "__utmz=27653039.1404364764.11.2.utmcsr=cbook.flight.qunar.com|utmccn=(referral)|utmcmd=referral|utmcct=/bookingtransform/bookingCheck"+time;
      	 
 			post.addRequestHeader("Cookie",cookie);
  
