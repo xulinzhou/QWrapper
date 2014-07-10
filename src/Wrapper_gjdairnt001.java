@@ -328,10 +328,10 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
      		
      	    cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
      	    System.out.println(cookie);
-     	    cookie += "__utmc:27653039"+"; ";
-     	    cookie += "__utma:27653039.443068471.1404180813.1404903677.1404973878.18"+"; ";
-     	    cookie += "__utmb:27653039.4.9.1404973917016"+"; ";
-     	    cookie += "__utmz:27653039.1404364764.11.2.utmcsr=cbook.flight.qunar.com|utmccn=(referral)|utmcmd=referral|utmcct=/bookingtransform/bookingCheck";
+     	    cookie += "__utmc=27653039"+"; ";
+     	    cookie += "__utma=27653039.443068471.1404180813.1404903677.1404973878.18"+"; ";
+     	    cookie += "__utmb=27653039.4.9.1404973917016"+"; ";
+     	    cookie += "__utmz=27653039.1404364764.11.2.utmcsr=cbook.flight.qunar.com|utmccn=(referral)|utmcmd=referral|utmcct=/bookingtransform/bookingCheck";
      	 
 			post.addRequestHeader("Cookie",cookie);
  
