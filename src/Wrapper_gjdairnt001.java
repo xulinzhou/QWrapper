@@ -35,9 +35,9 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
         public static void main(String[] args) {
 
                 FlightSearchParam searchParam = new FlightSearchParam();
-                searchParam.setDep("MAD");
-                searchParam.setArr("EUN");
-                searchParam.setDepDate("2014-07-20");
+                searchParam.setDep("LIS");
+                searchParam.setArr("TFN");
+                searchParam.setDepDate("2014-07-10");
                 //searchParam.setRetDate("2014-08-15");
                 //searchParam.setRetDate("2014-07-28");
                 //searchParam.setTimeOut("60000");
@@ -330,6 +330,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
      	    System.out.println(cookie);
      	    cookie += "__utmc:27653039"+"; ";
      	    cookie += "__utma:27653039.443068471.1404180813.1404885715.1404890341.15"+"; ";
+     	   cookie += "__utmb:27653039.4.9.1404973917016"+"; ";
      	    cookie += "__utmz:27653039.1404364764.11.2.utmcsr=cbook.flight.qunar.com|utmccn=(referral)|utmcmd=referral|utmcct=/bookingtransform/bookingCheck"+";";
      	 
 			post.addRequestHeader("Cookie",cookie);
