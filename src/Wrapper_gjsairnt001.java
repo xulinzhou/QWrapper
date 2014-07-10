@@ -311,7 +311,7 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
      		
           
             
-     		post.addRequestHeader("Accept", "*/*");
+     		/*post.addRequestHeader("Accept", "*//*");
      		post.addRequestHeader("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
      		post.addRequestHeader("Accept-Encoding", "gzip,deflate,sdch");
      		post.addRequestHeader("Connection", "keep-alive");
@@ -321,17 +321,17 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
      		post.addRequestHeader("Origin", "https://www.bintercanarias.com");
      		post.addRequestHeader("RA-Sid", "D397EE33-20140623-111000-43e0d4-07451b");
      		post.addRequestHeader("RA-Ver", "2.2.25");
-     		post.addRequestHeader("Referer", "https://www.bintercanarias.com");
+     		post.addRequestHeader("Referer", "https://www.bintercanarias.com");*/
      		//post.setRequestHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; nl; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13");
      		post.addRequestHeader("X-Requested-With", "XMLHttpRequest");
      		 
      		
      	    cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
      	    System.out.println(cookie);
-     	    cookie += "__utmc:27653039"+"; ";
-     	    cookie += "__utma:27653039.443068471.1404180813.1404903677.1404973878.18"+"; ";
-     	    cookie += "__utmb:27653039.4.9.1404973917016"+"; ";
-     	    cookie += "__utmz:27653039.1404364764.11.2.utmcsr=cbook.flight.qunar.com|utmccn=(referral)|utmcmd=referral|utmcct=/bookingtransform/bookingCheck"+"; ";
+     	    cookie += "__utma=27653039.443068471.1404180813.1404973878.1404981673.19"+"; ";
+     	    cookie += "__utmb=27653039.5.9.1404981704590"+"; ";
+     	    cookie += "__utmc=27653039"+"; ";
+     	    cookie += "__utmz=27653039.1404364764.11.2.utmcsr=cbook.flight.qunar.com|utmccn=(referral)|utmcmd=referral|utmcct=/bookingtransform/bookingCheck";
      	 
 			post.addRequestHeader("Cookie",cookie);
  
@@ -787,7 +787,7 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
 		                    
 		                     
 		                    flightDetail.setFlightno(flightNoList);
-		                    flightDetail.setMonetaryunit(monetaryunit);
+		                    flightDetail.setMonetaryunit(fee);
 		                    flightDetail.setPrice(Double.parseDouble(fare)+Double.parseDouble(fee));
 		                    flightDetail.setTax(Double.parseDouble(taxes));
 		                    flightDetail.setDepcity(arg1.getDep());
