@@ -35,9 +35,9 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
         public static void main(String[] args) {
 
                 FlightSearchParam searchParam = new FlightSearchParam();
-                searchParam.setDep("LIS");
-                searchParam.setArr("TFN");
-                searchParam.setDepDate("2014-07-10");
+                searchParam.setDep("MAD");
+                searchParam.setArr("EUN");
+                searchParam.setDepDate("2014-07-20");
                 //searchParam.setRetDate("2014-08-15");
                 //searchParam.setRetDate("2014-07-28");
                 //searchParam.setTimeOut("60000");
@@ -311,7 +311,7 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
      		
           
             
-     		post.addRequestHeader("Accept", "");
+     		post.addRequestHeader("Accept", "*/*");
      		post.addRequestHeader("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
      		post.addRequestHeader("Accept-Encoding", "gzip,deflate,sdch");
      		post.addRequestHeader("Connection", "keep-alive");
@@ -325,13 +325,12 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
      		//post.setRequestHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; nl; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13");
      		post.addRequestHeader("X-Requested-With", "XMLHttpRequest");
      		 
-     		String time = String.valueOf(new Date().getTime());
+     		
      	    cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
      	    System.out.println(cookie);
-     	    cookie += "__utma=27653039.443068471.1404180813.1404973878.1404981673.19"+time+"; ";
-     	    cookie += "__utmb=27653039.5.9.1404981704590"+time+"; ";
-     	    cookie += "__utmc=27653039"+time+"; ";
-     	    cookie += "__utmz=27653039.1404364764.11.2.utmcsr=cbook.flight.qunar.com|utmccn=(referral)|utmcmd=referral|utmcct=/bookingtransform/bookingCheck"+time;
+     	    cookie += "__utmc:27653039"+"; ";
+     	    cookie += "__utma:27653039.443068471.1404180813.1404885715.1404890341.15"+"; ";
+     	    cookie += "__utmz:27653039.1404364764.11.2.utmcsr=cbook.flight.qunar.com|utmccn=(referral)|utmcmd=referral|utmcct=/bookingtransform/bookingCheck"+";";
      	 
 			post.addRequestHeader("Cookie",cookie);
  
@@ -651,9 +650,9 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
  			                    roundTripFlightInfo.setDetail(flightDetail2);
 			                    roundTripFlightInfo.setRetinfo(retsegs);
 	                	    	roundTripFlightInfo.setRetflightno(retflightno);
-	                	    	roundTripFlightInfo.setOutboundPrice(0);
+	                	    	roundTripFlightInfo.setOutboundPrice(Double.parseDouble(fare));
 	                	    	roundTripFlightInfo.setRetdepdate(dateArriDetailDate);
-	                	    	roundTripFlightInfo.setReturnedPrice(0);
+	                	    	roundTripFlightInfo.setReturnedPrice(Double.parseDouble(fareRet));
 	                	    	flightRoundList.add(roundTripFlightInfo);
 	                	    	 
 	                	    	 
