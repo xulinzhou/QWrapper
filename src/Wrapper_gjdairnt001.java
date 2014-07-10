@@ -325,12 +325,12 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
      		//post.setRequestHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; nl; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13");
      		post.addRequestHeader("X-Requested-With", "XMLHttpRequest");
      		 
-     		
+     		String time = String.valueOf(new Date().getTime());
      	    cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
      	    System.out.println(cookie);
-     	    cookie += "__utma=27653039.443068471.1404180813.1404973878.1404981673.19"+"; ";
-     	    cookie += "__utmb=27653039.5.9.1404981704590"+"; ";
-     	    cookie += "__utmc=27653039"+"; ";
+     	    cookie += "__utma=27653039.443068471.1404180813.1404973878.1404981673.19"+time+"; ";
+     	    cookie += "__utmb=27653039.5.9.1404981704590"+time+"; ";
+     	    cookie += "__utmc=27653039"+time+"; ";
      	    cookie += "__utmz=27653039.1404364764.11.2.utmcsr=cbook.flight.qunar.com|utmccn=(referral)|utmcmd=referral|utmcct=/bookingtransform/bookingCheck";
      	 
 			post.addRequestHeader("Cookie",cookie);
