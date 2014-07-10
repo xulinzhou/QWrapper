@@ -35,7 +35,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.*;
 
-public class Wrapper_gjdairod001 implements QunarCrawler{
+public class Wrapper_gjsairod001 implements QunarCrawler{
 
 
     public static void main(String[] args) {
@@ -49,12 +49,12 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
             //searchParam.setTimeOut("60000");
             searchParam.setToken("");
             searchParam.setFastTrack(false);
-            String html = new  Wrapper_gjdairod001().getHtml(searchParam);
+            String html = new  Wrapper_gjsairod001().getHtml(searchParam);
             //System.out.println(html);
     //String detail = new  Wrapper_gjdairou001().getHtml2(searchParam);
     //System.out.println(detail);
             //ProcessResultInfo result = new ProcessResultInfo();
-    ProcessResultInfo   result = new  Wrapper_gjdairod001().process(html,searchParam);
+    ProcessResultInfo   result = new  Wrapper_gjsairod001().process(html,searchParam);
     System.out.println(JSON.toJSONString(result,SerializerFeature.DisableCircularReferenceDetect));
 
            // result = new  Wrapper_gjdairou001().process1(html,detail,searchParam);
