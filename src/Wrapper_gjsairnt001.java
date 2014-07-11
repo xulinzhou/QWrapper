@@ -35,9 +35,10 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
         public static void main(String[] args) {
 
                 FlightSearchParam searchParam = new FlightSearchParam();
-                searchParam.setDep("MAD");
-                searchParam.setArr("EUN");
+                searchParam.setDep("LPA");
+                searchParam.setArr("VDE");
                 searchParam.setDepDate("2014-07-20");
+                searchParam.setRetDate("2014-07-31");
                 //searchParam.setRetDate("2014-08-15");
                 //searchParam.setRetDate("2014-07-28");
                 //searchParam.setTimeOut("60000");
@@ -602,7 +603,7 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
 			                    		);
 				                    String tax = String.valueOf(Double.parseDouble(taxes)+Double.parseDouble(taxeRet)+Double.parseDouble(fee));
 				                    if(tax.indexOf(".")!=-1){
-					                    flightDetail2.setTax(Double.parseDouble(tax.substring(0,tax.indexOf(".")+3)));
+					                    flightDetail2.setTax(Double.parseDouble(tax));
 				                    }else{
 					                    flightDetail2.setTax(Double.parseDouble(tax));
 				                    }
