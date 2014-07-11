@@ -601,7 +601,7 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
 				                    flightDetail2.setPrice(Double.parseDouble(fare)+Double.parseDouble(fareRet)
 			                    		);
 				                    String tax = String.valueOf(Double.parseDouble(taxes)+Double.parseDouble(taxeRet)+Double.parseDouble(fee));
-				                    flightDetail2.setTax(Double.parseDouble(tax.substring(0,tax.indexOf(".")+2)));
+				                    flightDetail2.setTax(Double.parseDouble(tax.substring(0,tax.indexOf(".")+3)));
 	                            
  			                    for(int j=0;j<countFlightRet;j++){
 			                    	seg = new FlightSegement();
