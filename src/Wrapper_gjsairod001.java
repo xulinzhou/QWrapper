@@ -73,82 +73,57 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
     }
     
     public BookingResult getBookingInfo(FlightSearchParam arg0) {
-    	String bookingUrlPre = "https://www.bintercanarias.com/booking/searchDo";
+    	String bookingUrlPre = "http://booking.croatiaairlines.com/plnext/FPCcroatiaairlines/Override.action";
 		BookingResult bookingResult = new BookingResult();
 		
 		BookingInfo bookingInfo = new BookingInfo();
 		bookingInfo.setAction(bookingUrlPre);
-		bookingInfo.setMethod("post");
+		bookingInfo.setMethod("get");
 		Map<String, String> map = new LinkedHashMap<String, String>();
 		
-		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-	 	SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-	 	try {
-			String depdate = format.format(format1.parse(arg0.getDepDate()));
-			String arrdate = "";
-    	 	if(StringUtils.isNotBlank(arg0.getRetDate())){
-    	 		arrdate =format.format(format1.parse(arg0.getRetDate()));
-    	 	}
-    	 	map.put("data[search][departureDate]", depdate);
-    	 	map.put("data[search][returnDate]", arrdate);
-    	 	map.put("data[search][dateAdvance]", "2");
-    	 	//map.put("data[search][departureDate]", "depdate");
-    	 	///map.put("data[search][departureDate]", "depdate");
-    	 	 
- 			//map.put(("search[initDates][0][month]","07"),
- 			//map.put(("search[initDates][0][year]","2014"),
- 			
- 			//map.put(("search[initDates][1][month]","07"),
- 			//map.put(("search[initDates][1][year]","2014"),
- 			
-    	 	map.put("data[search][tipoBusqueda]","normal");
-    	 	map.put("data[search][from]",arg0.getDep());
- 			//map.put("data[search][from_text]","El Hierro");
- 			map.put("data[search][to]",arg0.getArr());
- 			//map.put("data[search][to_text]","Gran Canaria");
- 			map.put("data[search][oneWay]","0");
- 			map.put("data[search][oneWay]","1");
- 			map.put("data[search][onlyPoints]","0");
- 			map.put("data[search][onlyDirectFlights]","0");
- 			//map.put("data[search][departureDateVisual]","1 Jul 2014");
- 			
- 			//map.put("data[search][returnDateVisual]","12 Jul 2014");
- 			map.put("data[search][calendar]","0");
- 			map.put("data[search][passengers][ADTDC]","0");
- 			map.put("data[search][passengers][ADT]","1");
- 			map.put("data[search][passengers][CHDDC]","0");
- 			map.put("data[search][passengers][CHD]","0");
- 			map.put("data[search][passengers][INFDC]","0");
- 			map.put("data[search][passengers][INF]","0");
- 			map.put("data[search][conditions]","0");
- 			map.put("data[search][flagLess29Fare]","0");
- 			map.put("data[search][flagHigher60Fare]","0");
- 			map.put("data[search][flagLargeFamily]","0");
- 			map.put("data[search][flagUniversityFare]","0");
-    		
-    		bookingInfo.setInputs(map);		
-    		bookingResult.setData(bookingInfo);
-    		bookingResult.setRet(true);
-    		return bookingResult;
-		} catch (Exception e) {
-			e.printStackTrace();
+		/*trip_type=one+way&date_flexibility=fixed&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24departurePortSelected=Alor+Setar+%28AOR%29
+		&depart="+arg0.getDep()+"&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24arrivalPortSelected=Subang+%28SZB%29
+		&dest.1="+arg0.getArr()+"&date.0=1Sep&date.1=&persons.0=1&persons.1=0&persons.2=0
+		&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtDepartureDate="+arg0.getDepDate()+"
+			&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtReturnDate=
+			
+		trip_type=return&date_flexibility=fixed&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24departurePortSelected=Alor+Setar+%28AOR%29&depart=*/
+					
+		map.put("trip_type", "one+way");
+		map.put("date_flexibility", "fixed");
+		map.put("ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24departurePortSelected", "Alor+Setar+%28AOR%29");
+		map.put("depart", arg0.getDep());
+		map.put("ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24arrivalPortSelected", "Subang+%28SZB%29");
+		map.put("dest.1", arg0.getArr());
+		map.put("date.0", "arg0");
+		map.put("date.1", "");
+		map.put("persons.0", "1");
+		map.put("persons.1", "0");
+		map.put("persons.2", "0");
+		map.put("ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtDepartureDate", arg0.getDepDate());
+		map.put("ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtReturnDate","");
+		
+		if(StringUtils.isNotEmpty(arg0.getRetDate())){
+			map.put("trip_type", "return");
+			map.put("ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtReturnDate", arg0.getDepDate());
 		}
-	 	return null;
-	 	
-
+		bookingInfo.setInputs(map);		
+		bookingResult.setData(bookingInfo);
+		bookingResult.setRet(true);
+		return bookingResult;
     }
 
     public String getHtml(FlightSearchParam arg0) {
     	
-    	String depDate=arg0.getDepDate().replaceAll("-","")+"0000";
-		String getUrl = "https://secure.malindoair.com/MalindoAirCIBE/OnlineBooking.aspx?trip_type=return&date_flexibility=fixed&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24departurePortSelected=Alor+Setar+%28AOR%29&depart=AOR&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24arrivalPortSelected=Subang+%28SZB%29&dest.1=SZB&date.0=12Jul&date.1=28Jul&persons.0=1&persons.1=0&persons.2=0&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtDepartureDate=2014-07-12&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtReturnDate=2014-07-28";
+    	//String depDate=arg0.getDepDate().replaceAll("-","")+"0000";
+    	String getUrl = "";
+		//String getUrl = "https://secure.malindoair.com/MalindoAirCIBE/OnlineBooking.aspx?trip_type=return&date_flexibility=fixed&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24departurePortSelected=Alor+Setar+%28AOR%29&depart=AOR&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24arrivalPortSelected=Subang+%28SZB%29&dest.1=SZB&date.0=12Jul&date.1=28Jul&persons.0=1&persons.1=0&persons.2=0&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtDepartureDate=2014-07-12&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtReturnDate=2014-07-28";
 		//String getUrl = "https://secure.malindoair.com/MalindoAirCIBE/OnlineBooking.aspx?trip_type=one+way&date_flexibility=fixed&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24departurePortSelected=Alor+Setar+%28AOR%29&depart=AOR&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24arrivalPortSelected=Subang+%28SZB%29&dest.1=SZB&date.0=1Sep&date.1=&persons.0=1&persons.1=0&persons.2=0&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtDepartureDate=2014-09-01&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtReturnDate=";
-/*		if(StringUtils.isEmpty(arg0.getRetDate())){
-   		   getUrl = String.format("https://secure.malindoair.com/MalindoAirCIBE/OnlineBooking.aspx?trip_type=one+way&date_flexibility=fixed&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24departurePortSelected=Alor+Setar+%28AOR%29&depart=AOR&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24arrivalPortSelected=Subang+%28SZB%29&dest.1=SZB&date.0=1Sep&date.1=&persons.0=1&persons.1=0&persons.2=0&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtDepartureDate=2014-09-01&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtReturnDate=",depDate ,arg0.getDep(),arg0.getArr());
+		if(StringUtils.isEmpty(arg0.getRetDate())){
+   		   getUrl = "https://secure.malindoair.com/MalindoAirCIBE/OnlineBooking.aspx?trip_type=one+way&date_flexibility=fixed&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24departurePortSelected=Alor+Setar+%28AOR%29&depart="+arg0.getDep()+"&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24arrivalPortSelected=Subang+%28SZB%29&dest.1="+arg0.getArr()+"&date.0=1Sep&date.1=&persons.0=1&persons.1=0&persons.2=0&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtDepartureDate="+arg0.getDepDate()+"&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtReturnDate=";
 		}else{
-			String retDate=arg0.getRetDate().replaceAll("-","")+"0000";
-    		getUrl = String.format("https://booking.croatiaairlines.com/plnext/FPCcroatiaairlines/Override.action?EMBEDDED_TRANSACTION=FlexPricerAvailability&TRIPFLOW=YES&DIRECT_LOGIN=NO&SITE=BAXGBAXG&PRICING_TYPE=I&DATE_RANGE_QUALIFIER_1=C&DATE_RANGE_QUALIFIER_2=C&SO_SITE_SEND_CMD_EMAIL=OSI&LANGUAGE=GB&B_DATE_1=%s&TRIP_TYPE=R&DATE_RANGE_VALUE_1=0&DATE_RANGE_VALUE_2=0&SO_SITE_ALLOW_PROMO=True&DISPLAY_TYPE=1&COMMERCIAL_FARE_FAMILY_1=EUEU&B_LOCATION_1=%s&E_LOCATION_1=%s&B_DATE_2=%s&TRAVELLER_TYPE_1=ADT",depDate ,arg0.getDep(),arg0.getArr(),retDate);
-		}*/
+     		getUrl = "https://secure.malindoair.com/MalindoAirCIBE/OnlineBooking.aspx?trip_type=return&date_flexibility=fixed&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24departurePortSelected=Alor+Setar+%28AOR%29&depart="+arg0.getDep()+"&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24arrivalPortSelected=Subang+%28SZB%29&dest.1="+arg0.getArr()+"&date.0=12Jul&date.1=28Jul&persons.0=1&persons.1=0&persons.2=0&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtDepartureDate="+arg0.getDepDate()+"&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtReturnDate="+arg0.getRetDate();
+		}
             
 		   QFGetMethod get = null;
             try
