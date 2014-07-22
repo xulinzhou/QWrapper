@@ -42,11 +42,11 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
     public static void main(String[] args) {
 
             FlightSearchParam searchParam = new FlightSearchParam();
-            searchParam.setDep("BKI");
+            searchParam.setDep("LGK");
             searchParam.setArr("KUL");
-            searchParam.setDepDate("2014-8-1");
+            searchParam.setDepDate("2014-7-24");
             //searchParam.setRetDate("2014-08-19");
-            searchParam.setRetDate("2014-8-8");
+            //searchParam.setRetDate("2014-07-28");
             //searchParam.setTimeOut("60000");
             searchParam.setToken("");
             searchParam.setFastTrack(false);
@@ -72,6 +72,9 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
                     System.out.println(result.getStatus());
             }*/
     }
+
+
+	private String exception;
     
     public BookingResult getBookingInfo(FlightSearchParam arg0) {
     	String bookingUrlPre = "https://secure.malindoair.com/MalindoAirCIBE/OnlineBooking.aspx?";
@@ -304,13 +307,14 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
     		//}
             return get.getResponseBodyAsString();
             } catch (Exception e) {
+            	exception = e.toString();
                     e.printStackTrace();
             } finally {                     
                     if (get != null) {
                     	get.releaseConnection();
                     }
             }
-            return "Exception";
+            return "Exception"+exception;
     
     }
 
@@ -414,10 +418,13 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
 		                    String tax = StringUtils.substringBetween(html, "TotalTaxes:MYR","&lt;br/>");
 		                    
 		                    String flightNo = StringUtils.substringBetween(flightNum, "<br/>","<"); 
-		                    String departTime = StringUtils.substringBetween(depart, "<time>一","</time>");
-		                    String arrTime = StringUtils.substringBetween(arr, "<time>一","</time>");
+		                    String departTime = StringUtils.substringBetween(depart, "<time>","</time>");
+		                    String arrTime = StringUtils.substringBetween(arr, "<time>","</time>");
 		                    String depairport  = StringUtils.substringBetween(depart, "(",")");
 		                    String arrport  = StringUtils.substringBetween(arr, "(",")");
+		                    
+		                    departTime = departTime.substring(1);
+		                    arrTime = arrTime.substring(1);
 		                    
 		                    System.out.println("flightNo"+flightNo);
 	   	                    System.out.println("depart"+depart);
@@ -558,7 +565,7 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
 	   	                    flightNoList.add(flightNo);
 	   	                     
 	   	                    seg.setFlightno(flightNo);
-	                        seg.setDepDate(arg1.getRetDate());
+	                        seg.setDepDate(arg1.getDepDate());
 	                        seg.setDepairport(depairport);
 	                        seg.setArrairport(arrport);
 	                        seg.setDeptime(departTime);
@@ -622,7 +629,7 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
 			   	                     flightNoList.add(flightNo);
 			   	                     
 			   	                    seg.setFlightno(flightNo);
-			                        seg.setDepDate(arg1.getRetDate());
+			                        seg.setDepDate(arg1.getDepDate());
 			                        seg.setDepairport(depairport);
 			                        seg.setArrairport(arrport);
 			                        seg.setDeptime(departTime);
@@ -710,10 +717,13 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
 		                    String tax = StringUtils.substringBetween(html, "TotalTaxes:MYR","&lt;br/>");
 		                    
 		                    String flightNo = StringUtils.substringBetween(flightNum, "<br/>","<"); 
-		                    String departTime = StringUtils.substringBetween(depart, "<time>一","</time>");
-		                    String arrTime = StringUtils.substringBetween(arr, "<time>一","</time>");
+		                    String departTime = StringUtils.substringBetween(depart, "<time>","</time>");
+		                    String arrTime = StringUtils.substringBetween(arr, "<time>","</time>");
 		                    String depairport  = StringUtils.substringBetween(depart, "(",")");
 		                    String arrport  = StringUtils.substringBetween(arr, "(",")");
+		                    
+		                    departTime = departTime.substring(1);
+		                    arrTime = arrTime.substring(1);
 		                    
 		                    System.out.println("flightNo"+flightNo);
 	   	                    System.out.println("depart"+depart);

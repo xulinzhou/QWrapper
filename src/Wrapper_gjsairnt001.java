@@ -35,10 +35,10 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
         public static void main(String[] args) {
 
                 FlightSearchParam searchParam = new FlightSearchParam();
-                searchParam.setDep("LPA");
-                searchParam.setArr("VDE");
-                searchParam.setDepDate("2014-07-20");
-                searchParam.setRetDate("2014-07-31");
+                searchParam.setDep("MAD");
+                searchParam.setArr("EUN");
+                searchParam.setDepDate("2014-07-29");
+                searchParam.setRetDate("2014-08-15");
                 //searchParam.setRetDate("2014-08-15");
                 //searchParam.setRetDate("2014-07-28");
                 //searchParam.setTimeOut("60000");
@@ -66,6 +66,7 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
                         System.out.println(result.getStatus());
                 }*/
         }
+    	private String exception;
         
         public BookingResult getBookingInfo(FlightSearchParam arg0) {
         	String bookingUrlPre = "https://www.bintercanarias.com/booking/searchDo";
@@ -156,8 +157,8 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
 	 			new NameValuePair("data[search][departureDate]",depdate),
 	 			new NameValuePair("data[search][returnDate]",arrdate),
 	 			new NameValuePair("data[search][dateAdvance]","2"),
-	 			//new NameValuePair("search[initDates][0][month]","07"),
-	 			//new NameValuePair("search[initDates][0][year]","2014"),
+	 			new NameValuePair("search[initDates][0][month]","07"),
+	 			new NameValuePair("search[initDates][0][year]","2014"),
 	 			
 	 			//new NameValuePair("search[initDates][1][month]","07"),
 	 			//new NameValuePair("search[initDates][1][year]","2014"),
@@ -189,12 +190,19 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
 	 			
 	 			
 	    };
+	 	/*String cookie1 = "";
+	 	cookie1 += "__utma:27653039.1483583021.1406010395.1406010395.1406010395.1"+"; ";
+	 	cookie1 += "__utmb:27653039.3.9.1406010428351"+"; ";
+	 	cookie1 += "__utmc:27653039"+"; ";
+ 	    cookie1 += "__utmz:27653039.1406010395.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)"+";";
+ 	    post.addRequestHeader("Cookie",cookie1);*/
 	    post.setRequestBody(names);
 		post.getParams().setContentCharset("UTF-8");
 
 		httpClient.executeMethod(post);	
 		QFGetMethod get = null;
 		String ret = "";
+		System.out.println("status========"+post.getStatusCode());
 		if(post.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || post.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 			Header location = post.getResponseHeader("Location");
 			System.out.println(location.getValue());
@@ -202,7 +210,16 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
 			String url = "https://www.bintercanarias.com/eng/book/select-a-flight/"+urlDetail;
 			String cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
 		    get = new QFGetMethod(url);
+		    System.out.println("url========"+url);
+		    //get.setRequestHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; nl; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13");
+     		
 			httpClient.getState().clearCookies();
+			long time = new Date().getTime();
+			/*cookie += "__utma:27653039.1483583021.1406010395.1406010395.1406010395.1"+"; ";
+     	    cookie += "__utmb:27653039.3.9.1406010428351"+"; ";
+     	    cookie += "__utmc:27653039"+"; ";
+     	    cookie += "__utmz:27653039.1406010395.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)"+";";*/
+			
 			get.addRequestHeader("Cookie",cookie);
 			httpClient.executeMethod(get);
 			ret = get.getResponseBodyAsString();
@@ -210,13 +227,14 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
 		
 		return ret;
 		} catch (Exception e) {
+	       exception = e.toString();
 			e.printStackTrace();
 		} finally {			
 			if (post != null) {
 				post.releaseConnection();
 			}
 		}
-		return "Exception";
+		return "Exception"+post.getStatusCode();
 	}
 
         
@@ -602,7 +620,9 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
 				                    	}
 				                    }
 			                    //}
-			                    
+				                    if(fee.contains("Exce")){
+				                    	fee = "0";
+				                    }
 			                    
 				                    flightDetail2.setPrice(Double.parseDouble(fare)+Double.parseDouble(fareRet)
 			                    		);
@@ -795,7 +815,9 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
 			                    }
 		                    //}
 		                    
-		                     
+			                    if(fee.contains("Exce")){
+			                    	fee = "0";
+			                    }
 		                    flightDetail.setFlightno(flightNoList);
 		                    flightDetail.setMonetaryunit(monetaryunit);
 		                    flightDetail.setPrice(Double.parseDouble(fare));
