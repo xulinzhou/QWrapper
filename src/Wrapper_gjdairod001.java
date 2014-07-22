@@ -42,11 +42,11 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
     public static void main(String[] args) {
 
             FlightSearchParam searchParam = new FlightSearchParam();
-            searchParam.setDep("LGK");
+            searchParam.setDep("BKI");
             searchParam.setArr("KUL");
-            searchParam.setDepDate("2014-7-24");
+            searchParam.setDepDate("2014-8-1");
             //searchParam.setRetDate("2014-08-19");
-            //searchParam.setRetDate("2014-07-28");
+            searchParam.setRetDate("2014-8-8");
             //searchParam.setTimeOut("60000");
             searchParam.setToken("");
             searchParam.setFastTrack(false);
@@ -74,9 +74,83 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
     }
     
     public BookingResult getBookingInfo(FlightSearchParam arg0) {
-    	String bookingUrlPre = "http://booking.croatiaairlines.com/plnext/FPCcroatiaairlines/Override.action";
+    	String bookingUrlPre = "https://secure.malindoair.com/MalindoAirCIBE/OnlineBooking.aspx?";
 		BookingResult bookingResult = new BookingResult();
 		
+		String dayStr = "";
+    	String monStr = "";
+    	
+    	String dayStrRet = "";
+    	String monStrRet = "";
+    	
+    	String day[] = arg0.getDepDate().split("-");
+		String days = day[2];
+		int dayInt = Integer.parseInt(days);
+		dayStr = dayInt+"";
+		String mon = day[1];
+		//Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
+		if(Integer.parseInt(mon) == 1){
+			monStr = "Jan";
+		}else if(Integer.parseInt(mon) == 2){
+			monStr = "Feb";
+		}else if(Integer.parseInt(mon) == 3){
+			monStr = "Mar";
+		}else if(Integer.parseInt(mon) == 4){
+			monStr = "Apr";
+		}else if(Integer.parseInt(mon) == 5){
+			monStr = "May";
+		}else if(Integer.parseInt(mon) == 6){
+			monStr = "Jun";
+		}else if(Integer.parseInt(mon) == 7){
+			monStr = "Jul";
+		}else if(Integer.parseInt(mon) == 8){
+			monStr = "Aug";
+		}else if(Integer.parseInt(mon) == 9){
+			monStr = "Sep";
+		}else if(Integer.parseInt(mon) == 10){
+			monStr = "Oct";
+		}else if(Integer.parseInt(mon) == 11){
+			monStr = "Nov";
+		}else if(Integer.parseInt(mon) == 12){
+			monStr = "Dec";
+		}
+		
+		if(StringUtils.isNotEmpty(arg0.getRetDate())){
+			
+			String dayRet[] = arg0.getRetDate().split("-");
+    		String daysRet = dayRet[2];
+    		int dayIntRet = Integer.parseInt(daysRet);
+    		dayStrRet = dayIntRet+"";
+    		String monRet = dayRet[1];
+    		//Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
+    		if(Integer.parseInt(monRet) == 1){
+    			monStrRet = "Jan";
+    		}else if(Integer.parseInt(monRet) == 2){
+    			monStrRet = "Feb";
+    		}else if(Integer.parseInt(monRet) == 3){
+    			monStrRet = "Mar";
+    		}else if(Integer.parseInt(monRet) == 4){
+    			monStrRet = "Apr";
+    		}else if(Integer.parseInt(monRet) == 5){
+    			monStrRet = "May";
+    		}else if(Integer.parseInt(monRet) == 6){
+    			monStrRet = "Jun";
+    		}else if(Integer.parseInt(monRet) == 7){
+    			monStrRet = "Jul";
+    		}else if(Integer.parseInt(monRet) == 8){
+    			monStrRet = "Aug";
+    		}else if(Integer.parseInt(monRet) == 9){
+    			monStrRet = "Sep";
+    		}else if(Integer.parseInt(monRet) == 10){
+    			monStrRet = "Oct";
+    		}else if(Integer.parseInt(monRet) == 11){
+    			monStrRet = "Nov";
+    		}else if(Integer.parseInt(mon) == 12){
+    			monStrRet = "Dec";
+    		}
+		}
+		
+    	
 		BookingInfo bookingInfo = new BookingInfo();
 		bookingInfo.setAction(bookingUrlPre);
 		bookingInfo.setMethod("get");
@@ -89,15 +163,17 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
 			&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtReturnDate=
 			
 		trip_type=return&date_flexibility=fixed&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24departurePortSelected=Alor+Setar+%28AOR%29&depart=*/
-					
-		map.put("trip_type", "one+way");
+		if(StringUtils.isEmpty(arg0.getRetDate())){
+			map.put("trip_type", "one+way");
+		}
+		
 		map.put("date_flexibility", "fixed");
 		map.put("ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24departurePortSelected", "Alor+Setar+%28AOR%29");
 		map.put("depart", arg0.getDep());
 		map.put("ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24arrivalPortSelected", "Subang+%28SZB%29");
 		map.put("dest.1", arg0.getArr());
-		map.put("date.0", "arg0");
-		map.put("date.1", "");
+		map.put("date.0", dayStr+monStr);
+		
 		map.put("persons.0", "1");
 		map.put("persons.1", "0");
 		map.put("persons.2", "0");
@@ -106,6 +182,7 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
 		
 		if(StringUtils.isNotEmpty(arg0.getRetDate())){
 			map.put("trip_type", "return");
+			map.put("date.1", dayStrRet+monStrRet);
 			map.put("ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtReturnDate", arg0.getDepDate());
 		}
 		bookingInfo.setInputs(map);		
@@ -238,102 +315,6 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
     }
 
     
-    public String getHtml2(FlightSearchParam arg0,String name,String value,String name2,String value2) {
-    	QFPostMethod post = null;
-        try
-        {
-        	// get all query parameters from the url set by wrapperSearchInterface
-    		QFHttpClient httpClient = new QFHttpClient(arg0, false);
-    		httpClient.getParams().setCookiePolicy(
-    				CookiePolicy.BROWSER_COMPATIBILITY);
-
-    		post = new QFPostMethod("https://www.bintercanarias.com/booking/searchDo");
-     	 	SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-    	 	SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-    	 	String depdate = format.format(format1.parse(arg0.getDepDate()));
-    	 	String arrdate = "";
-    	 	if(StringUtils.isNotBlank(arg0.getRetDate())){
-    	 		arrdate =format.format(format1.parse(arg0.getRetDate()));
-    	 	}
-    	 	 
-    	 	NameValuePair[] names = {
-    	 			new NameValuePair("_method","POST"),
-    	 			new NameValuePair("data[search][departureDate]",depdate),
-    	 			new NameValuePair("data[search][returnDate]",arrdate),
-    	 			new NameValuePair("data[search][dateAdvance]","2"),
-    	 			//new NameValuePair("search[initDates][0][month]","07"),
-    	 			//new NameValuePair("search[initDates][0][year]","2014"),
-    	 			
-    	 			//new NameValuePair("search[initDates][1][month]","07"),
-    	 			//new NameValuePair("search[initDates][1][year]","2014"),
-    	 			
-    	 			new NameValuePair("data[search][tipoBusqueda]","normal"),
-    	 			new NameValuePair("data[search][from]",arg0.getDep()),
-    	 			//new NameValuePair("data[search][from_text]","El Hierro"),
-    	 			new NameValuePair("data[search][to]",arg0.getArr()),
-    	 			//new NameValuePair("data[search][to_text]","Gran Canaria"),
-    	 			new NameValuePair("data[search][oneWay]","0"),
-    	 			new NameValuePair("data[search][oneWay]","1"),
-    	 			new NameValuePair("data[search][onlyPoints]","0"),
-    	 			new NameValuePair("data[search][onlyDirectFlights]","0"),
-    	 			//new NameValuePair("data[search][departureDateVisual]","1 Jul 2014"),
-    	 			
-    	 			//new NameValuePair("data[search][returnDateVisual]","12 Jul 2014"),
-    	 			new NameValuePair("data[search][calendar]","0"),
-    	 			new NameValuePair("data[search][passengers][ADTDC]","0"),
-    	 			new NameValuePair("data[search][passengers][ADT]","1"),
-    	 			new NameValuePair("data[search][passengers][CHDDC]","0"),
-    	 			new NameValuePair("data[search][passengers][CHD]","0"),
-    	 			new NameValuePair("data[search][passengers][INFDC]","0"),
-    	 			new NameValuePair("data[search][passengers][INF]","0"),
-    	 			new NameValuePair("data[search][conditions]","0"),
-    	 			new NameValuePair("data[search][flagLess29Fare]","0"),
-    	 			new NameValuePair("data[search][flagHigher60Fare]","0"),
-    	 			new NameValuePair("data[search][flagLargeFamily]","0"),
-    	 			new NameValuePair("data[search][flagUniversityFare]","0"),
-    	 			
-    	    };
-    	    post.setRequestBody(names);
-    		post.getParams().setContentCharset("UTF-8");
-    		httpClient.executeMethod(post);	
-         
-		String getUrl = String.format("https://www.bintercanarias.com/booking/infoServiceFee/lang:eng");
-        System.out.println("getUrl"+getUrl);;
-        post = new QFPostMethod(getUrl);
-        if(StringUtils.isBlank(name2)){
-        	NameValuePair[] names1 = {
-     	 			new NameValuePair("HD",""),
-     	 			new NameValuePair(name,value),
-     	 			new NameValuePair("csrf","ND"),
-             };
-        	post.setRequestBody(names1);
-        }else{
-        	NameValuePair[] namesNew = {
-     	 			new NameValuePair("HD",""),
-     	 			new NameValuePair(name,value),
-     	 			new NameValuePair(name2,value2),
-     	 			new NameValuePair("csrf","HD|ND"),
-             };
-        	post.setRequestBody(namesNew);
-        }
-         
- 		post.getParams().setContentCharset("UTF-8");
- 		post.setRequestHeader("X_REQUESTED_WITH", "XMLHttpRequest");
- 		post.setRequestHeader("Referer", "https://www.bintercanarias.com/eng/book/select-a-flight/DKR-LPA");
- 		String cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
-		post.addRequestHeader("Cookie",cookie);
- 		httpClient.executeMethod(post);	
- 		return post.getResponseBodyAsString();
-        } catch (Exception e) {
-                e.printStackTrace();
-        } finally {                     
-                if (post != null) {
-                	post.releaseConnection();
-                }
-        }
-        return "Exception";
-
-}
     public ProcessResultInfo process(String arg0, FlightSearchParam arg1) {
     	String monetaryunit = "MYR";
     	
