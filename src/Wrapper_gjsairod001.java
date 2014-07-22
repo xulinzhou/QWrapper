@@ -368,7 +368,7 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 	   	                    System.out.println("price"+price);
 	   	                    flightNoList.add(flightNo);
 	   	                    seg.setFlightno(flightNo);
-	                        seg.setDepDate(arg1.getRetDate());
+	                        seg.setDepDate(arg1.getDepDate());
 	                        seg.setDepairport(depairport);
 	                        seg.setArrairport(arrport);
 	                        seg.setDeptime(departTime);
@@ -418,7 +418,7 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 			   	                     flightNoList.add(flightNo);
 			   	                     
 			   	                    seg.setFlightno(flightNo);
-			                        seg.setDepDate(arg1.getRetDate());
+			                        seg.setDepDate(arg1.getDepDate());
 			                        seg.setDepairport(depairport);
 			                        seg.setArrairport(arrport);
 			                        seg.setDeptime(departTime);
@@ -664,12 +664,12 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 	   	                     flightNoList.add(flightNo);
 	   	                     
 	   	                    seg.setFlightno(flightNo);
-	                        seg.setDepDate(arg1.getRetDate());
+	                        seg.setDepDate(arg1.getDepDate());
 	                        seg.setDepairport(depairport);
 	                        seg.setArrairport(arrport);
 	                        seg.setDeptime(departTime);
 	                        seg.setArrtime(arrTime);
-	                        seg.setArrDate(arg1.getRetDate());
+	                        seg.setArrDate(arg1.getDepDate());
 	                        
 	                        segs.add(seg);
 	                        
@@ -712,12 +712,12 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 			   	                     flightNoList.add(flightNo);
 			   	                     
 			   	                    seg.setFlightno(flightNo);
-			                        seg.setDepDate(arg1.getRetDate());
+			                        seg.setDepDate(arg1.getDepDate());
 			                        seg.setDepairport(depairport);
 			                        seg.setArrairport(arrport);
 			                        seg.setDeptime(departTime);
 			                        seg.setArrtime(arrTime);
-			                        seg.setArrDate(arg1.getRetDate());
+			                        seg.setArrDate(arg1.getDepDate());
 			                        segs.add(seg);
 				                    html = html.replaceFirst("depart-column", "");
 			   	                    html = html.replaceFirst("depart-column", "");

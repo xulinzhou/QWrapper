@@ -28,6 +28,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.SimpleTimeZone;
 import java.util.Date;
 import java.util.List;
@@ -41,11 +42,11 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
     public static void main(String[] args) {
 
             FlightSearchParam searchParam = new FlightSearchParam();
-            searchParam.setDep("AOR");
-            searchParam.setArr("SZB");
-            searchParam.setDepDate("2014-07-12");
+            searchParam.setDep("LGK");
+            searchParam.setArr("KUL");
+            searchParam.setDepDate("2014-7-24");
             //searchParam.setRetDate("2014-08-19");
-            searchParam.setRetDate("2014-07-28");
+            //searchParam.setRetDate("2014-07-28");
             //searchParam.setTimeOut("60000");
             searchParam.setToken("");
             searchParam.setFastTrack(false);
@@ -116,14 +117,92 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
     public String getHtml(FlightSearchParam arg0) {
     	
     	String getUrl = "";
+    	String dayStr = "";
+    	String monStr = "";
+    	
+    	String dayStrRet = "";
+    	String monStrRet = "";
+    	
+    	try {
+    		String day[] = arg0.getDepDate().split("-");
+    		String days = day[2];
+    		int dayInt = Integer.parseInt(days);
+    		dayStr = dayInt+"";
+    		String mon = day[1];
+    		//Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
+    		if(Integer.parseInt(mon) == 1){
+    			monStr = "Jan";
+    		}else if(Integer.parseInt(mon) == 2){
+    			monStr = "Feb";
+    		}else if(Integer.parseInt(mon) == 3){
+    			monStr = "Mar";
+    		}else if(Integer.parseInt(mon) == 4){
+    			monStr = "Apr";
+    		}else if(Integer.parseInt(mon) == 5){
+    			monStr = "May";
+    		}else if(Integer.parseInt(mon) == 6){
+    			monStr = "Jun";
+    		}else if(Integer.parseInt(mon) == 7){
+    			monStr = "Jul";
+    		}else if(Integer.parseInt(mon) == 8){
+    			monStr = "Aug";
+    		}else if(Integer.parseInt(mon) == 9){
+    			monStr = "Sep";
+    		}else if(Integer.parseInt(mon) == 10){
+    			monStr = "Oct";
+    		}else if(Integer.parseInt(mon) == 11){
+    			monStr = "Nov";
+    		}else if(Integer.parseInt(mon) == 12){
+    			monStr = "Dec";
+    		}
+    		
+    		if(StringUtils.isNotEmpty(arg0.getRetDate())){
+    			
+    			String dayRet[] = arg0.getRetDate().split("-");
+        		String daysRet = dayRet[2];
+        		int dayIntRet = Integer.parseInt(daysRet);
+        		dayStrRet = dayIntRet+"";
+        		String monRet = dayRet[1];
+        		//Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
+        		if(Integer.parseInt(monRet) == 1){
+        			monStrRet = "Jan";
+        		}else if(Integer.parseInt(monRet) == 2){
+        			monStrRet = "Feb";
+        		}else if(Integer.parseInt(monRet) == 3){
+        			monStrRet = "Mar";
+        		}else if(Integer.parseInt(monRet) == 4){
+        			monStrRet = "Apr";
+        		}else if(Integer.parseInt(monRet) == 5){
+        			monStrRet = "May";
+        		}else if(Integer.parseInt(monRet) == 6){
+        			monStrRet = "Jun";
+        		}else if(Integer.parseInt(monRet) == 7){
+        			monStrRet = "Jul";
+        		}else if(Integer.parseInt(monRet) == 8){
+        			monStrRet = "Aug";
+        		}else if(Integer.parseInt(monRet) == 9){
+        			monStrRet = "Sep";
+        		}else if(Integer.parseInt(monRet) == 10){
+        			monStrRet = "Oct";
+        		}else if(Integer.parseInt(monRet) == 11){
+        			monStrRet = "Nov";
+        		}else if(Integer.parseInt(mon) == 12){
+        			monStrRet = "Dec";
+        		}
+    		}
+            
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}  
+         System.out.println("dept==========");
 		//String getUrl = "https://secure.malindoair.com/MalindoAirCIBE/OnlineBooking.aspx?trip_type=return&date_flexibility=fixed&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24departurePortSelected=Alor+Setar+%28AOR%29&depart=AOR&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24arrivalPortSelected=Subang+%28SZB%29&dest.1=SZB&date.0=12Jul&date.1=28Jul&persons.0=1&persons.1=0&persons.2=0&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtDepartureDate=2014-07-12&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtReturnDate=2014-07-28";
 		//String getUrl = "https://secure.malindoair.com/MalindoAirCIBE/OnlineBooking.aspx?trip_type=one+way&date_flexibility=fixed&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24departurePortSelected=Alor+Setar+%28AOR%29&depart=AOR&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24arrivalPortSelected=Subang+%28SZB%29&dest.1=SZB&date.0=1Sep&date.1=&persons.0=1&persons.1=0&persons.2=0&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtDepartureDate=2014-09-01&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtReturnDate=";
 		if(StringUtils.isEmpty(arg0.getRetDate())){
-   		   getUrl = "https://secure.malindoair.com/MalindoAirCIBE/OnlineBooking.aspx?trip_type=one+way&date_flexibility=fixed&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24departurePortSelected=Alor+Setar+%28AOR%29&depart="+arg0.getDep()+"&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24arrivalPortSelected=Subang+%28SZB%29&dest.1="+arg0.getArr()+"&date.0=1Sep&date.1=&persons.0=1&persons.1=0&persons.2=0&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtDepartureDate="+arg0.getDepDate()+"&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtReturnDate=";
+   		   getUrl = "https://secure.malindoair.com/MalindoAirCIBE/OnlineBooking.aspx?trip_type=one+way&date_flexibility=fixed&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24departurePortSelected=%28"+arg0.getDep()+"%29&depart="+arg0.getDep()+"&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24arrivalPortSelected=%28"+arg0.getArr()+"%29&dest.1="+arg0.getArr()+"&date.0="+dayStr+monStr+"&date.1=&persons.0=1&persons.1=0&persons.2=0&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtDepartureDate="+arg0.getDepDate()+"&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtReturnDate=";
 		}else{
-     		getUrl = "https://secure.malindoair.com/MalindoAirCIBE/OnlineBooking.aspx?trip_type=return&date_flexibility=fixed&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24departurePortSelected=Alor+Setar+%28AOR%29&depart="+arg0.getDep()+"&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24arrivalPortSelected=Subang+%28SZB%29&dest.1="+arg0.getArr()+"&date.0=12Jul&date.1=28Jul&persons.0=1&persons.1=0&persons.2=0&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtDepartureDate="+arg0.getDepDate()+"&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtReturnDate="+arg0.getRetDate();
+     		getUrl = "https://secure.malindoair.com/MalindoAirCIBE/OnlineBooking.aspx?trip_type=return&date_flexibility=fixed&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24departurePortSelected=%28"+arg0.getDep()+"%29&depart="+arg0.getDep()+"&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24arrivalPortSelected=%28"+arg0.getArr()+"%29&dest.1="+arg0.getArr()+"&date.0="+dayStr+monStr+"&date.1="+dayStrRet+monStrRet+"&persons.0=1&persons.1=0&persons.2=0&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtDepartureDate="+arg0.getDepDate()+"&ctl00%24BodyContentPlaceHolder%24UcFlightSelection%24txtReturnDate="+arg0.getRetDate();
 		}
-            
+           System.out.println("getUrl=="+getUrl);
 		   QFGetMethod get = null;
             try
             {
@@ -367,7 +446,7 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
 	   	                    System.out.println("price"+price);
 	   	                    flightNoList.add(flightNo);
 	   	                    seg.setFlightno(flightNo);
-	                        seg.setDepDate(arg1.getRetDate());
+	                        seg.setDepDate(arg1.getDepDate());
 	                        seg.setDepairport(depairport);
 	                        seg.setArrairport(arrport);
 	                        seg.setDeptime(departTime);
@@ -417,7 +496,7 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
 			   	                     flightNoList.add(flightNo);
 			   	                     
 			   	                    seg.setFlightno(flightNo);
-			                        seg.setDepDate(arg1.getRetDate());
+			                        seg.setDepDate(arg1.getDepDate());
 			                        seg.setDepairport(depairport);
 			                        seg.setArrairport(arrport);
 			                        seg.setDeptime(departTime);
@@ -620,7 +699,10 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
 	             String count[] = StringUtils.substringsBetween(htmlCompress, "ctl00_BodyContentPlaceHolder_flightRowInbound", "\"");
 	             for(int k=0;k<count.length;k++){
 	            	 String air[] = count[k].split("_");
-	            	 System.out.println(count[k]);
+	            	 System.out.println("count==="+count[k]);
+	            	 if(k<count.length-1){
+		            	 System.out.println("count===++++"+count[k+1]);
+	            	 }
 	            	 String html = "";
 	            	 if(k<count.length-1){
 		            	  html  = StringUtils.substringBetween(htmlCompress, "ctl00_BodyContentPlaceHolder_flightRowInbound"+count[k], "ctl00_BodyContentPlaceHolder_flightRowInbound"+count[k+1]);
@@ -663,12 +745,12 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
 	   	                     flightNoList.add(flightNo);
 	   	                     
 	   	                    seg.setFlightno(flightNo);
-	                        seg.setDepDate(arg1.getRetDate());
+	                        seg.setDepDate(arg1.getDepDate());
 	                        seg.setDepairport(depairport);
 	                        seg.setArrairport(arrport);
 	                        seg.setDeptime(departTime);
 	                        seg.setArrtime(arrTime);
-	                        seg.setArrDate(arg1.getRetDate());
+	                        seg.setArrDate(arg1.getDepDate());
 	                        
 	                        segs.add(seg);
 	                        
@@ -693,11 +775,12 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
 	            		    segs = new ArrayList<FlightSegement>();
 		                	baseFlight = new OneWayFlightInfo();
 		                	flightDetail = new FlightDetail();
-		                	seg = new FlightSegement();
+		                	
 		                	flightNoList = new ArrayList<String>();
 		                	
 		                	 int flightMany = StringUtils.countMatches(html, "class=\"flight-table-row");
 		                	 for(int j=0;j<flightMany;j++){
+		                		    seg = new FlightSegement();
 		                		    String flightNum = StringUtils.substringBetween(html, "flight-number", "/span>"); 
 				                    String depart=   StringUtils.substringBetween(html, "depart-column", "</td>");
 				                    String arr = StringUtils.substringBetween(html, "arrive-column", "</td>");
@@ -711,12 +794,12 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
 			   	                     flightNoList.add(flightNo);
 			   	                     
 			   	                    seg.setFlightno(flightNo);
-			                        seg.setDepDate(arg1.getRetDate());
+			                        seg.setDepDate(arg1.getDepDate());
 			                        seg.setDepairport(depairport);
 			                        seg.setArrairport(arrport);
 			                        seg.setDeptime(departTime);
 			                        seg.setArrtime(arrTime);
-			                        seg.setArrDate(arg1.getRetDate());
+			                        seg.setArrDate(arg1.getDepDate());
 			                        segs.add(seg);
 				                    html = html.replaceFirst("depart-column", "");
 			   	                    html = html.replaceFirst("depart-column", "");
