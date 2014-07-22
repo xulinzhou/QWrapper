@@ -326,12 +326,13 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
      		//post.setRequestHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; nl; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13");
      		post.addRequestHeader("X-Requested-With", "XMLHttpRequest");
      		 
-     		
+     		long time = new Date().getTime();
      	    cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
      	    System.out.println(cookie);
-     	    cookie += "__utmc:27653039"+"; ";
-     	    cookie += "__utma:27653039.443068471.1404180813.1404885715.1404890341.15"+"; ";
-     	    cookie += "__utmz:27653039.1404364764.11.2.utmcsr=cbook.flight.qunar.com|utmccn=(referral)|utmcmd=referral|utmcct=/bookingtransform/bookingCheck"+";";
+     	    /*cookie += "__utma:27653039.1483583021.1406010395.1406010395.1406010395.1"+time+"; ";
+     	    cookie += "__utmb:27653039.3.9.1406010428351"+time+"; ";
+     	    cookie += "__utmc:27653039"+time+"; ";
+     	    cookie += "__utmz:27653039.1406010395.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)"+time+";";*/
      	 
 			post.addRequestHeader("Cookie",cookie);
  
