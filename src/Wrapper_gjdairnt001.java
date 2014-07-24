@@ -1,3 +1,4 @@
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,14 +38,14 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
                 FlightSearchParam searchParam = new FlightSearchParam();
                 searchParam.setDep("MAD");
                 searchParam.setArr("EUN");
-                searchParam.setDepDate("2014-07-29");
+                searchParam.setDepDate("2014-08-03");
                 //searchParam.setRetDate("2014-08-15");
                 //searchParam.setRetDate("2014-07-28");
                 //searchParam.setTimeOut("60000");
                 searchParam.setToken("");
                 searchParam.setFastTrack(false);
                 String html = new  Wrapper_gjdairnt001().getHtml(searchParam);
-                //System.out.println(html);
+                //System.out.println("html"+html);
         //String detail = new  Wrapper_gjdairou001().getHtml2(searchParam);
         //System.out.println(detail);
                 //ProcessResultInfo result = new ProcessResultInfo();
@@ -65,7 +66,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
                         System.out.println(result.getStatus());
                 }*/
         }
-		private String exception;
+		private String exception="";
         
         public BookingResult getBookingInfo(FlightSearchParam arg0) {
         	String bookingUrlPre = "https://www.bintercanarias.com/booking/searchDo";
@@ -134,11 +135,15 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
         }
 
         public String getHtml(FlightSearchParam arg0) {
+        	QFHttpClient httpClient =null;
         	QFPostMethod post = null;
+        	QFGetMethod get = null;
+        	String locationInfo = "";
+        	String postStatus = "";
 		try
 		{
 		// get all query parameters from the url set by wrapperSearchInterface
-		QFHttpClient httpClient = new QFHttpClient(arg0, false);
+	    httpClient = new QFHttpClient(arg0, false);
 		httpClient.getParams().setCookiePolicy(
 				CookiePolicy.BROWSER_COMPATIBILITY);
 
@@ -190,42 +195,46 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 	 			
 	    };
 	 	
-	 	/*String cookie1 = "";
-	 	cookie1 += "__utma:27653039.1483583021.1406010395.1406010395.1406010395.1"+"; ";
-	 	cookie1 += "__utmb:27653039.3.9.1406010428351"+"; ";
-	 	cookie1 += "__utmc:27653039"+"; ";
- 	    cookie1 += "__utmz:27653039.1406010395.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)"+";";
- 	    post.addRequestHeader("Cookie",cookie1);*/
 	    post.setRequestBody(names);
 		post.getParams().setContentCharset("UTF-8");
 
 		httpClient.executeMethod(post);	
-		QFGetMethod get = null;
+		
 		String ret = "";
+		postStatus = String.valueOf(post.getStatusCode());
 		System.out.println("status========"+post.getStatusCode());
+		
+		String cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
+		
 		if(post.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || post.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY ){
-			Header location = post.getResponseHeader("Location");
-			System.out.println(location.getValue());
-			String urlDetail = arg0.getDep()+"-"+arg0.getArr();
+			
+			if (post != null) {
+				post.abort();
+				post.releaseConnection();
+				post = null;
+			}
+			
+			String urlDetail = arg0.getDep().trim()+"-"+arg0.getArr().trim();
+			
 			String url = "https://www.bintercanarias.com/eng/book/select-a-flight/"+urlDetail;
-			String cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
+			
+			locationInfo += "url=="+url;
+			
+			
+			httpClient.getParams().setCookiePolicy(
+					CookiePolicy.BROWSER_COMPATIBILITY);
 			
 		    get = new QFGetMethod(url);
 		    
-		    System.out.println("url========"+url);
-		    //get.setRequestHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; nl; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13");
      		
-			httpClient.getState().clearCookies();
-			
-			long time = new Date().getTime();
-			/*cookie += "__utma:27653039.1483583021.1406010395.1406010395.1406010395.1"+"; ";
-     	    cookie += "__utmb:27653039.3.9.1406010428351"+"; ";
-     	    cookie += "__utmc:27653039"+"; ";
-     	    cookie += "__utmz:27653039.1406010395.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)"+";";*/
+		    httpClient.getState().clearCookies();
 			
 			get.addRequestHeader("Cookie",cookie);
+			
 			httpClient.executeMethod(get);
 			ret = get.getResponseBodyAsString();
+			locationInfo += "ret===="+ret;
+			locationInfo += "statuscode=="+get.getStatusCode();
 		}
 		
 		return ret;
@@ -235,9 +244,16 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 		} finally {			
 			if (post != null) {
 				post.releaseConnection();
+				post.abort();
+				post = null;
+				httpClient = null;
+			}if (get != null) {
+				get.releaseConnection();
+				get.abort();
+				get =null;
 			}
 		}
-		return "Exception"+post.getStatusCode();
+		return "Exception111==="+exception+"localtion==="+locationInfo+"post==="+postStatus;
 	}
 
         
@@ -323,12 +339,12 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
             }
              
      		post.getParams().setContentCharset("UTF-8");
-     		
-            httpClient.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET, "UTF8");
+     		//httpClient = new QFHttpClient(arg0, false);
+     		httpClient.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET, "UTF8");
             
-            httpClient.getParams().setCookiePolicy(
+     		httpClient.getParams().setCookiePolicy(
     				CookiePolicy.BROWSER_COMPATIBILITY);
-            httpClient.getParams().setParameter(HttpMethodParams.USER_AGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; nl; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13");
+     		httpClient.getParams().setParameter(HttpMethodParams.USER_AGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; nl; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13");
             
      		
           
@@ -369,7 +385,7 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
 			//System.out.println("Version=="+cookies[i].getVersion());
 			}
 			
-            httpClient.executeMethod(post);	
+			httpClient.executeMethod(post);	
      		return post.getResponseBodyAsString();
             } catch (Exception e) {
                     e.printStackTrace();
@@ -836,4 +852,6 @@ public class Wrapper_gjdairnt001 implements QunarCrawler{
                 result.setData(flightList);
                 return result;
         }
+        
+        
 }
