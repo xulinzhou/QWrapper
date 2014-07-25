@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.httpclient.Cookie;
-import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.lang.StringUtils;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.qunar.qfwrapper.bean.booking.BookingInfo;
@@ -37,8 +37,8 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
                 FlightSearchParam searchParam = new FlightSearchParam();
                 searchParam.setDep("MAD");
                 searchParam.setArr("EUN");
-                searchParam.setDepDate("2014-07-29");
-                searchParam.setRetDate("2014-08-15");
+                searchParam.setDepDate("2014-08-03");
+                searchParam.setRetDate("2014-08-05");
                 //searchParam.setRetDate("2014-08-15");
                 //searchParam.setRetDate("2014-07-28");
                 //searchParam.setTimeOut("60000");
@@ -66,7 +66,7 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
                         System.out.println(result.getStatus());
                 }*/
         }
-    	private String exception;
+		private String exception="";
         
         public BookingResult getBookingInfo(FlightSearchParam arg0) {
         	String bookingUrlPre = "https://www.bintercanarias.com/booking/searchDo";
@@ -88,27 +88,13 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
 	    	 	map.put("data[search][departureDate]", depdate);
 	    	 	map.put("data[search][returnDate]", arrdate);
 	    	 	map.put("data[search][dateAdvance]", "2");
-	    	 	//map.put("data[search][departureDate]", "depdate");
-	    	 	///map.put("data[search][departureDate]", "depdate");
-	    	 	 
-	 			//map.put(("search[initDates][0][month]","07"),
-	 			//map.put(("search[initDates][0][year]","2014"),
-	 			
-	 			//map.put(("search[initDates][1][month]","07"),
-	 			//map.put(("search[initDates][1][year]","2014"),
-	 			
 	    	 	map.put("data[search][tipoBusqueda]","normal");
 	    	 	map.put("data[search][from]",arg0.getDep());
-	 			//map.put("data[search][from_text]","El Hierro");
 	 			map.put("data[search][to]",arg0.getArr());
-	 			//map.put("data[search][to_text]","Gran Canaria");
 	 			map.put("data[search][oneWay]","0");
 	 			map.put("data[search][oneWay]","1");
 	 			map.put("data[search][onlyPoints]","0");
 	 			map.put("data[search][onlyDirectFlights]","0");
-	 			//map.put("data[search][departureDateVisual]","1 Jul 2014");
-	 			
-	 			//map.put("data[search][returnDateVisual]","12 Jul 2014");
 	 			map.put("data[search][calendar]","0");
 	 			map.put("data[search][passengers][ADTDC]","0");
 	 			map.put("data[search][passengers][ADT]","1");
@@ -163,22 +149,13 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
 	 			new NameValuePair("data[search][dateAdvance]","2"),
 	 			new NameValuePair("search[initDates][0][month]","07"),
 	 			new NameValuePair("search[initDates][0][year]","2014"),
-	 			
-	 			//new NameValuePair("search[initDates][1][month]","07"),
-	 			//new NameValuePair("search[initDates][1][year]","2014"),
-	 			
 	 			new NameValuePair("data[search][tipoBusqueda]","normal"),
 	 			new NameValuePair("data[search][from]",arg0.getDep()),
-	 			//new NameValuePair("data[search][from_text]","El Hierro"),
 	 			new NameValuePair("data[search][to]",arg0.getArr()),
-	 			//new NameValuePair("data[search][to_text]","Gran Canaria"),
 	 			new NameValuePair("data[search][oneWay]","0"),
 	 			new NameValuePair("data[search][oneWay]","1"),
 	 			new NameValuePair("data[search][onlyPoints]","0"),
 	 			new NameValuePair("data[search][onlyDirectFlights]","0"),
-	 			//new NameValuePair("data[search][departureDateVisual]","1 Jul 2014"),
-	 			
-	 			//new NameValuePair("data[search][returnDateVisual]","12 Jul 2014"),
 	 			new NameValuePair("data[search][calendar]","0"),
 	 			new NameValuePair("data[search][passengers][ADTDC]","0"),
 	 			new NameValuePair("data[search][passengers][ADT]","1"),
@@ -280,24 +257,13 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
         	 			new NameValuePair("data[search][departureDate]",depdate),
         	 			new NameValuePair("data[search][returnDate]",arrdate),
         	 			new NameValuePair("data[search][dateAdvance]","2"),
-        	 			//new NameValuePair("search[initDates][0][month]","07"),
-        	 			//new NameValuePair("search[initDates][0][year]","2014"),
-        	 			
-        	 			//new NameValuePair("search[initDates][1][month]","07"),
-        	 			//new NameValuePair("search[initDates][1][year]","2014"),
-        	 			
         	 			new NameValuePair("data[search][tipoBusqueda]","normal"),
         	 			new NameValuePair("data[search][from]",arg0.getDep()),
-        	 			//new NameValuePair("data[search][from_text]","El Hierro"),
         	 			new NameValuePair("data[search][to]",arg0.getArr()),
-        	 			//new NameValuePair("data[search][to_text]","Gran Canaria"),
         	 			new NameValuePair("data[search][oneWay]","0"),
         	 			new NameValuePair("data[search][oneWay]","1"),
         	 			new NameValuePair("data[search][onlyPoints]","0"),
         	 			new NameValuePair("data[search][onlyDirectFlights]","0"),
-        	 			//new NameValuePair("data[search][departureDateVisual]","1 Jul 2014"),
-        	 			
-        	 			//new NameValuePair("data[search][returnDateVisual]","12 Jul 2014"),
         	 			new NameValuePair("data[search][calendar]","0"),
         	 			new NameValuePair("data[search][passengers][ADTDC]","0"),
         	 			new NameValuePair("data[search][passengers][ADT]","1"),
@@ -363,7 +329,8 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
      		//post.setRequestHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; nl; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13");
      		post.addRequestHeader("X-Requested-With", "XMLHttpRequest");
      		 
-     		long time = new Date().getTime();
+     		
+    		long time = new Date().getTime();
      	    cookie = StringUtils.join(httpClient.getState().getCookies(),"; ");
      	    System.out.println(cookie);
      	    /*cookie += "__utma:27653039.1483583021.1406010395.1406010395.1406010395.1"+time+"; ";
@@ -407,7 +374,6 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
                         result.setStatus(Constants.CONNECTION_FAIL);
                         return result;                  
                 }
-                //需要有明显的提示语句，才能判断是否INVALID_DATE|INVALID_AIRLINE|NO_RESULT
                 if (htmlCompress.contains("We are unable to find recommendations for the date(s) / time(s) specified.")
                 		|| htmlCompress.contains("There are no places available on this date")) {
                         result.setRet(false);
@@ -449,6 +415,7 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
 				
 				
 				 if(StringUtils.isNotEmpty(arg1.getRetDate())){
+
 					 
 					 List<RoundTripFlightInfo> flightRoundList = new ArrayList<RoundTripFlightInfo>();
 	                 RoundTripFlightInfo roundTripFlightInfo = null;
@@ -488,7 +455,6 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
 		                    int countFlight = StringUtils.countMatches(info, "</span>");
 		                    
 		                    int lastIndex = StringUtils.lastIndexOf(price, "type=\"radio\"");
-		                    //价格为空
 		                    if(lastIndex==-1){
 		                    	String price2 = StringUtils.substringBetween(start, "data-group=\"jsGroup-masFare\"", "</div>");
 		                    	lastIndex = StringUtils.lastIndexOf(price2, "type=\"radio\"");
@@ -602,7 +568,6 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
 			                    int countFlightRet = StringUtils.countMatches(infoRet, "</span>");
 			                    
 			                    int lastIndexRet = StringUtils.lastIndexOf(priceRet, "type=\"radio\"");
-			                    //价格为空
 			                    if(lastIndexRet==-1){
 			                    	String price2 = StringUtils.substringBetween(end, "data-group=\"jsGroup-masFare\"", "</div>");
 			                    	lastIndexRet = StringUtils.lastIndexOf(price2, "type=\"radio\"");
@@ -759,7 +724,6 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
 		                    int countFlight = StringUtils.countMatches(info, "</span>");
 		                    
 		                    int lastIndex = StringUtils.lastIndexOf(price, "type=\"radio\"");
-		                    //价格为空
 		                    if(lastIndex==-1){
 		                    	String price2 = StringUtils.substringBetween(htmlCompress, "data-group=\"jsGroup-masFare\"", "</div>");
 		                    	lastIndex = StringUtils.lastIndexOf(price2, "type=\"radio\"");
@@ -820,7 +784,6 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
 		                    String name = StringUtils.substringBetween(price, "name=\"", "\"");
 		                    String value = StringUtils.substringBetween(price, "value=\"", "\"");
 		                    
-		                    //获取 fee
 		                    
 		                    System.out.println("fare========="+fare);
 		                    System.out.println("taxes========"+taxes);
@@ -862,4 +825,6 @@ public class Wrapper_gjsairnt001 implements QunarCrawler{
                 result.setData(flightList);
                 return result;
         }
+        
+        
 }
