@@ -1,40 +1,28 @@
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.google.common.collect.Lists;
-import com.qunar.qfwrapper.bean.booking.BookingResult;
-import com.qunar.qfwrapper.bean.booking.BookingInfo;
-import com.qunar.qfwrapper.bean.search.FlightSearchParam;
-import com.qunar.qfwrapper.bean.search.ProcessResultInfo;
-import com.qunar.qfwrapper.bean.search.OneWayFlightInfo;
-import com.qunar.qfwrapper.bean.search.FlightDetail;
-import com.qunar.qfwrapper.bean.search.FlightSegement;
-import com.qunar.qfwrapper.bean.search.RoundTripFlightInfo;
-import com.qunar.qfwrapper.interfaces.QunarCrawler;
-import com.qunar.qfwrapper.util.QFGetMethod;
-import com.qunar.qfwrapper.util.QFPostMethod;
-import com.qunar.qfwrapper.util.QFHttpClient;
-import com.qunar.qfwrapper.constants.Constants;
-import com.travelco.rdf.infocenter.InfoCenter;
-
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.cookie.CookiePolicy;
-import org.apache.commons.lang.StringUtils;
-
-import java.io.File;
-import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.SimpleTimeZone;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.regex.*;
+
+import org.apache.commons.lang.StringUtils;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.qunar.qfwrapper.bean.booking.BookingInfo;
+import com.qunar.qfwrapper.bean.booking.BookingResult;
+import com.qunar.qfwrapper.bean.search.FlightDetail;
+import com.qunar.qfwrapper.bean.search.FlightSearchParam;
+import com.qunar.qfwrapper.bean.search.FlightSegement;
+import com.qunar.qfwrapper.bean.search.OneWayFlightInfo;
+import com.qunar.qfwrapper.bean.search.ProcessResultInfo;
+import com.qunar.qfwrapper.bean.search.RoundTripFlightInfo;
+import com.qunar.qfwrapper.constants.Constants;
+import com.qunar.qfwrapper.interfaces.QunarCrawler;
+import com.qunar.qfwrapper.util.QFGetMethod;
+import com.qunar.qfwrapper.util.QFHttpClient;
 
 public class Wrapper_gjsairod001 implements QunarCrawler{
 
@@ -384,7 +372,11 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 		         System.out.println(arrHtml);
 	             String countArr[] = StringUtils.substringsBetween(arrHtml, "ctl00_BodyContentPlaceHolder_flightRowOutbound", "\"");
 	             String countDep[] = StringUtils.substringsBetween(depHtml, "ctl00_BodyContentPlaceHolder_flightRowInbound", "\"");
-	             
+	             if(countArr==null || countDep==null){
+	            	 result.setRet(false);
+	                 result.setStatus(Constants.NO_RESULT);
+	                 return result; 
+	             }
 	             for(int k=0;k<countArr.length;k++){
 	            	 
 	            	 roundTripFlightInfo = new RoundTripFlightInfo();
@@ -439,7 +431,12 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 	                        seg.setArrairport(arrport);
 	                        seg.setDeptime(departTime);
 	                        seg.setArrtime(arrTime);
-	                        seg.setArrDate(arg1.getRetDate());
+	                        if(compareDate(departTime,arrTime)<0){
+		                        seg.setArrDate(arg1.getRetDate());
+	                        }else{
+	                        	 seg.setArrDate(arg1.getRetDate());
+	                        }
+	                        
 	                        retsegs.add(seg);
 	   	                    html = html.replaceFirst("depart-column", "");
 	   	                    html = html.replaceFirst("depart-column", "");
@@ -490,7 +487,12 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 			                        seg.setArrairport(arrport);
 			                        seg.setDeptime(departTime);
 			                        seg.setArrtime(arrTime);
-			                        seg.setArrDate(arg1.getRetDate());
+			                        if(compareDate(departTime,arrTime)<0){
+				                        seg.setArrDate(arg1.getRetDate());
+			                        }else{
+			                        	 seg.setArrDate(arg1.getRetDate());
+			                        }
+			                        
 			                        retsegs.add(seg);
 				                    html = html.replaceFirst("depart-column", "");
 			   	                    html = html.replaceFirst("depart-column", "");
@@ -572,7 +574,11 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 	                        seg.setArrairport(arrport);
 	                        seg.setDeptime(departTime);
 	                        seg.setArrtime(arrTime);
-	                        seg.setArrDate(arg1.getDepDate());
+	                        if(compareDate(departTime,arrTime)<0){
+		                        seg.setArrDate(dateAdd(arg1.getDepDate()));
+	                        }else{
+	                        	 seg.setArrDate(arg1.getDepDate());
+	                        }
 	                        
 	                        segs.add(seg);
 	                        
@@ -637,7 +643,11 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 			                        seg.setArrairport(arrport);
 			                        seg.setDeptime(departTime);
 			                        seg.setArrtime(arrTime);
-			                        seg.setArrDate(arg1.getDepDate());
+			                        if(compareDate(departTime,arrTime)<0){
+				                        seg.setArrDate(dateAdd(arg1.getDepDate()));
+			                        }else{
+			                        	 seg.setArrDate(arg1.getDepDate());
+			                        }
 			                        segs.add(seg);
 				                    html = html.replaceFirst("depart-column", "");
 			   	                    html = html.replaceFirst("depart-column", "");
@@ -647,7 +657,7 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 		                    String tax = StringUtils.substringBetween(html, "TotalTaxes:MYR","&lt;br/>");
 		                    
 	   	                    System.out.println("price"+price);
-	   	                 System.out.println("tax"+tax);
+	   	                    System.out.println("tax"+tax);
 		                    
 		                    
 		                    
@@ -686,147 +696,38 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
                  return result;
                  
 			 }else{
-	            
-	             String count[] = StringUtils.substringsBetween(htmlCompress, "ctl00_BodyContentPlaceHolder_flightRowInbound", "\"");
-	             for(int k=0;k<count.length;k++){
-	            	 String air[] = count[k].split("_");
-	            	 System.out.println("count==="+count[k]);
-	            	 if(k<count.length-1){
-		            	 System.out.println("count===++++"+count[k+1]);
-	            	 }
-	            	 String html = "";
-	            	 if(k<count.length-1){
-		            	  html  = StringUtils.substringBetween(htmlCompress, "ctl00_BodyContentPlaceHolder_flightRowInbound"+count[k], "ctl00_BodyContentPlaceHolder_flightRowInbound"+count[k+1]);
-	            	 }else{
-		            	  html  = StringUtils.substringBetween(htmlCompress, "ctl00_BodyContentPlaceHolder_flightRowInbound"+count[k],"</tbody>");
-	            	 }
-		             System.out.println(html);
-	            	 int countFlightInfo = StringUtils.countMatches(html, "class=\"flight-table-row");
-	            	 System.out.println("countFlightInfo"+countFlightInfo);
-	            	 List<String> flightNoList = null;
-	            	 FlightSegement seg = null;
-	            	 retsegs = new ArrayList<FlightSegement>();
-	            	 System.out.println("countFlightInfocountFlightInfo"+countFlightInfo);
-	            	 if(countFlightInfo == 1){
-	            		 segs = new ArrayList<FlightSegement>();
-		                	baseFlight = new OneWayFlightInfo();
-		                	flightDetail = new FlightDetail();
-		                	seg = new FlightSegement();
-		                	flightNoList = new ArrayList<String>();
-			                String flightNum = StringUtils.substringBetween(html, "flight-number", "/span>"); 
-		                    String depart=   StringUtils.substringBetween(html, "depart-column", "</td>");
-		                    String arr = StringUtils.substringBetween(html, "arrive-column", "</td>");
-		                    String price = StringUtils.substringBetween(html, "BaseFare:MYR","&lt;br/>");
-		                    String tax = StringUtils.substringBetween(html, "TotalTaxes:MYR","&lt;br/>");
-		                    
-		                    String flightNo = StringUtils.substringBetween(flightNum, "<br/>","<"); 
-		                    String departTime = StringUtils.substringBetween(depart, "<time>","</time>");
-		                    String arrTime = StringUtils.substringBetween(arr, "<time>","</time>");
-		                    String depairport  = StringUtils.substringBetween(depart, "(",")");
-		                    String arrport  = StringUtils.substringBetween(arr, "(",")");
-		                    
-		                    departTime = departTime.substring(1);
-		                    arrTime = arrTime.substring(1);
-		                    
-		                    System.out.println("flightNo"+flightNo);
-	   	                    System.out.println("depart"+depart);
-	   	                    System.out.println("arr"+arr);
-	   	                    System.out.println("depairport"+depairport);
-	   	                    System.out.println("arrport"+arrport);
-	   	              
-	   	                    System.out.println("price"+price);
-	   	                    
-	   	                     flightNoList.add(flightNo);
-	   	                     
-	   	                    seg.setFlightno(flightNo);
-	                        seg.setDepDate(arg1.getDepDate());
-	                        seg.setDepairport(depairport);
-	                        seg.setArrairport(arrport);
-	                        seg.setDeptime(departTime);
-	                        seg.setArrtime(arrTime);
-	                        seg.setArrDate(arg1.getDepDate());
-	                        
-	                        segs.add(seg);
-	                        
-	   	                    html = html.replaceFirst("depart-column", "");
-	   	                    html = html.replaceFirst("depart-column", "");
-	   	                    html = html.replaceFirst("flight-number", "");
-		                    
-		                    flightDetail.setFlightno(flightNoList);
-		                    flightDetail.setMonetaryunit(monetaryunit);
-		                    flightDetail.setPrice(Double.parseDouble(price));
-		                    flightDetail.setTax(Double.parseDouble(tax));
-		                    flightDetail.setDepcity(arg1.getDep());
-		                    flightDetail.setArrcity(arg1.getArr());
-		                    flightDetail.setWrapperid(arg1.getWrapperid());
-		                    flightDetail.setDepdate(dateDeptDetailDate);                    
-		                    
-		                    baseFlight.setDetail(flightDetail);
-		                    baseFlight.setInfo(segs);
-		                    flightList.add(baseFlight);
-	            	 }else{
-                            //中转效果
-	            		    segs = new ArrayList<FlightSegement>();
-		                	baseFlight = new OneWayFlightInfo();
-		                	flightDetail = new FlightDetail();
-		                	
-		                	flightNoList = new ArrayList<String>();
-		                	
-		                	 int flightMany = StringUtils.countMatches(html, "class=\"flight-table-row");
-		                	 for(int j=0;j<flightMany;j++){
-		                		    seg = new FlightSegement();
-		                		    String flightNum = StringUtils.substringBetween(html, "flight-number", "/span>"); 
-				                    String depart=   StringUtils.substringBetween(html, "depart-column", "</td>");
-				                    String arr = StringUtils.substringBetween(html, "arrive-column", "</td>");
-				                    
-				                    String flightNo = StringUtils.substringBetween(flightNum, "<br/>","<"); 
-				                    String departTime = StringUtils.substringBetween(depart, "<time>一","</time>");
-				                    String arrTime = StringUtils.substringBetween(arr, "<time>一","</time>");
-				                    String depairport  = StringUtils.substringBetween(depart, "(",")");
-				                    String arrport  = StringUtils.substringBetween(arr, "(",")");
-
-			   	                     flightNoList.add(flightNo);
-			   	                     
-			   	                    seg.setFlightno(flightNo);
-			                        seg.setDepDate(arg1.getDepDate());
-			                        seg.setDepairport(depairport);
-			                        seg.setArrairport(arrport);
-			                        seg.setDeptime(departTime);
-			                        seg.setArrtime(arrTime);
-			                        seg.setArrDate(arg1.getDepDate());
-			                        segs.add(seg);
-				                    html = html.replaceFirst("depart-column", "");
-			   	                    html = html.replaceFirst("depart-column", "");
-			   	                    html = html.replaceFirst("flight-number", "");
-			   	                    
-		                	 }
-			                
-		                    String price = StringUtils.substringBetween(html, "BaseFare:MYR","&lt;br/>");
-		                    String tax = StringUtils.substringBetween(html, "TotalTaxes:MYR","&lt;br/>");
-		                     
-	   	                    System.out.println("price"+price);
-	   	                    
-		                    flightDetail.setFlightno(flightNoList);
-		                    flightDetail.setMonetaryunit(monetaryunit);
-		                    flightDetail.setPrice(Double.parseDouble(price));
-		                    flightDetail.setTax(Double.parseDouble(tax));
-		                    flightDetail.setDepcity(arg1.getDep());
-		                    flightDetail.setArrcity(arg1.getArr());
-		                    flightDetail.setWrapperid(arg1.getWrapperid());
-		                    flightDetail.setDepdate(dateDeptDetailDate);                    
-		                    
-		                    baseFlight.setDetail(flightDetail);
-		                    baseFlight.setInfo(segs);
-		                    flightList.add(baseFlight);
-	            	    }
-				     }
-	             }
- 				 
-            
+				
+			 }
             result.setRet(true);
             result.setStatus(Constants.SUCCESS);
             result.setData(flightList);
             return result;
     }
-
+    
+    public int compareDate(String start,String end){
+    	int result = 0;
+    	if(StringUtils.isNotEmpty(start) || StringUtils.isNotEmpty(end)){
+    		return result;
+    	}
+		 SimpleDateFormat formate = new SimpleDateFormat("HH:mm");
+		 try {
+			result =  formate.parse(end).compareTo(formate.parse(start));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return result;
+    }
+    public String dateAdd(String date){
+    	 Calendar calendar = Calendar.getInstance();//日历对象
+		 SimpleDateFormat formate = new SimpleDateFormat("yyyy-MM-dd");
+		 try {
+			Date dateFormate  =  formate.parse("2014-9-1");
+			calendar.setTime(dateFormate);//设置当前日期
+			calendar.add(Calendar.DATE, 1);//月份减一
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		String dateRet = formate.format(calendar.getTime());
+		return dateRet;
+    }
 }
