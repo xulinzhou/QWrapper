@@ -43,9 +43,9 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
     public static void main(String[] args) {
 
             FlightSearchParam searchParam = new FlightSearchParam();
-            searchParam.setDep("COK");
-            searchParam.setArr("KCH");
-            searchParam.setDepDate("2014-08-23");
+            searchParam.setDep("AOR");
+            searchParam.setArr("SZB");
+            searchParam.setDepDate("2014-9-1");
             //searchParam.setRetDate("2014-08-19");
             //searchParam.setRetDate("2014-07-28");
             //searchParam.setTimeOut("60000");
@@ -400,6 +400,9 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
 	            			 if(Integer.parseInt(air[0]) == Integer.parseInt(air1[0])){
 		            			 list.add(count[k]);
 		            			 train = 2;
+		            		 }else{
+		            			 list.add(count[k]);
+		            			 train = 1;
 		            		 }
 	            		 }
 	            		 
