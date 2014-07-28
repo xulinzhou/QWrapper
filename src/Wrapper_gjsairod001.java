@@ -415,8 +415,14 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 		                    String depairport  = StringUtils.substringBetween(depart, "(",")");
 		                    String arrport  = StringUtils.substringBetween(arr, "(",")");
 		                    
-		                    departTime = departTime.substring(1);
-		                    arrTime = arrTime.substring(1);
+		                    if(StringUtils.isNotEmpty(departTime)){
+			                    departTime = departTime.substring(1);
+		                    }
+		                    if(StringUtils.isNotEmpty(arrTime)){
+			                    arrTime = arrTime.substring(1);
+		                    }
+		                    
+		                    
 		                    
 		                    System.out.println("flightNo"+flightNo);
 	   	                    System.out.println("depart"+depart);
@@ -477,8 +483,15 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 				                    String arrTime = StringUtils.substringBetween(arr, "<time>","</time>");
 				                    String depairport  = StringUtils.substringBetween(depart, "(",")");
 				                    String arrport  = StringUtils.substringBetween(arr, "(",")");
-				                    departTime = departTime.substring(1);
-				                    arrTime = arrTime.substring(1);
+				                    
+				                    
+				                    if(StringUtils.isNotEmpty(departTime)){
+					                    departTime = departTime.substring(1);
+				                    }
+				                    if(StringUtils.isNotEmpty(arrTime)){
+					                    arrTime = arrTime.substring(1);
+				                    }
+				                    
 			   	                     flightNoList.add(flightNo);
 			   	                     
 			   	                    seg.setFlightno(flightNo);
@@ -557,8 +570,14 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 		                    String arrTime = StringUtils.substringBetween(arr, "<time>","</time>");
 		                    String depairport  = StringUtils.substringBetween(depart, "(",")");
 		                    String arrport  = StringUtils.substringBetween(arr, "(",")");
-		                    departTime = departTime.substring(1);
-		                    arrTime = arrTime.substring(1);
+		                    
+		                    if(StringUtils.isNotEmpty(departTime)){
+			                    departTime = departTime.substring(1);
+		                    }
+		                    if(StringUtils.isNotEmpty(arrTime)){
+			                    arrTime = arrTime.substring(1);
+		                    }
+		                    
 		                    System.out.println("flightNo"+flightNo);
 	   	                    System.out.println("depart"+depart);
 	   	                    System.out.println("arr"+arr);
@@ -633,8 +652,15 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 				                    String arrTime = StringUtils.substringBetween(arr, "<time>","</time>");
 				                    String depairport  = StringUtils.substringBetween(depart, "(",")");
 				                    String arrport  = StringUtils.substringBetween(arr, "(",")");
-				                    departTime = departTime.substring(1);
-				                    arrTime = arrTime.substring(1);
+				                    
+				                    if(StringUtils.isNotEmpty(departTime)){
+					                    departTime = departTime.substring(1);
+				                    }
+				                    if(StringUtils.isNotEmpty(arrTime)){
+					                    arrTime = arrTime.substring(1);
+				                    }
+				                    
+				                    
 			   	                     flightNoList.add(flightNo);
 			   	                     
 			   	                    seg.setFlightno(flightNo);
