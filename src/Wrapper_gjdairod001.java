@@ -43,9 +43,9 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
     public static void main(String[] args) {
 
             FlightSearchParam searchParam = new FlightSearchParam();
-            searchParam.setDep("AOR");
-            searchParam.setArr("SZB");
-            searchParam.setDepDate("2014-9-1");
+            searchParam.setDep("COK");
+            searchParam.setArr("KCH");
+            searchParam.setDepDate("2014-08-23");
             //searchParam.setRetDate("2014-08-19");
             //searchParam.setRetDate("2014-07-28");
             //searchParam.setTimeOut("60000");
@@ -442,8 +442,9 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
 			                String flightNum = StringUtils.substringBetween(html, "flight-number", "/span>"); 
 		                    String depart=   StringUtils.substringBetween(html, "depart-column", "</td>");
 		                    String arr = StringUtils.substringBetween(html, "arrive-column", "</td>");
-		                    String price = StringUtils.substringBetween(html, "BaseFare:MYR","&lt;br/>");
-		                    String tax = StringUtils.substringBetween(html, "TotalTaxes:MYR","&lt;br/>");
+		                    monetaryunit = html.substring(html.indexOf("BaseFare:")+9,html.indexOf("BaseFare:")+12);
+		                    String price = StringUtils.substringBetween(html, "BaseFare:"+monetaryunit,"&lt;br/>");
+		                    String tax = StringUtils.substringBetween(html, "TotalTaxes:"+monetaryunit,"&lt;br/>");
 		                    
 		                    String flightNo = StringUtils.substringBetween(flightNum, "<br/>","<"); 
 		                    String departTime = StringUtils.substringBetween(depart, "<time>","</time>");
@@ -479,7 +480,7 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
 	                        
 	                        segs.add(seg);
 	                        
-	   	                    html = html.replaceFirst("depart-column", "");
+	   	                    html = html.replaceFirst("arrive-column", "");
 	   	                    html = html.replaceFirst("depart-column", "");
 	   	                    html = html.replaceFirst("flight-number", "");
 		                    
@@ -569,7 +570,7 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
     }
     public int compareDate(String start,String end){
     	int result = 0;
-    	if(StringUtils.isNotEmpty(start) || StringUtils.isNotEmpty(end)){
+    	if(StringUtils.isEmpty(start) || StringUtils.isEmpty(end)){
     		return result;
     	}
 		 SimpleDateFormat formate = new SimpleDateFormat("HH:mm");
@@ -584,7 +585,7 @@ public class Wrapper_gjdairod001 implements QunarCrawler{
     	 Calendar calendar = Calendar.getInstance();//日历对象
 		 SimpleDateFormat formate = new SimpleDateFormat("yyyy-MM-dd");
 		 try {
-			Date dateFormate  =  formate.parse("2014-9-1");
+			Date dateFormate  =  formate.parse(date);
 			calendar.setTime(dateFormate);//设置当前日期
 			calendar.add(Calendar.DATE, 1);//月份减一
 		} catch (ParseException e) {

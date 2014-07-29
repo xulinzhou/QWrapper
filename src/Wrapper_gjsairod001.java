@@ -377,21 +377,73 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 	                 result.setStatus(Constants.NO_RESULT);
 	                 return result; 
 	             }
+	              
 	             for(int k=0;k<countArr.length;k++){
-	            	 
-	            	 roundTripFlightInfo = new RoundTripFlightInfo();
 	            	 String air[] = countArr[k].split("_");
 	            	 System.out.println(countArr[k]);
+	             }
+	             List<String> list = new ArrayList<String>();
+	             int  train = 1;
+	             for(int k=0;k<countArr.length;k++){
+	            	 if(train == 1){
+	            		
+	            		 if(k<countArr.length-1){
+	            			 String air[] = countArr[k].split("_");
+	            			 String air1[] = countArr[k+1].split("_");
+	            			 if(Integer.parseInt(air[0]) == Integer.parseInt(air1[0])){
+		            			 list.add(countArr[k]);
+		            			 train = 2;
+		            		 }else{
+		            			 list.add(countArr[k]);
+		            			 train = 1;
+		            		 }
+	            		 }
+	            		 
+	            		 
+	            	 }else{
+	            		 train = 1;
+	            	 }
+	             }
+	             
+	             
+	             List<String> listDept = new ArrayList<String>();
+	             int  trainDept = 1;
+	             for(int k=0;k<countDep.length;k++){
+	            	 if(trainDept == 1){
+	            		
+	            		 if(k<countDep.length-1){
+	            			 String air[] = countDep[k].split("_");
+	            			 String air1[] = countDep[k+1].split("_");
+	            			 if(Integer.parseInt(air[0]) == Integer.parseInt(air1[0])){
+	            				 listDept.add(countDep[k]);
+	            				 trainDept = 2;
+		            		 }else{
+		            			 listDept.add(countDep[k]);
+		            			 trainDept = 1;
+		            		 }
+	            		 }
+	            		 
+	            		 
+	            	 }else{
+	            		 trainDept = 1;
+	            	 }
+	             }
+	             
+	             for(int k=0;k<list.size();k++){
+	            	 
+	            	 roundTripFlightInfo = new RoundTripFlightInfo();
+	            	 //String air[] = countArr[k].split("_");
+	            	 //System.out.println(countArr[k]);
 	            	 String html = "";
 	            	 System.out.println("ctl00_BodyContentPlaceHolder_flightRowOutbound"+countArr[k]);
 	            	 System.out.println("ctl00_BodyContentPlaceHolder_flightRowOutbound");
-	            	 if(k<countArr.length-1){
-		            	  html  = StringUtils.substringBetween(arrHtml, "ctl00_BodyContentPlaceHolder_flightRowOutbound"+countArr[k], "ctl00_BodyContentPlaceHolder_flightRowOutbound"+countArr[k+1]);
+	            	 if(k<list.size()-1){
+		            	  html  = StringUtils.substringBetween(arrHtml, "ctl00_BodyContentPlaceHolder_flightRowOutbound"+list.get(k), "ctl00_BodyContentPlaceHolder_flightRowOutbound"+list.get(k+1));
 	            	 }else{
-		            	  html  = StringUtils.substringBetween(arrHtml, "ctl00_BodyContentPlaceHolder_flightRowOutbound"+countArr[k],"</tbody>");
+		            	  html  = StringUtils.substringBetween(arrHtml, "ctl00_BodyContentPlaceHolder_flightRowOutbound"+list.get(k),"</tbody>");
 	            	 }
 		             System.out.println(html);
-	            	 int countFlightInfo = StringUtils.countMatches(html, "class=\"flight-table-row");
+	            	 int countFlightInfo = StringUtils.countMatches(html, "\"class=\"flight-table-row");
 	            	 System.out.println("countFlightInfo"+countFlightInfo);
 	            	 List<String> flightNoList = null;
 	            	 FlightSegement seg = null;
@@ -406,9 +458,12 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 			                String flightNum = StringUtils.substringBetween(html, "flight-number", "/span>"); 
 		                    String depart=   StringUtils.substringBetween(html, "depart-column", "</td>");
 		                    String arr = StringUtils.substringBetween(html, "arrive-column", "</td>");
-		                    String price = StringUtils.substringBetween(html, "BaseFare:MYR","&lt;br/>");
-		                    String tax = StringUtils.substringBetween(html, "TotalTaxes:MYR","&lt;br/>");
 		                    
+		                    monetaryunit = html.substring(html.indexOf("BaseFare:")+9,html.indexOf("BaseFare:")+12);
+		                    String price = StringUtils.substringBetween(html, "BaseFare:"+monetaryunit,"&lt;br/>");
+		                    String tax = StringUtils.substringBetween(html, "TotalTaxes:"+monetaryunit,"&lt;br/>");
+		                    price = price.replaceAll(",", "");
+		                    tax = tax.replaceAll(",", "");
 		                    String flightNo = StringUtils.substringBetween(flightNum, "<br/>","<"); 
 		                    String departTime = StringUtils.substringBetween(depart, "<time>","</time>");
 		                    String arrTime = StringUtils.substringBetween(arr, "<time>","</time>");
@@ -444,7 +499,7 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 	                        }
 	                        
 	                        retsegs.add(seg);
-	   	                    html = html.replaceFirst("depart-column", "");
+	   	                    html = html.replaceFirst("arrive-column", "");
 	   	                    html = html.replaceFirst("depart-column", "");
 	   	                    html = html.replaceFirst("flight-number", "");
 	   	                    
@@ -472,7 +527,7 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 		                	flightDetail = new FlightDetail();
 		                	seg = new FlightSegement();
 		                	flightNoList = new ArrayList<String>();
-		                	 int flightMany = StringUtils.countMatches(html, "class=\"flight-table-row");
+		                	 int flightMany = StringUtils.countMatches(html, "\"class=\"flight-table-row");
 		                	 for(int j=0;j<flightMany;j++){
 		                		    String flightNum = StringUtils.substringBetween(html, "flight-number", "/span>"); 
 				                    String depart=   StringUtils.substringBetween(html, "depart-column", "</td>");
@@ -507,12 +562,17 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 			                        }
 			                        
 			                        retsegs.add(seg);
-				                    html = html.replaceFirst("depart-column", "");
+				                    html = html.replaceFirst("arrive-column", "");
 			   	                    html = html.replaceFirst("depart-column", "");
 			   	                    html = html.replaceFirst("flight-number", "");
 		                	 }
-		                    String price = StringUtils.substringBetween(html, "BaseFare:MYR","&lt;br/>");
-		                    String tax = StringUtils.substringBetween(html, "TotalTaxes:MYR","&lt;br/>");
+		                	 monetaryunit = html.substring(html.indexOf("BaseFare:")+9,html.indexOf("BaseFare:")+12);
+		                    String price = StringUtils.substringBetween(html, "BaseFare:"+monetaryunit,"&lt;br/>");
+		                    String tax = StringUtils.substringBetween(html, "TotalTaxes:"+monetaryunit,"&lt;br/>");
+		                    
+		                    price = price.replaceAll(",", "");
+		                    tax = tax.replaceAll(",", "");
+		                    
 	   	                    System.out.println("price"+price);
 		                    flightDetail.setFlightno(flightNoList);
 		                    flightDetail.setMonetaryunit(monetaryunit);
@@ -533,19 +593,19 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 	            	 }
 	             }
 	             
-	             for(int k=0;k<countDep.length;k++){
+	             for(int k=0;k<listDept.size();k++){
 	            	 
 	            	 
-	            	 String air[] = countDep[k].split("_");
-	            	 System.out.println(countDep[k]);
+	            	 //String air[] = countDep[k].split("_");
+	            	 //System.out.println(countDep[k]);
 	            	 String html = "";
-	            	 if(k<countDep.length-1){
-		            	  html  = StringUtils.substringBetween(depHtml, "ctl00_BodyContentPlaceHolder_flightRowInbound"+countDep[k], "ctl00_BodyContentPlaceHolder_flightRowInbound"+countDep[k+1]);
+	            	 if(k<listDept.size()-1){
+		            	  html  = StringUtils.substringBetween(depHtml, "ctl00_BodyContentPlaceHolder_flightRowInbound"+listDept.get(k), "ctl00_BodyContentPlaceHolder_flightRowInbound"+listDept.get(k+1));
 	            	 }else{
-		            	  html  = StringUtils.substringBetween(depHtml, "ctl00_BodyContentPlaceHolder_flightRowInbound"+countDep[k],"</tbody>");
+		            	  html  = StringUtils.substringBetween(depHtml, "ctl00_BodyContentPlaceHolder_flightRowInbound"+listDept.get(k),"</tbody>");
 	            	 }
 		             System.out.println(html);
-	            	 int countFlightInfo = StringUtils.countMatches(html, "class=\"flight-table-row");
+	            	 int countFlightInfo = StringUtils.countMatches(html, "\"class=\"flight-table-row");
 	            	 System.out.println("countFlightInfo"+countFlightInfo);
 	            	 List<String> flightNoList = null;
 	            	 FlightSegement seg = null;
@@ -562,9 +622,15 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 			                String flightNum = StringUtils.substringBetween(html, "flight-number", "/span>"); 
 		                    String depart=   StringUtils.substringBetween(html, "depart-column", "</td>");
 		                    String arr = StringUtils.substringBetween(html, "arrive-column", "</td>");
-		                    String price = StringUtils.substringBetween(html, "BaseFare:MYR","&lt;br/>");
-		                    String tax = StringUtils.substringBetween(html, "TotalTaxes:MYR","&lt;br/>");
 		                    
+		                    monetaryunit = html.substring(html.indexOf("BaseFare:")+9,html.indexOf("BaseFare:")+12);
+		                    String price = StringUtils.substringBetween(html, "BaseFare:"+monetaryunit,"&lt;br/>");
+		                    String tax = StringUtils.substringBetween(html, "TotalTaxes:"+monetaryunit,"&lt;br/>");
+		                    
+		                    //String price = StringUtils.substringBetween(html, "BaseFare:MYR","&lt;br/>");
+		                    //String tax = StringUtils.substringBetween(html, "TotalTaxes:MYR","&lt;br/>");
+		                    price = price.replaceAll(",", "");
+		                    tax = tax.replaceAll(",", "");
 		                    String flightNo = StringUtils.substringBetween(flightNum, "<br/>","<"); 
 		                    String departTime = StringUtils.substringBetween(depart, "<time>","</time>");
 		                    String arrTime = StringUtils.substringBetween(arr, "<time>","</time>");
@@ -601,7 +667,7 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 	                        
 	                        segs.add(seg);
 	                        
-	   	                    html = html.replaceFirst("depart-column", "");
+	   	                    html = html.replaceFirst("arrive-column", "");
 	   	                    html = html.replaceFirst("depart-column", "");
 	   	                    html = html.replaceFirst("flight-number", "");
 		                    
@@ -641,7 +707,7 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
  		                	seg = new FlightSegement();
 		                	flightNoList = new ArrayList<String>();
 		                	
-		                	 int flightMany = StringUtils.countMatches(html, "class=\"flight-table-row");
+		                	 int flightMany = StringUtils.countMatches(html, "\"class=\"flight-table-row");
 		                	 for(int j=0;j<flightMany;j++){
 		                		    String flightNum = StringUtils.substringBetween(html, "flight-number", "/span>"); 
 				                    String depart=   StringUtils.substringBetween(html, "depart-column", "</td>");
@@ -675,13 +741,19 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 			                        	 seg.setArrDate(arg1.getDepDate());
 			                        }
 			                        segs.add(seg);
-				                    html = html.replaceFirst("depart-column", "");
+				                    html = html.replaceFirst("arrive-column", "");
 			   	                    html = html.replaceFirst("depart-column", "");
 			   	                    html = html.replaceFirst("flight-number", "");
 		                	 }
-		                    String price = StringUtils.substringBetween(html, "BaseFare:MYR","&lt;br/>");
-		                    String tax = StringUtils.substringBetween(html, "TotalTaxes:MYR","&lt;br/>");
-		                    
+		                	 
+		                	 monetaryunit = html.substring(html.indexOf("BaseFare:")+9,html.indexOf("BaseFare:")+12);
+			                    String price = StringUtils.substringBetween(html, "BaseFare:"+monetaryunit,"&lt;br/>");
+			                    String tax = StringUtils.substringBetween(html, "TotalTaxes:"+monetaryunit,"&lt;br/>");
+			                    
+		                   // String price = StringUtils.substringBetween(html, "BaseFare:MYR","&lt;br/>");
+		                    //String tax = StringUtils.substringBetween(html, "TotalTaxes:MYR","&lt;br/>");
+			                    price = price.replaceAll(",", "");
+			                    tax = tax.replaceAll(",", "");
 	   	                    System.out.println("price"+price);
 	   	                    System.out.println("tax"+tax);
 		                    
@@ -732,7 +804,7 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
     
     public int compareDate(String start,String end){
     	int result = 0;
-    	if(StringUtils.isNotEmpty(start) || StringUtils.isNotEmpty(end)){
+    	if(StringUtils.isEmpty(start) || StringUtils.isEmpty(end)){
     		return result;
     	}
 		 SimpleDateFormat formate = new SimpleDateFormat("HH:mm");
@@ -747,7 +819,7 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
     	 Calendar calendar = Calendar.getInstance();//日历对象
 		 SimpleDateFormat formate = new SimpleDateFormat("yyyy-MM-dd");
 		 try {
-			Date dateFormate  =  formate.parse("2014-9-1");
+			Date dateFormate  =  formate.parse(date);
 			calendar.setTime(dateFormate);//设置当前日期
 			calendar.add(Calendar.DATE, 1);//月份减一
 		} catch (ParseException e) {
