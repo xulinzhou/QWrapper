@@ -30,11 +30,11 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
     public static void main(String[] args) {
 
             FlightSearchParam searchParam = new FlightSearchParam();
-            searchParam.setDep("AOR");
-            searchParam.setArr("SZB");
-            searchParam.setDepDate("2014-9-1");
+            searchParam.setDep("COK");
+            searchParam.setArr("KCH");
+            searchParam.setDepDate("2014-8-23");
             //searchParam.setRetDate("2014-08-19");
-            searchParam.setRetDate("2014-9-8");
+            searchParam.setRetDate("2014-08-25");
             //searchParam.setTimeOut("60000");
             searchParam.setToken("");
             searchParam.setFastTrack(false);
@@ -397,6 +397,8 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 		            			 list.add(countArr[k]);
 		            			 train = 1;
 		            		 }
+	            		 }else{
+	            			 list.add(countArr[k]);
 	            		 }
 	            		 
 	            		 
@@ -421,6 +423,8 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 		            			 listDept.add(countDep[k]);
 		            			 trainDept = 1;
 		            		 }
+	            		 }else{
+	            			 listDept.add(countDep[k]);
 	            		 }
 	            		 
 	            		 
@@ -431,12 +435,12 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 	             
 	             for(int k=0;k<list.size();k++){
 	            	 
-	            	 roundTripFlightInfo = new RoundTripFlightInfo();
+	            	 
 	            	 //String air[] = countArr[k].split("_");
 	            	 //System.out.println(countArr[k]);
 	            	 String html = "";
-	            	 System.out.println("ctl00_BodyContentPlaceHolder_flightRowOutbound"+countArr[k]);
-	            	 System.out.println("ctl00_BodyContentPlaceHolder_flightRowOutbound");
+	            	 //System.out.println("ctl00_BodyContentPlaceHolder_flightRowOutbound"+countArr[k]);
+	            	 //System.out.println("ctl00_BodyContentPlaceHolder_flightRowOutbound");
 	            	 if(k<list.size()-1){
 		            	  html  = StringUtils.substringBetween(arrHtml, "ctl00_BodyContentPlaceHolder_flightRowOutbound"+list.get(k), "ctl00_BodyContentPlaceHolder_flightRowOutbound"+list.get(k+1));
 	            	 }else{
@@ -450,6 +454,7 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 	            	 retsegs = new ArrayList<FlightSegement>();
 	            	 System.out.println("countFlightInfocountFlightInfo"+countFlightInfo);
 	            	 if(countFlightInfo == 1){
+	            		 roundTripFlightInfo = new RoundTripFlightInfo();
 	            		    segs = new ArrayList<FlightSegement>();
 		                	baseFlight = new OneWayFlightInfo();
 		                	flightDetail = new FlightDetail();
@@ -520,15 +525,16 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
           	    	      flightRoundArrList.add(roundTripFlightInfo);
 	            	 
 	            	 }else{
-
+	            		    roundTripFlightInfo = new RoundTripFlightInfo();
                            //中转效果
 	            		    segs = new ArrayList<FlightSegement>();
 		                	baseFlight = new OneWayFlightInfo();
 		                	flightDetail = new FlightDetail();
-		                	seg = new FlightSegement();
+		                	
 		                	flightNoList = new ArrayList<String>();
 		                	 int flightMany = StringUtils.countMatches(html, "\"class=\"flight-table-row");
 		                	 for(int j=0;j<flightMany;j++){
+		                		    seg = new FlightSegement();
 		                		    String flightNum = StringUtils.substringBetween(html, "flight-number", "/span>"); 
 				                    String depart=   StringUtils.substringBetween(html, "depart-column", "</td>");
 				                    String arr = StringUtils.substringBetween(html, "arrive-column", "</td>");
@@ -614,6 +620,7 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 	            	 
 	            	 
 	            	 if(countFlightInfo == 1){
+	            		 
 	            		    segs = new ArrayList<FlightSegement>();
 		                	baseFlight = new OneWayFlightInfo();
 		                	
@@ -676,6 +683,7 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
                          
 	   	                    
              	    	   for(RoundTripFlightInfo roundTrip:flightRoundArrList){
+             	    		  roundTripFlightInfo = new RoundTripFlightInfo();
              	    		  flightDetail = new FlightDetail();
              	    		 flightDetail.setFlightno(flightNoList);
  	                        flightDetail.setMonetaryunit(monetaryunit);
@@ -701,14 +709,16 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
              	    	   
 		                    
 	            	 }else{
+	            		   
                             //中转效果
 	            		    segs = new ArrayList<FlightSegement>();
 		                	baseFlight = new OneWayFlightInfo();
- 		                	seg = new FlightSegement();
+ 		                	
 		                	flightNoList = new ArrayList<String>();
 		                	
 		                	 int flightMany = StringUtils.countMatches(html, "\"class=\"flight-table-row");
 		                	 for(int j=0;j<flightMany;j++){
+		                		    seg = new FlightSegement();
 		                		    String flightNum = StringUtils.substringBetween(html, "flight-number", "/span>"); 
 				                    String depart=   StringUtils.substringBetween(html, "depart-column", "</td>");
 				                    String arr = StringUtils.substringBetween(html, "arrive-column", "</td>");
@@ -761,7 +771,7 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
 		                    
 		                    FlightDetail flightDetail1 = null;
              	    	   for(RoundTripFlightInfo roundTrip:flightRoundArrList){
-             	    		   
+             	    		  roundTripFlightInfo = new RoundTripFlightInfo();
              	    		  flightDetail = new FlightDetail();
              	    		  flightDetail.setFlightno(flightNoList);
  		                      flightDetail.setMonetaryunit(monetaryunit);
@@ -776,8 +786,8 @@ public class Wrapper_gjsairod001 implements QunarCrawler{
            	    		        flightDetail.setTax(flightDetail.getTax()+roundTrip.getDetail().getTax());
              	    		    roundTripFlightInfo.setInfo(segs);
   		                        roundTripFlightInfo.setDetail(flightDetail);
-  		                        roundTripFlightInfo.setRetinfo(retsegs);
-               	    	        roundTripFlightInfo.setRetflightno(flightNoList);
+  		                        //roundTripFlightInfo.setRetinfo(retsegs);
+               	    	        //roundTripFlightInfo.setRetflightno(flightNoList);
                	    	        roundTripFlightInfo.setOutboundPrice(0);
                	    	        roundTripFlightInfo.setRetdepdate(dateArriDetailDate);
                	    	        roundTripFlightInfo.setReturnedPrice(0);
